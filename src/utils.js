@@ -1,35 +1,8 @@
-const paymentMethodsConfig = {
-    shopperReference: 'Checkout Components sample code test',
-    reference: 'Checkout Components sample code test',
-    countryCode: 'NL',
-    amount: {
-        value: 1000,
-        currency: 'EUR'
-    }
-};
-
-const paymentsDefaultConfig = {
-    shopperReference: 'Checkout Components sample code test',
-    reference: 'Checkout Components sample code test',
-    countryCode: 'NL',
-    channel: 'Web',
-    returnUrl: 'https://your-company.com/',
-    amount: {
-        value: 1000,
-        currency: 'EUR'
-    },
-    lineItems: [
-        {
-            id: '1',
-            description: 'Test Item 1',
-            amountExcludingTax: 10000,
-            amountIncludingTax: 11800,
-            taxAmount: 1800,
-            taxPercentage: 1800,
-            quantity: 1,
-            taxCategory: 'High'
-        }
-    ]
+// Generic GET Helper
+let httpGet = async (endpoint, data) => {
+    const response = await fetch(`/${endpoint}?${data}`);
+    const text = await response.text();
+    return text;
 };
 
 // Generic POST Helper
@@ -43,40 +16,92 @@ const httpPost = (endpoint, data) =>
         body: JSON.stringify(data)
     }).then(response => response.json());
 
-// Get all available payment methods from the local server
-const getPaymentMethods = () =>
-    httpPost('paymentMethods', paymentMethodsConfig)
-        .then(response => {
-            if (response.error) throw 'No paymentMethods available';
+const getPaymentMethodsConfig = async () => {
+    let config = {
+        amount: {}
+    };
+    config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
+    config.reference = await httpGet('env', 'REFERENCE');
+    config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+    config.countryCode = await httpGet('env', 'COUNTRY');
+    config.amount.currency = await httpGet('env', 'CURRENCY');
+    config.amount.value = await httpGet('env', 'VALUE');
+    return config;
+};
 
-            return response;
-        })
-        .catch(console.error);
+const getPaymentsDefaultConfig = async() => {
+    let config = {
+        channel: 'Web',
+        amount: {},
+        lineItems: []
+    };
+    config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
+    config.reference = await httpGet('env', 'REFERENCE');
+    config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+    config.countryCode = await httpGet('env', 'COUNTRY');
+    config.amount.currency = await httpGet('env', 'CURRENCY');
+    config.amount.value = await httpGet('env', 'VALUE');
+    config.returnUrl = window.location.href;
+    config.lineItems = [{
+        id: '1',
+        description: 'Test Item 1',
+        amountExcludingTax: config.amount.value,
+        amountIncludingTax: config.amount.value,
+        taxAmount: 0,
+        taxPercentage: 0,
+        quantity: 1,
+        taxCategory: 'High'
+    }];
+    return config;
+};
+
+// Get all available payment methods from the local server
+const getPaymentMethods = () => {
+    return getPaymentMethodsConfig().then(paymentMethodsConfig => {
+      updateRequestContainer(paymentMethodsConfig);
+      updateResponseContainer("");
+      
+      return httpPost('paymentMethods', paymentMethodsConfig)
+          .then(response => {
+              if (response.error) throw 'No paymentMethods available';
+              updateResponseContainer(response);
+              return response;
+          })
+          .catch(console.error);
+    });
+};
 
 // Posts a new payment into the local server
 const makePayment = (paymentMethod, config = {}) => {
-    const paymentsConfig = { ...paymentsDefaultConfig, ...config };
-    const paymentRequest = { ...paymentsConfig, ...paymentMethod };
+  return getPaymentsDefaultConfig().then(paymentsDefaultConfig => {
+    const paymentsConfig = {
+        ...paymentsDefaultConfig,
+        ...config
+    };
+    const paymentRequest = {
+        ...paymentsConfig,
+        ...paymentMethod
+    };
 
     updateRequestContainer(paymentRequest);
+    updateResponseContainer("");
 
     return httpPost('payments', paymentRequest)
         .then(response => {
             if (response.error) throw 'Payment initiation failed';
-
             updateResponseContainer(response);
-
             return response;
         })
         .catch(console.error);
+    });
 };
 
 // Fetches an originKey from the local server
 const getOriginKey = () =>
     httpPost('originKeys')
-        .then(response => {
-            if (response.error || !response.originKeys) throw 'No originKey available';
+    .then(response => {
+        if (response.error || !response.originKeys) throw 'No originKey available';
 
-            return response.originKeys[Object.keys(response.originKeys)[0]];
-        })
-        .catch(console.error);
+        return response.originKeys[Object.keys(response.originKeys)[0]];
+    })
+    .catch(console.error);

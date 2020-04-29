@@ -20,17 +20,8 @@ function getPaymentMethods() {
     $merchantAccount = getenv('MERCHANT_ACCOUNT');
     $url = "https://checkout-test.adyen.com/v52/paymentMethods";
 
-    $data = [
-        'merchantAccount' => $merchantAccount,
-        'countryCode' => 'NL',
-        'amount' => [
-            'currency' => 'EUR',
-            'value' => 1000
-        ]
-    ];
-
     // Convert data to JSON
-    $json_data = json_encode(array_merge($data, $request));
+    $json_data = json_encode($request);
 
     // Initiate curl
     $curlAPICall = curl_init();

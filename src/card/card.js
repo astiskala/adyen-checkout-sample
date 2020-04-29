@@ -1,9 +1,11 @@
 // 0. Get originKey
 getOriginKey().then(originKey => {
+    getPaymentMethods().then(paymentMethodsResponse => {
     // 1. Create an instance of AdyenCheckout
     const checkout = new AdyenCheckout({
         environment: 'test',
-        originKey: originKey // Mandatory. originKey from Customer Area
+        originKey: originKey, // Mandatory. originKey from Customer Area
+        paymentMethodsResponse
     });
 
     // 2. Create and mount the Component
@@ -42,4 +44,5 @@ getOriginKey().then(originKey => {
             }
         })
         .mount('#card-container');
+  });
 });
