@@ -33,18 +33,6 @@
         </div>
 
         <div class="sidebar">
-            <div class="header">
-                <h2>Basic Implementation</h2>
-                <button class="copy-sample-code" aria-label="Copy sample code"></button>
-            </div>
-            <pre class="source-code"><code>const checkout = new AdyenCheckout({
-    originKey: 'pub...'
-});
-
-const multibanco = checkout
-    .createFromAction(response.action)
-    .mount('#multibanco-container');</code></pre>
-
             <div class="request-container">
                 <div class="header">
                     <h2>Request</h2>

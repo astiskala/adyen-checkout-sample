@@ -37,21 +37,6 @@
 
         <div class="sidebar">
             <div class="header">
-                <h2>Basic Implementation</h2>
-                <button class="copy-sample-code" aria-label="Copy sample code"></button>
-            </div>
-            <pre class="source-code"><code>const checkout = new AdyenCheckout({
-                onChange: (state, component) => {
-                    // state.data;
-                    // state.isValid;
-                }
-            });
-
-const sepa = checkout
-    .create('sepadirectdebit')
-    .mount('#sepa-container');</code></pre>
-
-            <div class="header">
                 <h2>Current state</h2>
             </div>
             <pre class="current-state">{}</pre>

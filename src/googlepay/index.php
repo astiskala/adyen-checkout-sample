@@ -35,34 +35,6 @@
 
         <div class="sidebar">
             <div class="header">
-                <h2>Basic Implementation</h2>
-                <button class="copy-sample-code" aria-label="Copy sample code"></button>
-            </div>
-            <pre class="source-code"><code>const checkout = new AdyenCheckout();
-
-const googlepay = checkout
-    .create('paywithgoogle', {
-        currencyCode: 'EUR',
-        amount: 100, // 1 EUR
-        configuration: {
-            gatewayMerchantId: '', // name of your Adyen Merchant account
-            merchantName: 'Adyen Test', // Name to be shown
-            merchantIdentifier: '' // Google's merchantId
-        },
-        onChange: (state, component) => {
-            // state.data;
-            // state.isValid;
-        }
-    });
-
-googlepay
-    .isAvailable()
-    .then(() => {
-        googlepay.mount('#googlepay-container');
-    })
-    .catch(e => console.warn(e));</code></pre>
-
-            <div class="header">
                 <h2>Current state</h2>
             </div>
             <pre class="current-state">{}</pre>
