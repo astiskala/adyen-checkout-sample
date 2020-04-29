@@ -20,7 +20,6 @@ function getPaymentMethods() {
     $merchantAccount = getenv('MERCHANT_ACCOUNT');
     $version = getenv('CHECKOUT_API_VERSION');
     $url = "https://checkout-test.adyen.com/v{$version}/paymentMethods";
-    error_log($url);
 
     // Convert data to JSON
     $json_data = json_encode($request);
@@ -29,7 +28,8 @@ function getPaymentMethods() {
     $curlAPICall = curl_init();
 
     // Set to POST
-    curl_setopt($curlAPICall, CURLOPT_CUSTOMREQUEST, "POST");
+    $method = "POST";
+    curl_setopt($curlAPICall, CURLOPT_CUSTOMREQUEST, $method);
 
     // Will return the response, if false it print the response
     curl_setopt($curlAPICall, CURLOPT_RETURNTRANSFER, true);
@@ -41,13 +41,14 @@ function getPaymentMethods() {
     curl_setopt($curlAPICall, CURLOPT_URL, $url);
 
     // Api key
-    curl_setopt($curlAPICall, CURLOPT_HTTPHEADER,
-        array(
-            "X-Api-Key: " . $apikey,
-            "Content-Type: application/json",
-            "Content-Length: " . strlen($json_data)
-        )
+    $headers = array(
+        "X-Api-Key: " . $apikey,
+        "Content-Type: application/json",
+        "Content-Length: " . strlen($json_data)
     );
+    curl_setopt($curlAPICall, CURLOPT_HTTPHEADER, $headers);
+
+    logApiCall($method, $url, $headers, $json_data);
 
     // Execute
     $result = curl_exec($curlAPICall);
@@ -59,6 +60,8 @@ function getPaymentMethods() {
 
     // Closing
     curl_close($curlAPICall);
+
+    logApiResponse($result);
 
     // This file returns a JSON object
     return $result;

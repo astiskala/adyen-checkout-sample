@@ -5,6 +5,7 @@
  */
 
 require('utils/env.php');
+require('utils/log.php');
 
 require('api/paymentMethods.php');
 require('api/payments.php');
