@@ -36,22 +36,6 @@
                 <h2>Current state</h2>
             </div>
             <pre class="current-state">{}</pre>
-
-            <div class="request-container">
-                <div class="header">
-                    <h2>Request</h2>
-                </div>
-                <p>The request to the <code>/payments</code> endpoint will be shown here.</p>
-                <pre class="request-code"></pre>
-            </div>
-
-            <div class="response-container">
-                <div class="header">
-                    <h2>Response</h2>
-                </div>
-                <p>The response from the <code>/payments</code> endpoint will be shown here.</p>
-                <pre class="response-code"></pre>
-            </div>
         </div>
     </div>
 

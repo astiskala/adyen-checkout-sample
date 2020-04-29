@@ -58,13 +58,12 @@ const getPaymentsDefaultConfig = async() => {
 // Get all available payment methods from the local server
 const getPaymentMethods = () => {
     return getPaymentMethodsConfig().then(paymentMethodsConfig => {
-      updateRequestContainer(paymentMethodsConfig);
-      updateResponseContainer("");
-      
+      updateRequestContainer("/paymentMethods", paymentMethodsConfig);
+
       return httpPost('paymentMethods', paymentMethodsConfig)
           .then(response => {
               if (response.error) throw 'No paymentMethods available';
-              updateResponseContainer(response);
+              updateResponseContainer("/paymentMethods", response);
               return response;
           })
           .catch(console.error);
@@ -83,13 +82,12 @@ const makePayment = (paymentMethod, config = {}) => {
         ...paymentMethod
     };
 
-    updateRequestContainer(paymentRequest);
-    updateResponseContainer("");
+    updateRequestContainer("/payments", paymentRequest);
 
     return httpPost('payments', paymentRequest)
         .then(response => {
             if (response.error) throw 'Payment initiation failed';
-            updateResponseContainer(response);
+            updateResponseContainer("/payments", response);
             return response;
         })
         .catch(console.error);

@@ -1,6 +1,5 @@
+const sidebar = document.querySelector('.sidebar');
 const stateContainer = document.querySelector('.current-state');
-const requestContainer = document.querySelector('.request-container');
-const responseContainer = document.querySelector('.response-container');
 
 // Demo - Update current component state container
 function updateStateContainer(newState) {
@@ -8,20 +7,31 @@ function updateStateContainer(newState) {
 }
 
 // Demo - Update request container
-function updateRequestContainer(response) {
-    const defaultResponseParams = { merchantAccount: 'YOUR_MERCHANT_ACCOUNT' };
-    requestContainer.querySelector('pre').innerText = JSON.stringify(
-        { ...defaultResponseParams, ...response },
-        null,
-        2
-    );
-    requestContainer.classList.add('request-container--visible');
+function updateRequestContainer(name, response) {
+  let formattedJson = JSON.stringify(response, null, 2);
+  sidebar.insertAdjacentHTML('beforeend',
+    `<div class="request-container request-container--visible">
+        <div class="header">
+            <h2>${name} Request</h2>
+        </div>
+        <pre class="request-code">${formattedJson}</pre>
+    </div>
+  `);
+  sidebar.scrollTop = sidebar.scrollHeight;
 }
 
 // Demo - Update server response container
-function updateResponseContainer(response) {
-    responseContainer.querySelector('pre').innerText = JSON.stringify(response, null, 2);
-    responseContainer.classList.add('response-container--visible');
+function updateResponseContainer(name, response) {
+  let formattedJson = JSON.stringify(response, null, 2);
+  sidebar.insertAdjacentHTML('beforeend',
+    `<div class="response-container response-container--visible">
+        <div class="header">
+            <h2>${name} Response</h2>
+        </div>
+        <pre class="response-code">${formattedJson}</pre>
+    </div>
+  `);
+  sidebar.scrollTop = sidebar.scrollHeight;
 }
 
 // Demo - Copy Source Code Examples
