@@ -5,29 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout Components sample code</title>
-    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.css">
+    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
     <link rel="stylesheet" href="../demo.css">
 </head>
 <body>
     <div class="container container--full-width">
         <div class="main">
-            <div class="checkout-container">
-                <a href="../">Back</a>
+            <a href="../">Back</a>
 
-                <h1>Swish Component</h1>
+            <div class="checkout-container">
+                <h1>WeChat Pay Component</h1>
                 <div class="payment-method">
-                    <div id="swish-container" class="payment-method__container">
-                        <!-- Swish Component will be rendered here -->
+                    <div id="wechatpay-container">
+                        <!-- WeChat Pay Component will be rendered here -->
                     </div>
                 </div>
             </div>
+
             <div class="info">
-                <p>
-                    Check the Source Code to see the full implementation.
-                </p>
-                <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
-                </p>
+                <p>Check the Source Code to see the full implementation.</p>
+                <p>For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.</p>
             </div>
         </div>
 
@@ -37,18 +34,13 @@
                 <button class="copy-sample-code" aria-label="Copy sample code"></button>
             </div>
             <pre class="source-code"><code>const checkout = new AdyenCheckout({
-    environment: 'test',
-    paymentMethodsResponse: { ... }
+    originKey: 'pub...'
 });
 
-const swish = checkout
-    .create('swish')
-    .mount('#swish-container');</code></pre>
-
-            <div class="header">
-                <h2>Current state</h2>
-            </div>
-            <pre class="current-state">{}</pre>
+const wechatpay = checkout
+    .createFromAction(response.action)
+    .mount('#wechatpay-container');
+</code></pre>
 
             <div class="request-container">
                 <div class="header">
@@ -68,9 +60,9 @@ const swish = checkout
         </div>
     </div>
 
-    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.js"></script>
+    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../demo.js"></script>
     <script src="../utils.js"></script>
-    <script src="/swish/swish.js"></script>
+    <script src="/wechatpay/wechatpay.js"></script>
 </body>
 </html>

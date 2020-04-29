@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout Components sample code</title>
-    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.css">
+    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
     <link rel="stylesheet" href="../demo.css">
 </head>
 <body>
@@ -14,10 +14,10 @@
             <div class="checkout-container">
                 <a href="../">Back</a>
 
-                <h1>ACH Component</h1>
+                <h1>Card Component</h1>
                 <div class="payment-method">
-                    <div id="ach-container" class="payment-method__container">
-                        <!-- ACH Component will be rendered here -->
+                    <div id="card-container" class="payment-method__container">
+                        <!-- Card Component will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     Check the Source Code to see the full implementation.
                 </p>
                 <p>
-                    To make a payment, use a valid ABA routing number: <a href="https://www.usbanklocations.com/u-s-bank-routing-number.shtml" target="_blank">bank routing numbers</a>.
+                    To make a payment, use our <a href="https://docs.adyen.com/developers/development-resources/test-cards/test-card-numbers" target="_blank">test card numbers</a>.
                 </p>
                 <p>
                     For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
@@ -36,22 +36,6 @@
         </div>
 
         <div class="sidebar">
-            <div class="header">
-                <h2>Basic Implementation</h2>
-                <button class="copy-sample-code" aria-label="Copy sample code"></button>
-            </div>
-            <pre class="source-code"><code>const checkout = new AdyenCheckout({
-    environment: 'test',
-    originKey: 'pub...',
-    onChange: (state, component) => {
-        // state.data;
-        // state.isValid;
-    }
-});
-
-const ach = checkout
-    .create('ach')
-    .mount('#ach-container');</code></pre>
 
             <div class="header">
                 <h2>Current state</h2>
@@ -76,9 +60,9 @@ const ach = checkout
         </div>
     </div>
 
-    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.6.0/adyen.js"></script>
+    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../demo.js"></script>
     <script src="../utils.js"></script>
-    <script src="/ach/ach.js"></script>
+    <script src="/card/card.js"></script>
 </body>
 </html>

@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout Components sample code</title>
-    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.css">
+    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
     <link rel="stylesheet" href="../demo.css">
 </head>
 <body>
     <div class="container container--full-width">
         <div class="main">
-            <div class="checkout-container">
-                <a href="../">Back</a>
+            <a href="../">Back</a>
 
-                <h1>Multibanco Component</h1>
+            <div class="checkout-container">
+                <h1>Google Pay Component</h1>
                 <div class="payment-method">
 
-                    <div id="multibanco-container">
-                        <!-- Multibanco Component will be rendered here -->
+                    <div id="googlepay-container">
+                        <!-- Google Pay Component will be rendered here -->
                     </div>
                 </div>
             </div>
+
             <div class="info">
                 <p>
                     Check the Source Code to see the full implementation.
@@ -37,13 +38,34 @@
                 <h2>Basic Implementation</h2>
                 <button class="copy-sample-code" aria-label="Copy sample code"></button>
             </div>
-            <pre class="source-code"><code>const checkout = new AdyenCheckout({
-    originKey: 'pub...'
-});
+            <pre class="source-code"><code>const checkout = new AdyenCheckout();
 
-const multibanco = checkout
-    .createFromAction(response.action)
-    .mount('#multibanco-container');</code></pre>
+const googlepay = checkout
+    .create('paywithgoogle', {
+        currencyCode: 'EUR',
+        amount: 100, // 1 EUR
+        configuration: {
+            gatewayMerchantId: '', // name of your Adyen Merchant account
+            merchantName: 'Adyen Test', // Name to be shown
+            merchantIdentifier: '' // Google's merchantId
+        },
+        onChange: (state, component) => {
+            // state.data;
+            // state.isValid;
+        }
+    });
+
+googlepay
+    .isAvailable()
+    .then(() => {
+        googlepay.mount('#googlepay-container');
+    })
+    .catch(e => console.warn(e));</code></pre>
+
+            <div class="header">
+                <h2>Current state</h2>
+            </div>
+            <pre class="current-state">{}</pre>
 
             <div class="request-container">
                 <div class="header">
@@ -63,9 +85,10 @@ const multibanco = checkout
         </div>
     </div>
 
-    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.js"></script>
+    <script src="https://pay.google.com/gp/p/js/pay.js"></script>
+    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../demo.js"></script>
     <script src="../utils.js"></script>
-    <script src="/multibanco/multibanco.js"></script>
+    <script src="/googlepay/googlepay.js"></script>
 </body>
 </html>

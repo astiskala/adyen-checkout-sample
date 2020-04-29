@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout Components sample code</title>
-    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.css">
+    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
     <link rel="stylesheet" href="../demo.css">
 </head>
 <body>
@@ -14,11 +14,11 @@
             <div class="checkout-container">
                 <a href="../">Back</a>
 
-                <h1>Bancontact Mobile Component</h1>
+                <h1>Multibanco Component</h1>
                 <div class="payment-method">
 
-                    <div id="bancontact-container">
-                        <!-- Bancontact Mobile Component will be rendered here -->
+                    <div id="multibanco-container">
+                        <!-- Multibanco Component will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -41,9 +41,9 @@
     originKey: 'pub...'
 });
 
-const bancontact = checkout
+const multibanco = checkout
     .createFromAction(response.action)
-    .mount('#bancontact-container');</code></pre>
+    .mount('#multibanco-container');</code></pre>
 
             <div class="request-container">
                 <div class="header">
@@ -63,9 +63,9 @@ const bancontact = checkout
         </div>
     </div>
 
-    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.js"></script>
+    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../demo.js"></script>
     <script src="../utils.js"></script>
-    <script src="/bancontact/bancontact.js"></script>
+    <script src="/multibanco/multibanco.js"></script>
 </body>
 </html>

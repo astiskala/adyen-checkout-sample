@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout Components sample code</title>
-    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.css">
+    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
     <link rel="stylesheet" href="../demo.css">
 </head>
 <body>
@@ -14,11 +14,10 @@
             <a href="../">Back</a>
 
             <div class="checkout-container">
-                <h1>Google Pay Component</h1>
+                <h1>SEPA Direct Debit Component</h1>
                 <div class="payment-method">
-
-                    <div id="googlepay-container">
-                        <!-- Google Pay Component will be rendered here -->
+                    <div id="sepa-container" class="payment-method__container">
+                        <!-- SEPA Direct Debit Component will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -26,6 +25,9 @@
             <div class="info">
                 <p>
                     Check the Source Code to see the full implementation.
+                </p>
+                <p>
+                    To make a payment, use our <a href="https://docs.adyen.com/developers/development-resources/test-cards/test-card-numbers#sepadirectdebit" target="_blank">SEPA Direct Debit test credentials</a>.
                 </p>
                 <p>
                     For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
@@ -38,29 +40,16 @@
                 <h2>Basic Implementation</h2>
                 <button class="copy-sample-code" aria-label="Copy sample code"></button>
             </div>
-            <pre class="source-code"><code>const checkout = new AdyenCheckout();
+            <pre class="source-code"><code>const checkout = new AdyenCheckout({
+                onChange: (state, component) => {
+                    // state.data;
+                    // state.isValid;
+                }
+            });
 
-const googlepay = checkout
-    .create('paywithgoogle', {
-        currencyCode: 'EUR',
-        amount: 100, // 1 EUR
-        configuration: {
-            gatewayMerchantId: '', // name of your Adyen Merchant account
-            merchantName: 'Adyen Test', // Name to be shown
-            merchantIdentifier: '' // Google's merchantId
-        },
-        onChange: (state, component) => {
-            // state.data;
-            // state.isValid;
-        }
-    });
-
-googlepay
-    .isAvailable()
-    .then(() => {
-        googlepay.mount('#googlepay-container');
-    })
-    .catch(e => console.warn(e));</code></pre>
+const sepa = checkout
+    .create('sepadirectdebit')
+    .mount('#sepa-container');</code></pre>
 
             <div class="header">
                 <h2>Current state</h2>
@@ -85,10 +74,9 @@ googlepay
         </div>
     </div>
 
-    <script src="https://pay.google.com/gp/p/js/pay.js"></script>
-    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.js"></script>
+    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../demo.js"></script>
     <script src="../utils.js"></script>
-    <script src="/googlepay/googlepay.js"></script>
+    <script src="/sepa/sepa.js"></script>
 </body>
 </html>

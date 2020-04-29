@@ -18,7 +18,9 @@ function getPaymentMethods() {
 
     $apikey = getenv('CHECKOUT_APIKEY');
     $merchantAccount = getenv('MERCHANT_ACCOUNT');
-    $url = "https://checkout-test.adyen.com/v52/paymentMethods";
+    $version = getenv('CHECKOUT_API_VERSION');
+    $url = "https://checkout-test.adyen.com/v{$version}/paymentMethods";
+    error_log($url);
 
     // Convert data to JSON
     $json_data = json_encode($request);

@@ -16,7 +16,8 @@ function initiatePayment() {
     }
 
     $apikey = getenv('CHECKOUT_APIKEY');
-    $url = "https://checkout-test.adyen.com/v52/payments";
+    $version = getenv('CHECKOUT_API_VERSION');
+    $url = "https://checkout-test.adyen.com/v{$version}/payments";
 
     // Convert data to JSON
     $json_data = json_encode($request);
