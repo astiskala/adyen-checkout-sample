@@ -36,6 +36,21 @@
                     <label for="showPayButton">showPayButton:</label>
                     <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
                   </form>
+                  <form id="cardToggles">
+                    <h3>Cards Component</h3>
+                    <label for="enableStoreDetails">enableStoreDetails:</label>
+                    <input type="checkbox" id="enableStoreDetails" name="enableStoreDetails" /><br />
+                    <label for="hasHolderName">hasHolderName:</label>
+                    <input type="checkbox" id="hasHolderName" name="hasHolderName" /><br />
+                    <label for="holderNameRequired">holderNameRequired:</label>
+                    <input type="checkbox" id="holderNameRequired" name="holderNameRequired" /><br />
+                    <label for="hideCVC">hideCVC:</label>
+                    <input type="checkbox" id="hideCVC" name="hideCVC" /><br />
+                    <label for="showBrandIcon">showBrandIcon:</label>
+                    <input type="checkbox" id="showBrandIcon" name="showBrandIcon" checked="checked" /><br />
+                    <label for="billingAddressRequired">billingAddressRequired:</label>
+                    <input type="checkbox" id="billingAddressRequired" name="billingAddressRequired" />
+                  </form>
                 </div>
             </div>
 

@@ -34,6 +34,23 @@ function updateResponseContainer(name, response) {
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
+let clearRequests = function clearRequests() {
+  var requestContainers = document.getElementsByClassName('request-container');
+  while(requestContainers[0]) {
+      requestContainers[0].parentNode.removeChild(requestContainers[0]);
+  }
+
+  var responseContainers = document.getElementsByClassName('response-container');
+  while(responseContainers[0]) {
+      responseContainers[0].parentNode.removeChild(responseContainers[0]);
+  }
+
+  var resultContainers = document.getElementsByClassName('result-container');
+  while(resultContainers[0]) {
+      resultContainers[0].parentNode.removeChild(resultContainers[0]);
+  }
+}
+
 function updateResultContainer(response) {
   sidebar.insertAdjacentHTML('beforeend',
     `<div class="result-container result-container--visible">

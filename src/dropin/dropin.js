@@ -1,5 +1,5 @@
 const getConfig = async () => {
-    let config = { paypalConfig: { environment: "test", amount: {} } };
+    let config = { cardConfig: {}, paypalConfig: { environment: "test", amount: {} } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
 
     config.openFirstPaymentMethod = document.querySelector('#openFirstPaymentMethod').checked;
@@ -7,6 +7,13 @@ const getConfig = async () => {
     config.showStoredPaymentMethods = document.querySelector('#showStoredPaymentMethods').checked;
     config.showPaymentMethods = document.querySelector('#showPaymentMethods').checked;
     config.showPayButton = document.querySelector('#showPayButton').checked;
+
+    config.cardConfig.enableStoreDetails = document.querySelector('#enableStoreDetails').checked;
+    config.cardConfig.hasHolderName = document.querySelector('#hasHolderName').checked;
+    config.cardConfig.holderNameRequired = document.querySelector('#holderNameRequired').checked;
+    config.cardConfig.hideCVC = document.querySelector('#hideCVC').checked;
+    config.cardConfig.showBrandIcon = document.querySelector('#showBrandIcon').checked;
+    config.cardConfig.billingAddressRequired = document.querySelector('#billingAddressRequired').checked;
 
     config.paypalConfig.merchantId = await httpGet('env', 'PAYPAL_MERCHANT_ID');
     config.paypalConfig.countryCode = await httpGet('env', 'COUNTRY');
@@ -33,7 +40,8 @@ let loadDropIn = function loadDropIn() {
 
             // 2. Handle any additional configuration required for specific payment methods
             let paymentMethodsConfiguration = { // Example required configuration for PayPal
-              paypal: config.paypalConfig
+              paypal: config.paypalConfig,
+              card: config.cardConfig
             };
 
             paymentMethodsConfiguration.paypal.onCancel = (data, dropin) => {
@@ -98,6 +106,7 @@ loadDropIn();
 
 let reloadDropIn = function reloadDropIn() {
   dropin.unmount('#dropin-container');
+  clearRequests();
   loadDropIn();
 }
 
@@ -107,3 +116,6 @@ let addReloadEventListener = function addReloadEventListener(element) {
 
 let toggles = document.querySelectorAll('#dropinToggles input');
 toggles.forEach(addReloadEventListener);
+
+let cardToggles = document.querySelectorAll('#cardToggles input');
+cardToggles.forEach(addReloadEventListener);
