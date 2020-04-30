@@ -29,10 +29,13 @@
     <script src="/returnUrl/returnUrl.js"></script>
     <script>
 <?php
-if (file_get_contents('php://input') != '') {
-    $request = file_get_contents('php://input');
-    print('handlePostback("' . $request . '");');
-}
+  $request = $_SERVER['QUERY_STRING'];
+  if (file_get_contents('php://input') != '') {
+      $request .= file_get_contents('php://input');
+  }
+
+  $tmp = sys_get_temp_dir() . "/paymentData";
+  print('handlePostback("' . file_get_contents($tmp) . '", "' . $request . '");');
 ?>
     </script>
 </body>

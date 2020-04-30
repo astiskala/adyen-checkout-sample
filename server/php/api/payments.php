@@ -61,6 +61,12 @@ function initiatePayment() {
 
     logApiResponse($result);
 
+    $json = json_decode($result, true);
+    $paymentData = $json["action"]["paymentData"];
+    $tmp = sys_get_temp_dir() . "/paymentData";
+    error_log("Persisting paymentData '" . $paymentData . "' to " . $tmp);
+    file_put_contents($tmp, $paymentData);
+
     // This file returns a JSON object
     return $result;
 }

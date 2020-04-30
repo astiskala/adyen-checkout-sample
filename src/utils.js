@@ -34,15 +34,40 @@ const getPaymentsDefaultConfig = async() => {
     let config = {
         channel: 'Web',
         amount: {},
+        shopperName: {},
+        billingAddress: {},
+        deliveryAddress: {},
         lineItems: []
     };
+
     config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
     config.reference = await httpGet('env', 'REFERENCE');
     config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
     config.countryCode = await httpGet('env', 'COUNTRY');
+    config.returnUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/returnUrl';
+    config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
+    config.telephoneNumber = await httpGet('env', 'TELEPHONE_NUMBER');
+
     config.amount.currency = await httpGet('env', 'CURRENCY');
     config.amount.value = await httpGet('env', 'VALUE');
-    config.returnUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/returnUrl';
+
+    config.shopperName.firstName = await httpGet('env', 'SHOPPERNAME_FIRSTNAME');
+    config.shopperName.lastName = await httpGet('env', 'SHOPPERNAME_LASTNAME');
+
+    config.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
+    config.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
+    config.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
+    config.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
+    config.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
+    config.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
+
+    config.deliveryAddress.city = await httpGet('env', 'DELIVERY_ADDRESS_CITY');
+    config.deliveryAddress.country = await httpGet('env', 'DELIVERY_ADDRESS_COUNTRY');
+    config.deliveryAddress.houseNumberOrName = await httpGet('env', 'DELIVERY_ADDRESS_HOUSENUMBERORNAME');
+    config.deliveryAddress.postalCode = await httpGet('env', 'DELIVERY_ADDRESS_POSTALCODE');
+    config.deliveryAddress.stateOrProvince = await httpGet('env', 'DELIVERY_ADDRESS_STATEORPROVINCE');
+    config.deliveryAddress.street = await httpGet('env', 'DELIVERY_ADDRESS_STREET');
+
     config.lineItems = [{
         id: '1',
         description: 'Test Item 1',

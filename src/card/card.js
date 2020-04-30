@@ -32,9 +32,6 @@ let loadComponent = function loadComponent() {
             .create('card', {
                 ...config.cardConfig,
 
-                // Optional Configuration
-                // hasHolderName: true,
-
                 // Optional. Customize the look and feel of the payment form
                 // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
                 styles: {},
@@ -53,16 +50,32 @@ let loadComponent = function loadComponent() {
                 // Events
                 onSubmit: (state, component) => {
                     if (state.isValid) {
-                        makePayment(card.data);
+                        makePayment(card.data)
+                          .then(response => {
+                            if (response.action) {
+                              component.handleAction(response.action);
+                            } else {
+                              if (response.resultCode) {
+                                updateResultContainer(response.resultCode);
+                              } else if (response.message) {
+                                updateResultContainer(response.message);
+                              }
+                            }
+                          });
                     }
                 },
-
                 onChange: (state, component) => {
                     // state.data;
                     // state.isValid;
 
                     updateStateContainer(state); // Demo purposes only
-                }
+                },
+                onAdditionalDetails: (state, component) => {
+                  submitAdditionalDetails(state.data)
+                    .then(result => {
+                       updateResultContainer(result.resultCode);
+                    });
+                },
             })
             .mount('#card-container');
       });
