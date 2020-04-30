@@ -20,6 +20,23 @@
                         <!-- Drop-in will be rendered here -->
                     </div>
                 </div>
+
+                <h2>Configuration Options</h2>
+                <div class="configuration-options">
+                  <form id="dropinToggles">
+                    <h3>Drop-in</h3>
+                    <label for="openFirstPaymentMethod">openFirstPaymentMethod:</label>
+                    <input type="checkbox" id="openFirstPaymentMethod" name="openFirstPaymentMethod" checked="checked" /><br />
+                    <label for="openFirstStoredPaymentMethod">openFirstStoredPaymentMethod:</label>
+                    <input type="checkbox" id="openFirstStoredPaymentMethod" name="openFirstStoredPaymentMethod" checked="checked" /><br />
+                    <label for="showStoredPaymentMethods">showStoredPaymentMethods:</label>
+                    <input type="checkbox" id="showStoredPaymentMethods" name="showStoredPaymentMethods" checked="checked" /><br />
+                    <label for="showPaymentMethods">showPaymentMethods:</label>
+                    <input type="checkbox" id="showPaymentMethods" name="showPaymentMethods" checked="checked" /><br />
+                    <label for="showPayButton">showPayButton:</label>
+                    <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+                  </form>
+                </div>
             </div>
 
             <div class="info">

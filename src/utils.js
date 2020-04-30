@@ -24,6 +24,7 @@ const getPaymentMethodsConfig = async () => {
     config.reference = await httpGet('env', 'REFERENCE');
     config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
     config.countryCode = await httpGet('env', 'COUNTRY');
+    config.shopperLocale = await httpGet('env', 'SHOPPER_LOCALE');
     config.amount.currency = await httpGet('env', 'CURRENCY');
     config.amount.value = await httpGet('env', 'VALUE');
     return config;
@@ -41,7 +42,7 @@ const getPaymentsDefaultConfig = async() => {
     config.countryCode = await httpGet('env', 'COUNTRY');
     config.amount.currency = await httpGet('env', 'CURRENCY');
     config.amount.value = await httpGet('env', 'VALUE');
-    config.returnUrl = window.location.href;
+    config.returnUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/returnUrl';
     config.lineItems = [{
         id: '1',
         description: 'Test Item 1',
@@ -92,6 +93,19 @@ const makePayment = (paymentMethod, config = {}) => {
         })
         .catch(console.error);
     });
+};
+
+// Posts additional details into the local server
+const submitAdditionalDetails = (stateData, config = {}) => {
+    updateRequestContainer("/payments/details", stateData);
+
+    return httpPost('paymentDetails', stateData)
+        .then(response => {
+            if (response.error) throw 'Payment details submission failed';
+            updateResponseContainer("/payments/details", response);
+            return response;
+        })
+        .catch(console.error);
 };
 
 // Fetches an originKey from the local server

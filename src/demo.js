@@ -34,6 +34,18 @@ function updateResponseContainer(name, response) {
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
+function updateResultContainer(response) {
+  sidebar.insertAdjacentHTML('beforeend',
+    `<div class="result-container result-container--visible">
+        <div class="header">
+            <h2>Result</h2>
+        </div>
+        <p class="result-code">${response}</p>
+    </div>
+  `);
+  sidebar.scrollTop = sidebar.scrollHeight;
+}
+
 // Demo - Copy Source Code Examples
 document.querySelectorAll('.copy-sample-code').forEach(c => {
     c.addEventListener('click', () => {

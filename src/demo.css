@@ -200,13 +200,15 @@ pre {
 }
 
 .request-container .request-code,
-.response-container .response-code {
+.response-container .response-code,
+.result-container .result-code {
     opacity: 0;
     transition: opacity 0.2s ease-out;
 }
 
 .request-container--visible .request-code,
-.response-container--visible .response-code {
+.response-container--visible .response-code,
+.result-container--visible .result-code {
     opacity: 1;
 }
 
@@ -217,9 +219,11 @@ pre {
     opacity: 0.7;
 }
 
-.request-container--visible p,
-.response-container--visible p {
-    display: none;
+.result-container p {
+    padding: 0 24px;
+    font-weight: bold;
+    font-size: 1.5em;
+    opacity: 0.7;
 }
 
 .payment-method {
@@ -256,4 +260,16 @@ pre {
 #boletobancario-container,
 #boletobancario-result-container {
     width: 550px;
+}
+
+.configuration-options label {
+  float: left;
+  width: 20em;
+  text-align: right;
+}
+
+.configuration-options input {
+  margin-left: 0.5em;
+  text-align: left;
+  padding: 0;
 }
