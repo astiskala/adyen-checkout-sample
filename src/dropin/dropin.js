@@ -1,5 +1,5 @@
 const getConfig = async () => {
-    let config = { cardConfig: {}, paypalConfig: { environment: "test", amount: {} } };
+    let config = { cardConfig: { data: { billingAddress : {} }}, paypalConfig: { environment: "test", amount: {} } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
 
     config.openFirstPaymentMethod = document.querySelector('#openFirstPaymentMethod').checked;
@@ -15,11 +15,20 @@ const getConfig = async () => {
     config.cardConfig.showBrandIcon = document.querySelector('#showBrandIcon').checked;
     config.cardConfig.billingAddressRequired = document.querySelector('#billingAddressRequired').checked;
 
+    config.cardConfig.data.holderName = await httpGet('env', 'CARD_HOLDERNAME');
+    config.cardConfig.data.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
+    config.cardConfig.data.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
+    config.cardConfig.data.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
+    config.cardConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
+    config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
+    config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
+
     config.paypalConfig.merchantId = await httpGet('env', 'PAYPAL_MERCHANT_ID');
     config.paypalConfig.countryCode = await httpGet('env', 'COUNTRY');
     config.paypalConfig.amount.currency = await httpGet('env', 'CURRENCY');
     config.paypalConfig.amount.value = await httpGet('env', 'VALUE');
     config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
+
     return config;
 };
 

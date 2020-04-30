@@ -21,7 +21,9 @@ let loadComponent = function loadComponent() {
 
           // 2. Create and mount the Component
           afterpaytouchComponent = checkout.create('afterpaytouch', {
-            // Events
+            onChange: (state, component) => {
+                updateStateContainer(state);
+            },
             onSelect: activeComponent => {
                 updateStateContainer(activeComponent.data); // Demo purposes only
             },

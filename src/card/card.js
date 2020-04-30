@@ -1,5 +1,5 @@
 const getConfig = async () => {
-    let config = { cardConfig: {} };
+    let config = { cardConfig: { data: { billingAddress: {} } } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
 
     config.cardConfig.enableStoreDetails = document.querySelector('#enableStoreDetails').checked;
@@ -8,6 +8,14 @@ const getConfig = async () => {
     config.cardConfig.hideCVC = document.querySelector('#hideCVC').checked;
     config.cardConfig.showBrandIcon = document.querySelector('#showBrandIcon').checked;
     config.cardConfig.billingAddressRequired = document.querySelector('#billingAddressRequired').checked;
+
+    config.cardConfig.data.holderName = await httpGet('env', 'CARD_HOLDERNAME');
+    config.cardConfig.data.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
+    config.cardConfig.data.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
+    config.cardConfig.data.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
+    config.cardConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
+    config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
+    config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
     return config;
 };
@@ -65,10 +73,7 @@ let loadComponent = function loadComponent() {
                     }
                 },
                 onChange: (state, component) => {
-                    // state.data;
-                    // state.isValid;
-
-                    updateStateContainer(state); // Demo purposes only
+                    updateStateContainer(state);
                 },
                 onAdditionalDetails: (state, component) => {
                   submitAdditionalDetails(state.data)

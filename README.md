@@ -11,6 +11,37 @@ To run this project, **create** a `.env` file on your project's root folder foll
 ```
 MERCHANT_ACCOUNT=MyMerchantAccount
 CHECKOUT_APIKEY=MY_CHECKOUT_API_KEY
+
+PAYPAL_MERCHANT_ID=MY_PAYPAL_MERCHANT_ID
+PAYPAL_INTENT=capture
+
+SDK_VERSION=3.8.0
+CHECKOUT_API_VERSION=53
+
+COUNTRY=AU
+CURRENCY=AUD
+VALUE=1000
+SHOPPER_LOCALE=en-US
+REFERENCE=TEST-123
+SHOPPER_REFERENCE=JohnSmith
+
+CARD_HOLDERNAME="John Smith"
+SHOPPERNAME_FIRSTNAME=John
+SHOPPERNAME_LASTNAME=Smith
+SHOPPER_EMAIL=shopper@email.com
+TELEPHONE_NUMBER=+61404040404
+BILLING_ADDRESS_CITY=Sydney
+BILLING_ADDRESS_COUNTRY=AU
+BILLING_ADDRESS_HOUSENUMBERORNAME=123
+BILLING_ADDRESS_POSTALCODE=2000
+BILLING_ADDRESS_STATEORPROVINCE=NSW
+BILLING_ADDRESS_STREET="Happy Street"
+DELIVERY_ADDRESS_CITY=Sydney
+DELIVERY_ADDRESS_COUNTRY=AU
+DELIVERY_ADDRESS_HOUSENUMBERORNAME=123
+DELIVERY_ADDRESS_POSTALCODE=2000
+DELIVERY_ADDRESS_STATEORPROVINCE=NSW
+DELIVERY_ADDRESS_STREET="Happy Street"
 ```
 
 These variables can be found in Adyen Customer Area. For more information, visit our [Get started with Adyen guide](https://docs.adyen.com/payments-essentials/get-started-with-adyen).
@@ -28,24 +59,11 @@ $ ./start.sh
 
 A PHP server will start on `http://localhost:3000`.
 
-### Running the Node.js Server
-
-If preferred, you can run a Node.js server instead.
-To do this, navigate to the root of the project, install the dependencies (only the first time) and run the start script:
-
-```
-$ cd adyen-components-js-sample-code
-$ npm i
-$ npm start
-```
-
-A Node.js server will start on `http://localhost:3000`.
-
 ### Deploying this example to Heroku
 
 Alternatively, you can install this example by using this shortcut to deploy to Heroku:
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Adyen/adyen-components-js-sample-code)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/astiskala/adyen-components-js-sample-code)
 
 ## Documentation
 
