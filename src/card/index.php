@@ -24,6 +24,11 @@
 
             <h2>Configuration Options</h2>
             <div class="configuration-options">
+              <form id="componentToggles">
+                <h3>Component</h3>
+                <label for="showPayButton">showPayButton:</label>
+                <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+              </form>
               <form id="cardToggles">
                 <h3>Cards Component</h3>
                 <label for="enableStoreDetails">enableStoreDetails:</label>

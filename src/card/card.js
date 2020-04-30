@@ -2,6 +2,8 @@ const getConfig = async () => {
     let config = { cardConfig: { data: { billingAddress: {} } } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
 
+    config.showPayButton = document.querySelector('#showPayButton').checked;
+
     config.cardConfig.enableStoreDetails = document.querySelector('#enableStoreDetails').checked;
     config.cardConfig.hasHolderName = document.querySelector('#hasHolderName').checked;
     config.cardConfig.holderNameRequired = document.querySelector('#holderNameRequired').checked;
@@ -30,7 +32,7 @@ let loadComponent = function loadComponent() {
         // 1. Create an instance of AdyenCheckout
         const checkout = new AdyenCheckout({
             environment: 'test',
-            originKey: originKey, // Mandatory. originKey from Customer Area
+            originKey: originKey,
             paymentMethodsResponse,
             locale: config.locale
         });
@@ -38,6 +40,7 @@ let loadComponent = function loadComponent() {
         // 2. Create and mount the Component
         card = checkout
             .create('card', {
+                showPayButton: config.showPayButton,
                 ...config.cardConfig,
 
                 // Optional. Customize the look and feel of the payment form
@@ -52,10 +55,6 @@ let loadComponent = function loadComponent() {
                     // encryptedSecurityCode : '123'
                 },
 
-                // Optionally show a Pay Button
-                showPayButton: true,
-
-                // Events
                 onSubmit: (state, component) => {
                     if (state.isValid) {
                         makePayment(card.data)
@@ -99,6 +98,9 @@ let reloadComponent = function reloadComponent() {
 let addReloadEventListener = function addReloadEventListener(element) {
   element.addEventListener('change', function() { reloadComponent(); });
 }
+
+let componentToggles = document.querySelectorAll('#componentToggles input');
+componentToggles.forEach(addReloadEventListener);
 
 let cardToggles = document.querySelectorAll('#cardToggles input');
 cardToggles.forEach(addReloadEventListener);

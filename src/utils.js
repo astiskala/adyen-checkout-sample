@@ -33,6 +33,7 @@ const getPaymentMethodsConfig = async () => {
 const getPaymentsDefaultConfig = async() => {
     let config = {
         channel: 'Web',
+        applicationInfo: { externalPlatform: { name: 'adyen-components-js-sample-code', version: 'N/A', integrator: 'https://github.com/Adyen' } },
         amount: {},
         shopperName: {},
         billingAddress: {},
