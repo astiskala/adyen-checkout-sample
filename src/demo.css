@@ -197,6 +197,8 @@ pre {
     margin: 24px;
     overflow: auto;
     position: relative;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .request-container .request-code,
