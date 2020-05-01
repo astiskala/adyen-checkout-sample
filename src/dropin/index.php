@@ -23,7 +23,7 @@
 
                 <h2>Configuration Options</h2>
                 <div class="configuration-options">
-                  <form id="dropinToggles">
+                  <form id="toggles">
                     <h3>Drop-in</h3>
                     <label for="openFirstPaymentMethod">openFirstPaymentMethod:</label>
                     <input type="checkbox" id="openFirstPaymentMethod" name="openFirstPaymentMethod" checked="checked" /><br />
@@ -35,8 +35,6 @@
                     <input type="checkbox" id="showPaymentMethods" name="showPaymentMethods" checked="checked" /><br />
                     <label for="showPayButton">showPayButton:</label>
                     <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
-                  </form>
-                  <form id="cardToggles">
                     <h3>Cards Component</h3>
                     <label for="enableStoreDetails">enableStoreDetails:</label>
                     <input type="checkbox" id="enableStoreDetails" name="enableStoreDetails" /><br />

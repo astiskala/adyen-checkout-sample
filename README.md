@@ -42,6 +42,9 @@ DELIVERY_ADDRESS_HOUSENUMBERORNAME=123
 DELIVERY_ADDRESS_POSTALCODE=2000
 DELIVERY_ADDRESS_STATEORPROVINCE=NSW
 DELIVERY_ADDRESS_STREET=Happy Street
+DATE_OF_BIRTH=2000-01-01
+
+ZIP_CLICKANDCOLLECT=false
 ```
 
 These variables can be found in Adyen Customer Area. For more information, visit our [Get started with Adyen guide](https://docs.adyen.com/payments-essentials/get-started-with-adyen).

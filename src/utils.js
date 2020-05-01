@@ -38,6 +38,7 @@ const getPaymentsDefaultConfig = async() => {
         shopperName: {},
         billingAddress: {},
         deliveryAddress: {},
+        paymentMethod: {},
         lineItems: []
     };
 
@@ -48,6 +49,7 @@ const getPaymentsDefaultConfig = async() => {
     config.returnUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/returnUrl';
     config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
     config.telephoneNumber = await httpGet('env', 'TELEPHONE_NUMBER');
+    config.dateOfBirth = await httpGet('env', 'DATE_OF_BIRTH');
 
     config.amount.currency = await httpGet('env', 'CURRENCY');
     config.amount.value = await httpGet('env', 'VALUE');
@@ -69,6 +71,8 @@ const getPaymentsDefaultConfig = async() => {
     config.deliveryAddress.stateOrProvince = await httpGet('env', 'DELIVERY_ADDRESS_STATEORPROVINCE');
     config.deliveryAddress.street = await httpGet('env', 'DELIVERY_ADDRESS_STREET');
 
+    config.paymentMethod.clickAndCollect = await httpGet('env', 'ZIP_CLICKANDCOLLECT');
+
     config.lineItems = [{
         id: '1',
         description: 'Test Item 1',
@@ -79,6 +83,7 @@ const getPaymentsDefaultConfig = async() => {
         quantity: 1,
         taxCategory: 'High'
     }];
+
     return config;
 };
 
@@ -104,6 +109,11 @@ const makePayment = (paymentMethod, config = {}) => {
         ...paymentsDefaultConfig,
         ...config
     };
+
+    if (paymentMethod.paymentMethod.type === "zip") {
+      paymentMethod.paymentMethod.clickAndCollect = paymentsConfig.paymentMethod.clickAndCollect;
+    }
+
     const paymentRequest = {
         ...paymentsConfig,
         ...paymentMethod

@@ -1,5 +1,5 @@
 const getConfig = async () => {
-    let config = { cardConfig: { data: { billingAddress : {} }}, paypalConfig: { environment: "test", amount: {} } };
+    let config = { cardConfig: { data: { billingAddress : {} }}, paypalConfig: { environment: "test", amount: {} }, paymentMethod: {} };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
 
     config.openFirstPaymentMethod = document.querySelector('#openFirstPaymentMethod').checked;
@@ -35,7 +35,8 @@ const getConfig = async () => {
 var dropin;
 
 let loadDropIn = function loadDropIn() {
-  getConfig().then(config => {
+  getConfig()
+    .then(config => {
     // 0. Get originKey
     getOriginKey().then(originKey => {
         getPaymentMethods().then(paymentMethodsResponse => {
@@ -123,8 +124,5 @@ let addReloadEventListener = function addReloadEventListener(element) {
   element.addEventListener('change', function() { reloadDropIn(); });
 }
 
-let toggles = document.querySelectorAll('#dropinToggles input');
+let toggles = document.querySelectorAll('#toggles input');
 toggles.forEach(addReloadEventListener);
-
-let cardToggles = document.querySelectorAll('#cardToggles input');
-cardToggles.forEach(addReloadEventListener);
