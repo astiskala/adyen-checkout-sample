@@ -17,7 +17,19 @@ function submitPaymentDetails() {
 
     $apikey = getenv('CHECKOUT_APIKEY');
     $version = getenv('CHECKOUT_API_VERSION');
-    $url = "https://checkout-test.adyen.com/v{$version}/payments/details";
+    $environment = getenv('ENVIRONMENT');
+    if ($environment == "test") {
+      $domain = "checkout-test.adyen.com";
+    } else if ($environment == "live") {
+      $prefix = getenv('PREFIX');
+      if ($prefix) {
+        $prefix = $prefix . "-";
+      }
+
+      $domain = $prefix . "checkout-live.adyenpayments.com/checkout";
+    }
+
+    $url = "https://" . $domain . "/v{$version}/payments/details";
 
     // Convert data to JSON
     $json_data = json_encode($request);

@@ -19,7 +19,19 @@ function getPaymentMethods() {
     $apikey = getenv('CHECKOUT_APIKEY');
     $merchantAccount = getenv('MERCHANT_ACCOUNT');
     $version = getenv('CHECKOUT_API_VERSION');
-    $url = "https://checkout-test.adyen.com/v{$version}/paymentMethods";
+    $environment = getenv('ENVIRONMENT');
+    if ($environment == "test") {
+      $domain = "checkout-test.adyen.com";
+    } else if ($environment == "live") {
+      $prefix = getenv('PREFIX');
+      if ($prefix) {
+        $prefix = $prefix . "-";
+      }
+
+      $domain = $prefix . "checkout-live.adyenpayments.com/checkout";
+    }
+
+    $url = "https://" . $domain . "/v{$version}/paymentMethods";
 
     // Convert data to JSON
     $json_data = json_encode($request);

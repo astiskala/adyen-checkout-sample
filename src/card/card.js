@@ -1,6 +1,7 @@
 const getConfig = async () => {
     let config = { cardConfig: { data: { billingAddress: {} } } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+    config.environment = await httpGet('env', 'ENVIRONMENT');
 
     config.showPayButton = document.querySelector('#showPayButton').checked;
 
@@ -31,7 +32,7 @@ let loadComponent = function loadComponent() {
         getPaymentMethods().then(paymentMethodsResponse => {
         // 1. Create an instance of AdyenCheckout
         const checkout = new AdyenCheckout({
-            environment: 'test',
+            environment: config.environment,
             originKey: originKey,
             paymentMethodsResponse,
             locale: config.locale

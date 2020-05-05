@@ -1,6 +1,7 @@
 const getConfig = async () => {
     let config = { afterpaytouchConfig: { environment: "test", amount: {} } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+    config.environment = await httpGet('env', 'ENVIRONMENT');
     return config;
 };
 
@@ -13,7 +14,7 @@ let loadComponent = function loadComponent() {
         getPaymentMethods().then(paymentMethodsResponse => {
           // 1. Create an instance of AdyenCheckout
           var checkout = new AdyenCheckout({
-              environment: 'test',
+              environment: config.environment,
               originKey: originKey, // Mandatory. originKey from Customer Area
               paymentMethodsResponse,
               locale: config.locale

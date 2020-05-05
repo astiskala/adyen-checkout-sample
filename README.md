@@ -9,8 +9,19 @@
 To run this project, **create** a `.env` file on your project's root folder following the example on `.env.default`.
 
 ```
-MERCHANT_ACCOUNT=MyMerchantAccount
-CHECKOUT_APIKEY=MY_CHECKOUT_API_KEY
+# Either "test" or "live"
+ENVIRONMENT=test
+
+# For "live" environment only - see https://docs.adyen.com/development-resources/live-endpoints
+PREFIX=
+
+# For "live" environment only, either blank, "au" or "us"
+DC=
+
+# See https://docs.adyen.com/user-management/how-to-get-the-api-key
+CHECKOUT_APIKEY=
+
+MERCHANT_ACCOUNT=
 
 PAYPAL_MERCHANT_ID=MY_PAYPAL_MERCHANT_ID
 PAYPAL_INTENT=capture

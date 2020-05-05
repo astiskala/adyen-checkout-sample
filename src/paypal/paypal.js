@@ -1,6 +1,7 @@
 const getConfig = async () => {
     let config = { paypalConfig: { environment: "test", amount: {} } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+    config.environment = await httpGet('env', 'ENVIRONMENT');
 
     config.paypalConfig.merchantId = await httpGet('env', 'PAYPAL_MERCHANT_ID');
     config.paypalConfig.countryCode = await httpGet('env', 'COUNTRY');
@@ -18,7 +19,7 @@ let loadComponent = function loadComponent() {
     getOriginKey().then(originKey => {
           // 1. Create an instance of AdyenCheckout
           var checkout = new AdyenCheckout({
-              environment: 'test',
+              environment: config.environment,
               originKey: originKey, // Mandatory. originKey from Customer Area
               locale: config.locale
           });

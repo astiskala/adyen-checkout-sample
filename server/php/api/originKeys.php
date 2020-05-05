@@ -7,7 +7,19 @@
 function getOriginKey() {
     $apikey = getenv('CHECKOUT_APIKEY');
     $merchantAccount = getenv('MERCHANT_ACCOUNT');
-    $url = "https://checkout-test.adyen.com/v1/originKeys";
+    $environment = getenv('ENVIRONMENT');
+    if ($environment == "test") {
+      $domain = "checkout-test.adyen.com";
+    } else if ($environment == "live") {
+      $prefix = getenv('PREFIX');
+      if ($prefix) {
+        $prefix = $prefix . "-";
+      }
+
+      $domain = $prefix . "checkout-live.adyenpayments.com/checkout";
+    }
+
+    $url = "https://" . $domain . "/v1/originKeys";
 
     // Get the current domain
     $domain = $_SERVER['HTTP_HOST'];

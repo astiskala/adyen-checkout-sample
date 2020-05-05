@@ -1,6 +1,7 @@
 const getConfig = async () => {
     let config = { cardConfig: { data: { billingAddress : {} }}, paypalConfig: { environment: "test", amount: {} }, paymentMethod: {} };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+    config.environment = await httpGet('env', 'ENVIRONMENT');
 
     config.openFirstPaymentMethod = document.querySelector('#openFirstPaymentMethod').checked;
     config.openFirstStoredPaymentMethod = document.querySelector('#openFirstStoredPaymentMethod').checked;
@@ -42,7 +43,7 @@ let loadDropIn = function loadDropIn() {
         getPaymentMethods().then(paymentMethodsResponse => {
             // 1. Create an instance of AdyenCheckout
             var checkout = new AdyenCheckout({
-                environment: 'test',
+                environment: config.environment,
                 originKey: originKey, // Mandatory. originKey from Customer Area
                 paymentMethodsResponse,
                 locale: config.locale
