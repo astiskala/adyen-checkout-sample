@@ -1,5 +1,5 @@
 const getConfig = async () => {
-    let config = { afterpaytouchConfig: { environment: "test", amount: {} } };
+    let config = { afterpaytouchConfig: { amount: {} } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
     config.environment = await httpGet('env', 'ENVIRONMENT');
     return config;

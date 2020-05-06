@@ -1,8 +1,9 @@
 const getConfig = async () => {
-    let config = { paypalConfig: { environment: "test", amount: {} } };
+    let config = { paypalConfig: { amount: {} } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
     config.environment = await httpGet('env', 'ENVIRONMENT');
 
+    config.paypalConfig.environment = await httpGet('env', 'ENVIRONMENT');
     config.paypalConfig.merchantId = await httpGet('env', 'PAYPAL_MERCHANT_ID');
     config.paypalConfig.countryCode = await httpGet('env', 'COUNTRY');
     config.paypalConfig.amount.currency = await httpGet('env', 'CURRENCY');

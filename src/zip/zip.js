@@ -1,5 +1,5 @@
 const getConfig = async () => {
-    let config = { zipConfig: { environment: "test", amount: {} } };
+    let config = { zipConfig: { amount: {} } };
     config.locale = await httpGet('env', 'SHOPPER_LOCALE');
     config.environment = await httpGet('env', 'ENVIRONMENT');
     return config;
