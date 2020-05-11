@@ -22,6 +22,15 @@
                 </div>
             </div>
 
+            <h2>Configuration Options</h2>
+            <div class="configuration-options">
+              <form id="toggles">
+                <h3>PayPal Component</h3>
+                <label for="includeDeliveryAddress">Include Delivery Address and Shopper Name:</label>
+                <input type="checkbox" id="includeDeliveryAddress" name="includeDeliveryAddress" checked="checked" />
+              </form>
+            </div>
+
             <div class="info">
                 <p>
                     Check the Source Code to see the full implementation.

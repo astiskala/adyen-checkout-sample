@@ -103,7 +103,7 @@ const getPaymentMethods = () => {
 };
 
 // Posts a new payment into the local server
-const makePayment = (paymentMethod, config = {}) => {
+const makePayment = (paymentMethod, config = {}, includeDeliveryAddress = true) => {
   return getPaymentsDefaultConfig().then(paymentsDefaultConfig => {
     const paymentsConfig = {
         ...paymentsDefaultConfig,
@@ -118,6 +118,11 @@ const makePayment = (paymentMethod, config = {}) => {
         ...paymentsConfig,
         ...paymentMethod
     };
+
+    if (includeDeliveryAddress === false) {
+      paymentRequest.shopperName = null;
+      paymentRequest.deliveryAddress = null;
+    }
 
     updateRequestContainer("/payments", paymentRequest);
 
