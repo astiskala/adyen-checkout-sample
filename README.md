@@ -23,6 +23,10 @@ CHECKOUT_APIKEY=
 
 MERCHANT_ACCOUNT=
 
+WEBHOOKRELAY_KEY=
+WEBHOOKRELAY_SERCRET=
+WEBHOOKRELAY_BUCKET=
+
 PAYPAL_MERCHANT_ID=MY_PAYPAL_MERCHANT_ID
 PAYPAL_INTENT=capture
 
@@ -72,6 +76,14 @@ $ ./start.sh
 ```
 
 A PHP server will start on `http://localhost:3000`.
+
+### Setting up Webhook Relay
+
+1. Sign up for a free account at https://webhookrelay.com/
+2. Create a new bucket
+3. Edit the Endpoint Settings for the default public endpoint and set the "Static response body" to always return [accepted]
+4. Create a new access token
+5. Set the bucket name, access key and secret in your .env file
 
 ### Deploying this example to Heroku
 

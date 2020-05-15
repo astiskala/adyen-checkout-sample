@@ -160,37 +160,40 @@ const getOriginKey = () =>
     .catch(console.error);
 
 const subscribeToWebhooks = async() => {
-  const client = new WebSocket('wss://my.webhookrelay.com/v1/socket');
   const webhookRelayKey = await httpGet('env', 'WEBHOOKRELAY_KEY');
-  const webhookRelaySecret = await httpGet('env', 'WEBHOOKRELAY_SERCRET');
-  const webhookRelayBucket = await httpGet('env', 'WEBHOOKRELAY_BUCKET');
 
-  client.onopen = () => {
-    console.log('WebSocket Client Connected');
-    client.send(JSON.stringify({
-        "action": "auth",
-        "key": webhookRelayKey,
-        "secret": webhookRelaySecret
-    }));
-  };
+  if (webhookRelayKey !== "") {
+    const client = new WebSocket('wss://my.webhookrelay.com/v1/socket');
+    const webhookRelaySecret = await httpGet('env', 'WEBHOOKRELAY_SERCRET');
+    const webhookRelayBucket = await httpGet('env', 'WEBHOOKRELAY_BUCKET');
 
-  client.onmessage = (message) => {
-    console.log(message);
-    const jsonData = JSON.parse(message.data);
-    if(jsonData.status === "authenticated") {
-      console.log('Authenticated, subscribing to bucket...');
+    client.onopen = () => {
+      console.log('WebSocket Client Connected');
       client.send(JSON.stringify({
-          "action":"subscribe",
-          "buckets": [ "demo" ]
+          "action": "auth",
+          "key": webhookRelayKey,
+          "secret": webhookRelaySecret
       }));
-  }
+    };
 
-  if(jsonData.type === "webhook") {
-      console.log('Got webhook...');
-      console.log(jsonData.body);
-      updateResponseContainer("Webhook Notification", JSON.parse(jsonData.body));
+    client.onmessage = (message) => {
+      console.log(message);
+      const jsonData = JSON.parse(message.data);
+      if(jsonData.status === "authenticated") {
+        console.log('Authenticated, subscribing to bucket...');
+        client.send(JSON.stringify({
+            "action":"subscribe",
+            "buckets": [ "demo" ]
+        }));
     }
-  };
+
+    if(jsonData.type === "webhook") {
+        console.log('Got webhook...');
+        console.log(jsonData.body);
+        updateResponseContainer("Webhook Notification", JSON.parse(jsonData.body));
+      }
+    };
+  }
 };
 
 subscribeToWebhooks();
