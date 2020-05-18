@@ -24,6 +24,9 @@
                 <h2>Configuration Options</h2>
                 <div class="configuration-options">
                   <form id="toggles">
+                    <h3>3DS2</h3>
+                    <label for="native3ds2">Enable Native 3DS2:</label>
+                    <input type="checkbox" id="native3ds2" name="native3ds2" checked="checked" />
                     <h3>Drop-in</h3>
                     <label for="openFirstPaymentMethod">openFirstPaymentMethod:</label>
                     <input type="checkbox" id="openFirstPaymentMethod" name="openFirstPaymentMethod" checked="checked" /><br />

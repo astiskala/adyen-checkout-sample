@@ -3,6 +3,8 @@ const getConfig = async () => {
   config.locale = await httpGet("env", "SHOPPER_LOCALE");
   config.environment = await httpGet("env", "ENVIRONMENT");
 
+  config.native3ds2 = document.querySelector("#native3ds2").checked;
+
   config.showPayButton = document.querySelector("#showPayButton").checked;
 
   config.cardConfig.enableStoreDetails = document.querySelector(
@@ -86,7 +88,7 @@ let loadComponent = function loadComponent() {
 
             onSubmit: (state, component) => {
               if (state.isValid) {
-                makePayment(card.data).then((response) => {
+                makePayment(card.data, {}, true, config.native3ds2).then((response) => {
                   if (response.action) {
                     component.handleAction(response.action);
                   } else {
@@ -104,7 +106,11 @@ let loadComponent = function loadComponent() {
             },
             onAdditionalDetails: (state, component) => {
               submitAdditionalDetails(state.data).then((result) => {
-                updateResultContainer(result.resultCode);
+                if (result.action) {
+                  component.handleAction(result.action);
+                } else {
+                  updateResultContainer(result.resultCode);
+                }
               });
             },
           })
@@ -128,8 +134,5 @@ let addReloadEventListener = function addReloadEventListener(element) {
   });
 };
 
-let componentToggles = document.querySelectorAll("#componentToggles input");
-componentToggles.forEach(addReloadEventListener);
-
-let cardToggles = document.querySelectorAll("#cardToggles input");
-cardToggles.forEach(addReloadEventListener);
+let toggles = document.querySelectorAll("#toggles input");
+toggles.forEach(addReloadEventListener);

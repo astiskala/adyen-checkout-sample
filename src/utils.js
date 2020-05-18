@@ -52,13 +52,19 @@ const getPaymentsDefaultConfig = async () => {
   config.reference = await httpGet("env", "REFERENCE");
   config.shopperReference = await httpGet("env", "SHOPPER_REFERENCE");
   config.countryCode = await httpGet("env", "COUNTRY");
-  config.returnUrl =
+
+  const ipResponse = await fetch(`https://api.ipify.org`);
+  config.shopperIP = await ipResponse.text();
+
+  config.origin =
     window.location.protocol +
     "//" +
     window.location.hostname +
     ":" +
-    window.location.port +
-    "/returnUrl";
+    window.location.port;
+
+  config.returnUrl = config.origin + "/returnUrl";
+
   config.shopperEmail = await httpGet("env", "SHOPPER_EMAIL");
   config.telephoneNumber = await httpGet("env", "TELEPHONE_NUMBER");
   config.dateOfBirth = await httpGet("env", "DATE_OF_BIRTH");
@@ -74,18 +80,22 @@ const getPaymentsDefaultConfig = async () => {
     "env",
     "BILLING_ADDRESS_COUNTRY"
   );
+
   config.billingAddress.houseNumberOrName = await httpGet(
     "env",
     "BILLING_ADDRESS_HOUSENUMBERORNAME"
   );
+
   config.billingAddress.postalCode = await httpGet(
     "env",
     "BILLING_ADDRESS_POSTALCODE"
   );
+
   config.billingAddress.stateOrProvince = await httpGet(
     "env",
     "BILLING_ADDRESS_STATEORPROVINCE"
   );
+
   config.billingAddress.street = await httpGet("env", "BILLING_ADDRESS_STREET");
 
   config.deliveryAddress.city = await httpGet("env", "DELIVERY_ADDRESS_CITY");
@@ -93,18 +103,22 @@ const getPaymentsDefaultConfig = async () => {
     "env",
     "DELIVERY_ADDRESS_COUNTRY"
   );
+
   config.deliveryAddress.houseNumberOrName = await httpGet(
     "env",
     "DELIVERY_ADDRESS_HOUSENUMBERORNAME"
   );
+
   config.deliveryAddress.postalCode = await httpGet(
     "env",
     "DELIVERY_ADDRESS_POSTALCODE"
   );
+
   config.deliveryAddress.stateOrProvince = await httpGet(
     "env",
     "DELIVERY_ADDRESS_STATEORPROVINCE"
   );
+
   config.deliveryAddress.street = await httpGet(
     "env",
     "DELIVERY_ADDRESS_STREET"
@@ -150,7 +164,8 @@ const getPaymentMethods = () => {
 const makePayment = (
   paymentMethod,
   config = {},
-  includeDeliveryAddress = true
+  includeDeliveryAddress = true,
+  native3ds2 = false
 ) => {
   return getPaymentsDefaultConfig().then((paymentsDefaultConfig) => {
     const paymentsConfig = {
@@ -171,6 +186,11 @@ const makePayment = (
     if (includeDeliveryAddress === false) {
       paymentRequest.shopperName = null;
       paymentRequest.deliveryAddress = null;
+    }
+
+    if (native3ds2 === true) {
+      paymentRequest.additionalData = {};
+      paymentRequest.additionalData.allow3DS2 = true;
     }
 
     updateRequestContainer("/payments", paymentRequest);

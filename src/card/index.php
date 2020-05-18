@@ -24,12 +24,13 @@
 
             <h2>Configuration Options</h2>
             <div class="configuration-options">
-              <form id="componentToggles">
+              <form id="toggles">
+                <h3>3DS2</h3>
+                <label for="native3ds2">Enable Native 3DS2:</label>
+                <input type="checkbox" id="native3ds2" name="native3ds2" checked="checked" />
                 <h3>Component</h3>
                 <label for="showPayButton">showPayButton:</label>
                 <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
-              </form>
-              <form id="cardToggles">
                 <h3>Cards Component</h3>
                 <label for="enableStoreDetails">enableStoreDetails:</label>
                 <input type="checkbox" id="enableStoreDetails" name="enableStoreDetails" /><br />
