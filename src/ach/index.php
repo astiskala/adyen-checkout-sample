@@ -44,7 +44,6 @@
     </div>
 
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/3.6.0/adyen.js"></script>
-    <script src="../demo.js"></script>
     <script src="../utils.js"></script>
     <script src="/ach/ach.js"></script>
 </body>

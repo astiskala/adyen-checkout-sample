@@ -1,25 +1,25 @@
 const getConfig = async () => {
-  let config = {};
-  config.locale = await httpGet("env", "SHOPPER_LOCALE");
-  config.environment = await httpGet("env", "ENVIRONMENT");
+  const config = {};
+  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+  config.environment = await httpGet('env', 'ENVIRONMENT');
   return config;
 };
 
-var alipayComponent;
+let alipayComponent;
 
-let loadComponent = function loadComponent() {
+const loadComponent = function loadComponent() {
   getConfig().then((config) => {
     getOriginKey().then((originKey) => {
       getPaymentMethods().then((paymentMethodsResponse) => {
-        var checkout = new AdyenCheckout({
+        const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey: originKey, // Mandatory. originKey from Customer Area
+          originKey, // Mandatory. originKey from Customer Area
           paymentMethodsResponse,
           locale: config.locale,
         });
 
         alipayComponent = checkout
-          .create("alipay", {
+          .create('alipay', {
             onChange: (state) => {
               updateStateContainer(state); // Demo purposes only
             },
@@ -31,12 +31,10 @@ let loadComponent = function loadComponent() {
                   if (response.action) {
                     // Drop-in handles the action object from the /payments response.
                     component.handleAction(response.action);
-                  } else {
-                    if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
-                    } else if (response.message) {
-                      updateResultContainer(response.message);
-                    }
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
                   }
                 })
                 .catch((error) => {
@@ -44,7 +42,7 @@ let loadComponent = function loadComponent() {
                 });
             },
           })
-          .mount("#alipay-container");
+          .mount('#alipay-container');
       });
     });
   });

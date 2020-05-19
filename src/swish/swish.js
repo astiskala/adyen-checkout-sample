@@ -3,8 +3,8 @@ getOriginKey().then((originKey) => {
   // 1. Create an instance of AdyenCheckout
   const checkout = new AdyenCheckout({
     originKey, // Mandatory. originKey from Customer Area
-    environment: "test",
-    amount: { currency: "EUR", value: 1000 },
+    environment: 'test',
+    amount: { currency: 'EUR', value: 1000 },
     onAdditionalDetails: (result) => {
       console.log(result);
     },
@@ -15,16 +15,16 @@ getOriginKey().then((originKey) => {
 
   const swishData = {
     paymentMethod: {
-      type: "swish",
+      type: 'swish',
     },
-    countryCode: "SE",
+    countryCode: 'SE',
     amount: {
-      currency: "SEK",
+      currency: 'SEK',
       value: 10000,
     },
   };
 
   makePayment(swishData).then((response) => {
-    checkout.createFromAction(response.action).mount("#swish-container");
+    checkout.createFromAction(response.action).mount('#swish-container');
   });
 });

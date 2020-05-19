@@ -1,125 +1,77 @@
 const getConfig = async () => {
-  let config = {
+  const config = {
     cardConfig: { data: { billingAddress: {} } },
-    paypalConfig: { environment: "test", amount: {} },
+    paypalConfig: { environment: 'test', amount: {} },
     paymentMethod: {},
   };
 
-  config.locale = await httpGet("env", "SHOPPER_LOCALE");
-  config.environment = await httpGet("env", "ENVIRONMENT");
+  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+  config.environment = await httpGet('env', 'ENVIRONMENT');
 
-  config.native3ds2 = document.querySelector("#native3ds2").checked;
+  config.native3ds2 = document.querySelector('#native3ds2').checked;
 
-  config.openFirstPaymentMethod = document.querySelector(
-    "#openFirstPaymentMethod"
-  ).checked;
+  config.openFirstPaymentMethod = document.querySelector('#openFirstPaymentMethod').checked;
+  config.openFirstStoredPaymentMethod = document.querySelector('#openFirstStoredPaymentMethod').checked;
+  config.showStoredPaymentMethods = document.querySelector('#showStoredPaymentMethods').checked;
+  config.showPaymentMethods = document.querySelector('#showPaymentMethods').checked;
+  config.showPayButton = document.querySelector('#showPayButton').checked;
 
-  config.openFirstStoredPaymentMethod = document.querySelector(
-    "#openFirstStoredPaymentMethod"
-  ).checked;
+  config.cardConfig.enableStoreDetails = document.querySelector('#enableStoreDetails').checked;
+  config.cardConfig.hasHolderName = document.querySelector('#hasHolderName').checked;
+  config.cardConfig.holderNameRequired = document.querySelector('#holderNameRequired').checked;
+  config.cardConfig.hideCVC = document.querySelector('#hideCVC').checked;
+  config.cardConfig.showBrandIcon = document.querySelector('#showBrandIcon').checked;
+  config.cardConfig.billingAddressRequired = document.querySelector('#billingAddressRequired').checked;
+  config.cardConfig.data.holderName = await httpGet('env', 'CARD_HOLDERNAME');
+  config.cardConfig.data.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
 
-  config.showStoredPaymentMethods = document.querySelector(
-    "#showStoredPaymentMethods"
-  ).checked;
+  config.cardConfig.data.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
+  config.cardConfig.data.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
+  config.cardConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
+  config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
+  config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
-  config.showPaymentMethods = document.querySelector(
-    "#showPaymentMethods"
-  ).checked;
-
-  config.showPayButton = document.querySelector("#showPayButton").checked;
-
-  config.cardConfig.enableStoreDetails = document.querySelector(
-    "#enableStoreDetails"
-  ).checked;
-
-  config.cardConfig.hasHolderName = document.querySelector(
-    "#hasHolderName"
-  ).checked;
-
-  config.cardConfig.holderNameRequired = document.querySelector(
-    "#holderNameRequired"
-  ).checked;
-
-  config.cardConfig.hideCVC = document.querySelector("#hideCVC").checked;
-  config.cardConfig.showBrandIcon = document.querySelector(
-    "#showBrandIcon"
-  ).checked;
-
-  config.cardConfig.billingAddressRequired = document.querySelector(
-    "#billingAddressRequired"
-  ).checked;
-
-  config.cardConfig.data.holderName = await httpGet("env", "CARD_HOLDERNAME");
-  config.cardConfig.data.billingAddress.city = await httpGet(
-    "env",
-    "BILLING_ADDRESS_CITY"
-  );
-
-  config.cardConfig.data.billingAddress.country = await httpGet(
-    "env",
-    "BILLING_ADDRESS_COUNTRY"
-  );
-
-  config.cardConfig.data.billingAddress.houseNumberOrName = await httpGet(
-    "env",
-    "BILLING_ADDRESS_HOUSENUMBERORNAME"
-  );
-
-  config.cardConfig.data.billingAddress.postalCode = await httpGet(
-    "env",
-    "BILLING_ADDRESS_POSTALCODE"
-  );
-
-  config.cardConfig.data.billingAddress.stateOrProvince = await httpGet(
-    "env",
-    "BILLING_ADDRESS_STATEORPROVINCE"
-  );
-
-  config.cardConfig.data.billingAddress.street = await httpGet(
-    "env",
-    "BILLING_ADDRESS_STREET"
-  );
-
-  config.paypalConfig.merchantId = await httpGet("env", "PAYPAL_MERCHANT_ID");
-  config.paypalConfig.countryCode = await httpGet("env", "COUNTRY");
-  config.paypalConfig.amount.currency = await httpGet("env", "CURRENCY");
-  config.paypalConfig.amount.value = await httpGet("env", "VALUE");
-  config.paypalConfig.intent = await httpGet("env", "PAYPAL_INTENT");
+  config.paypalConfig.merchantId = await httpGet('env', 'PAYPAL_MERCHANT_ID');
+  config.paypalConfig.countryCode = await httpGet('env', 'COUNTRY');
+  config.paypalConfig.amount.currency = await httpGet('env', 'CURRENCY');
+  config.paypalConfig.amount.value = await httpGet('env', 'VALUE');
+  config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
 
   return config;
 };
 
-var dropin;
+let dropin;
 
-let loadDropIn = function loadDropIn() {
+const loadDropIn = function loadDropIn() {
   getConfig().then((config) => {
     // 0. Get originKey
     getOriginKey().then((originKey) => {
       getPaymentMethods().then((paymentMethodsResponse) => {
         // 1. Create an instance of AdyenCheckout
-        var checkout = new AdyenCheckout({
+        const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey: originKey, // Mandatory. originKey from Customer Area
+          originKey, // Mandatory. originKey from Customer Area
           paymentMethodsResponse,
           locale: config.locale,
         });
 
         // 2. Handle any additional configuration required for specific payment methods
-        let paymentMethodsConfiguration = {
+        const paymentMethodsConfiguration = {
           // Example required configuration for PayPal
           paypal: config.paypalConfig,
           card: config.cardConfig,
         };
 
-        paymentMethodsConfiguration.paypal.onCancel = (data, dropin) => {
-          dropin.setStatus("ready");
-          // Sets your prefered status of the Drop-in component when a PayPal payment is cancelled. In this example, return to the initial state.
+        paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
+          component.setStatus('ready');
+          // Sets your prefered status of the Drop-in component when a PayPal payment is cancelled.
+          // In this example, return to the initial state.
         };
 
         // 3. Create and mount the Component
         dropin = checkout
-          .create("dropin", {
-            paymentMethodsConfiguration: paymentMethodsConfiguration,
+          .create('dropin', {
+            paymentMethodsConfiguration,
             openFirstPaymentMethod: config.openFirstPaymentMethod,
             openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
             showStoredPaymentMethods: config.showStoredPaymentMethods,
@@ -140,12 +92,10 @@ let loadDropIn = function loadDropIn() {
                   if (response.action) {
                     // Drop-in handles the action object from the /payments response.
                     dropin.handleAction(response.action);
-                  } else {
-                    if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
-                    } else if (response.message) {
-                      updateResultContainer(response.message);
-                    }
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
                   }
                 })
                 .catch((error) => {
@@ -162,12 +112,13 @@ let loadDropIn = function loadDropIn() {
                 }
               });
             },
-            onError: (state, dropin) => {
-              // Sets your prefered status of Drop-in when an error occurs. In this example, return to the initial state.
-              dropin.setStatus("ready");
+            onError: (state, component) => {
+              // Sets your prefered status of Drop-in when an error occurs.
+              // In this example, return to the initial state.
+              component.setStatus('ready');
             },
           })
-          .mount("#dropin-container");
+          .mount('#dropin-container');
       });
     });
   });
@@ -175,17 +126,17 @@ let loadDropIn = function loadDropIn() {
 
 loadDropIn();
 
-let reloadDropIn = function reloadDropIn() {
-  dropin.unmount("#dropin-container");
+const reloadDropIn = function reloadDropIn() {
+  dropin.unmount('#dropin-container');
   clearRequests();
   loadDropIn();
 };
 
-let addReloadEventListener = function addReloadEventListener(element) {
-  element.addEventListener("change", function () {
+const addReloadEventListener = function addReloadEventListener(element) {
+  element.addEventListener('change', () => {
     reloadDropIn();
   });
 };
 
-let toggles = document.querySelectorAll("#toggles input");
+const toggles = document.querySelectorAll('#toggles input');
 toggles.forEach(addReloadEventListener);

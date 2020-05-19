@@ -1,28 +1,28 @@
 const getConfig = async () => {
-  let config = { afterpaytouchConfig: { amount: {} } };
-  config.locale = await httpGet("env", "SHOPPER_LOCALE");
-  config.environment = await httpGet("env", "ENVIRONMENT");
+  const config = { afterpaytouchConfig: { amount: {} } };
+  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+  config.environment = await httpGet('env', 'ENVIRONMENT');
   return config;
 };
 
-var afterpaytouchComponent;
+let afterpaytouchComponent;
 
-let loadComponent = function loadComponent() {
+const loadComponent = function loadComponent() {
   getConfig().then((config) => {
     // 0. Get originKey
     getOriginKey().then((originKey) => {
       getPaymentMethods().then((paymentMethodsResponse) => {
         // 1. Create an instance of AdyenCheckout
-        var checkout = new AdyenCheckout({
+        const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey: originKey, // Mandatory. originKey from Customer Area
+          originKey, // Mandatory. originKey from Customer Area
           paymentMethodsResponse,
           locale: config.locale,
         });
 
         // 2. Create and mount the Component
         afterpaytouchComponent = checkout
-          .create("afterpaytouch", {
+          .create('afterpaytouch', {
             onChange: (state, component) => {
               updateStateContainer(state);
             },
@@ -35,12 +35,10 @@ let loadComponent = function loadComponent() {
                 makePayment(state.data).then((response) => {
                   if (response.action) {
                     afterpaytouchComponent.handleAction(response.action);
-                  } else {
-                    if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
-                    } else if (response.message) {
-                      updateResultContainer(response.message);
-                    }
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
                   }
                 });
               }
@@ -51,7 +49,7 @@ let loadComponent = function loadComponent() {
               });
             },
           })
-          .mount("#afterpaytouch-container");
+          .mount('#afterpaytouch-container');
       });
     });
   });

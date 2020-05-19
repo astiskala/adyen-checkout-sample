@@ -1,61 +1,32 @@
 const getConfig = async () => {
-  let config = { cardConfig: { data: { billingAddress: {} } } };
-  config.locale = await httpGet("env", "SHOPPER_LOCALE");
-  config.environment = await httpGet("env", "ENVIRONMENT");
+  const config = { cardConfig: { data: { billingAddress: {} } } };
+  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+  config.environment = await httpGet('env', 'ENVIRONMENT');
 
-  config.native3ds2 = document.querySelector("#native3ds2").checked;
+  config.native3ds2 = document.querySelector('#native3ds2').checked;
+  config.showPayButton = document.querySelector('#showPayButton').checked;
 
-  config.showPayButton = document.querySelector("#showPayButton").checked;
+  config.cardConfig.enableStoreDetails = document.querySelector('#enableStoreDetails').checked;
+  config.cardConfig.hasHolderName = document.querySelector('#hasHolderName').checked;
+  config.cardConfig.holderNameRequired = document.querySelector('#holderNameRequired').checked;
+  config.cardConfig.hideCVC = document.querySelector('#hideCVC').checked;
+  config.cardConfig.showBrandIcon = document.querySelector('#showBrandIcon').checked;
+  config.cardConfig.billingAddressRequired = document.querySelector('#billingAddressRequired').checked;
 
-  config.cardConfig.enableStoreDetails = document.querySelector(
-    "#enableStoreDetails"
-  ).checked;
-  config.cardConfig.hasHolderName = document.querySelector(
-    "#hasHolderName"
-  ).checked;
-  config.cardConfig.holderNameRequired = document.querySelector(
-    "#holderNameRequired"
-  ).checked;
-  config.cardConfig.hideCVC = document.querySelector("#hideCVC").checked;
-  config.cardConfig.showBrandIcon = document.querySelector(
-    "#showBrandIcon"
-  ).checked;
-  config.cardConfig.billingAddressRequired = document.querySelector(
-    "#billingAddressRequired"
-  ).checked;
-
-  config.cardConfig.data.holderName = await httpGet("env", "CARD_HOLDERNAME");
-  config.cardConfig.data.billingAddress.city = await httpGet(
-    "env",
-    "BILLING_ADDRESS_CITY"
-  );
-  config.cardConfig.data.billingAddress.country = await httpGet(
-    "env",
-    "BILLING_ADDRESS_COUNTRY"
-  );
-  config.cardConfig.data.billingAddress.houseNumberOrName = await httpGet(
-    "env",
-    "BILLING_ADDRESS_HOUSENUMBERORNAME"
-  );
-  config.cardConfig.data.billingAddress.postalCode = await httpGet(
-    "env",
-    "BILLING_ADDRESS_POSTALCODE"
-  );
-  config.cardConfig.data.billingAddress.stateOrProvince = await httpGet(
-    "env",
-    "BILLING_ADDRESS_STATEORPROVINCE"
-  );
-  config.cardConfig.data.billingAddress.street = await httpGet(
-    "env",
-    "BILLING_ADDRESS_STREET"
-  );
+  config.cardConfig.data.holderName = await httpGet('env', 'CARD_HOLDERNAME');
+  config.cardConfig.data.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
+  config.cardConfig.data.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
+  config.cardConfig.data.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
+  config.cardConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
+  config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
+  config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
   return config;
 };
 
-var card;
+let card;
 
-let loadComponent = function loadComponent() {
+const loadComponent = function loadComponent() {
   getConfig().then((config) => {
     // 0. Get originKey
     getOriginKey().then((originKey) => {
@@ -63,14 +34,14 @@ let loadComponent = function loadComponent() {
         // 1. Create an instance of AdyenCheckout
         const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey: originKey,
+          originKey,
           paymentMethodsResponse,
           locale: config.locale,
         });
 
         // 2. Create and mount the Component
         card = checkout
-          .create("card", {
+          .create('card', {
             showPayButton: config.showPayButton,
             ...config.cardConfig,
 
@@ -91,12 +62,10 @@ let loadComponent = function loadComponent() {
                 makePayment(card.data, {}, true, config.native3ds2).then((response) => {
                   if (response.action) {
                     component.handleAction(response.action);
-                  } else {
-                    if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
-                    } else if (response.message) {
-                      updateResultContainer(response.message);
-                    }
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
                   }
                 });
               }
@@ -114,7 +83,7 @@ let loadComponent = function loadComponent() {
               });
             },
           })
-          .mount("#card-container");
+          .mount('#card-container');
       });
     });
   });
@@ -122,17 +91,17 @@ let loadComponent = function loadComponent() {
 
 loadComponent();
 
-let reloadComponent = function reloadComponent() {
-  card.unmount("#card-container");
+const reloadComponent = function reloadComponent() {
+  card.unmount('#card-container');
   clearRequests();
   loadComponent();
 };
 
-let addReloadEventListener = function addReloadEventListener(element) {
-  element.addEventListener("change", function () {
+const addReloadEventListener = function addReloadEventListener(element) {
+  element.addEventListener('change', () => {
     reloadComponent();
   });
 };
 
-let toggles = document.querySelectorAll("#toggles input");
+const toggles = document.querySelectorAll('#toggles input');
 toggles.forEach(addReloadEventListener);

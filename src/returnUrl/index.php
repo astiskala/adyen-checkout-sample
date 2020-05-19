@@ -24,7 +24,6 @@
         </div>
     </div>
 
-    <script src="../demo.js"></script>
     <script src="../utils.js"></script>
     <script src="/returnUrl/returnUrl.js"></script>
     <script>

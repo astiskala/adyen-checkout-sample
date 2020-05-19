@@ -2,13 +2,13 @@
 getOriginKey().then((originKey) => {
   // 1. Create an instance of AdyenCheckout
   const checkout = new AdyenCheckout({
-    environment: "test",
-    originKey: originKey, // Mandatory. originKey from Customer Area
+    environment: 'test',
+    originKey, // Mandatory. originKey from Customer Area
   });
 
   // 2. Create and mount the Component
   const ach = checkout
-    .create("ach", {
+    .create('ach', {
       // Optional Configuration
       // hasHolderName: true,
 
@@ -32,7 +32,7 @@ getOriginKey().then((originKey) => {
           // ACH only works in US or PR, with payment in USD
           const additionalConfig = {
             countryCode: state.data.billingAddress.country,
-            amount: { value: 1000, currency: "USD" },
+            amount: { value: 1000, currency: 'USD' },
           };
           makePayment(ach.data, additionalConfig);
         }
@@ -58,5 +58,5 @@ getOriginKey().then((originKey) => {
       //                }
       //            }
     })
-    .mount("#ach-container");
+    .mount('#ach-container');
 });

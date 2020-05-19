@@ -70,7 +70,6 @@
     </div>
 
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
-    <script src="../demo.js"></script>
     <script src="../utils.js"></script>
     <script src="/card/card.js"></script>
 </body>

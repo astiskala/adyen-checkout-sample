@@ -17,5 +17,5 @@ getPaymentMethods().then((response) => {
   });
 
   // 2. Create and mount the Component
-  const ideal = checkout.create("ideal").mount("#ideal-container");
+  const ideal = checkout.create('ideal').mount('#ideal-container');
 });

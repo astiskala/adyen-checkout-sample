@@ -1,19 +1,19 @@
-let queryStringToObject = (queryString) => {
-  let obj = {};
+const queryStringToObject = (queryString) => {
+  const obj = {};
   if (queryString) {
-    queryString.split("&").map((item) => {
-      const [k, v] = item.split("=");
+    queryString.split('&').map((item) => {
+      const [k, v] = item.split('=');
       v ? (obj[k] = v) : null;
     });
   }
   return obj;
 };
 
-let handlePostback = function handlePostback(paymentData, postData) {
-  updateResponseContainer("Postback", postData);
+const handlePostback = function handlePostback(paymentData, postData) {
+  updateResponseContainer('Postback', postData);
 
-  let details = queryStringToObject(postData);
-  let paymentDetails = { paymentData: paymentData, details: details };
+  const details = queryStringToObject(postData);
+  const paymentDetails = { paymentData, details };
 
   submitAdditionalDetails(paymentDetails).then((result) => {
     if (result.resultCode) {

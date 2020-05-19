@@ -1,6 +1,6 @@
 // 1. Create an instance of AdyenCheckout
 const checkout = new AdyenCheckout({
-  environment: "test",
+  environment: 'test',
   onChange: (state, component) => {
     // state.data;
     // state.isValid;
@@ -11,9 +11,9 @@ const checkout = new AdyenCheckout({
 
 // 2. Create and mount the Component
 const sepa = checkout
-  .create("sepadirectdebit", {
+  .create('sepadirectdebit', {
     showPayButton: true,
-    countryCode: "NL", // Optional. Sets the default country of the IBAN Placeholder
+    countryCode: 'NL', // Optional. Sets the default country of the IBAN Placeholder
     placeholders: {
       // Optional. Overwriting the default placeholders
       // ownerName: '',
@@ -25,4 +25,4 @@ const sepa = checkout
       makePayment(state.data);
     },
   })
-  .mount("#sepa-container");
+  .mount('#sepa-container');
