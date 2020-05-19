@@ -1,13 +1,5 @@
 <?php
-/**
- * Adyen Checkout Example (https://www.adyen.com/)
- * Copyright (c) 2019 Adyen BV (https://www.adyen.com/)
- * /payments Documentation: https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v40/payments
- */
 
-/**
- * Make a payment
- */
 function initiatePayment() {
     if (file_get_contents('php://input') != '') {
         $request = json_decode(file_get_contents('php://input'), true);

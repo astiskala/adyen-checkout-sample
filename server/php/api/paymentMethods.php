@@ -1,14 +1,5 @@
 <?php
-/**
- * Adyen Checkout Example (https://www.adyen.com/)
- * Copyright (c) 2019 Adyen BV (https://www.adyen.com/)
- * /paymentMethods Documentation: https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v40/paymentMethods
- */
 
-/**
- * Retrieves payment methods
- * from your merchant account
- */
 function getPaymentMethods() {
     if (file_get_contents('php://input') != '') {
         $request = json_decode(file_get_contents('php://input'), true);

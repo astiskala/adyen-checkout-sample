@@ -1,12 +1,31 @@
-# Adyen Components sample code
+# Adyen Checkout samples
 
-![Adyen Components Sample Code](screenshot.png)
+This project been designed to highlight the capabilities of the Adyen Checkout
+SDK and to help developers familiarise themselves with various payment flows. It
+contains the following features:
 
-> ⚠️ **This repository is for demo purposes only**
+- Ability to view the request and response of all synchronous API calls in your
+  browser and in the console
+- Ability to view Webhook notification responses
+- UI-based toggles for various Component and Drop-in configuration options
+- Native 3DS2 support
+- Support for many alternative payment methods
+
+> ⚠️ **This sample project is for demonstration purposes only. It is
+  purposefully insecure and as such, this code should not be used for any
+  production implementations.**
 
 ## Requirements
 
-To run this project, **create** a `.env` file on your project's root folder following the example on `.env.default`.
+### PHP
+
+You will need PHP installed on your local machine with the cURL and OpenSSL
+extensions enabled.
+
+## Configuration
+
+To run this project, **create** a `.env` file on your project's root folder
+following the example on `.env.default`.
 
 ```
 # Either "test" or "live"
@@ -21,8 +40,10 @@ DC=
 # See https://docs.adyen.com/user-management/how-to-get-the-api-key
 CHECKOUT_APIKEY=
 
+# See https://docs.adyen.com/user-management/company-and-merchant-accounts
 MERCHANT_ACCOUNT=
 
+# See "Setting up Webhook Relay" in README.md
 WEBHOOKRELAY_KEY=
 WEBHOOKRELAY_SERCRET=
 WEBHOOKRELAY_BUCKET=
@@ -62,28 +83,44 @@ DATE_OF_BIRTH=2000-01-01
 ZIP_CLICKANDCOLLECT=false
 ```
 
-These variables can be found in Adyen Customer Area. For more information, visit our [Get started with Adyen guide](https://docs.adyen.com/payments-essentials/get-started-with-adyen).
+These variables can be found in Adyen Customer Area. For more information, visit
+[Get started with Adyen guide](https://docs.adyen.com/payments-essentials/get-started-with-adyen).
 
-## Installation
+### Setting up Webhook Relay
 
-### Running the PHP Server
+Webhook Relay will alllow you to see the result of webhook notifications in
+real time as payments are made.
+
+1. Sign up for a free account at https://webhookrelay.com/
+2. Create a new bucket
+3. Edit the Endpoint Settings for the default public endpoint and set the
+   "Static response body" to always return [accepted]
+4. Create a new access token
+5. Set the bucket name, access key and secret in your .env file
+
+## Usage
+
+### MacOS / Linux
 
 Navigate to the root of the project and run the `start.sh` script:
 
-```
+```sh
 $ cd adyen-components-js-sample-code
 $ ./start.sh
 ```
 
 A PHP server will start on `http://localhost:3000`.
 
-### Setting up Webhook Relay
+### Windows
 
-1. Sign up for a free account at https://webhookrelay.com/
-2. Create a new bucket
-3. Edit the Endpoint Settings for the default public endpoint and set the "Static response body" to always return [accepted]
-4. Create a new access token
-5. Set the bucket name, access key and secret in your .env file
+Navigate to the root of the project and run the `Start.ps1` script:
+
+```powershell
+PS> cd adyen-components-js-sample-code
+PS> .\Start.ps1
+```
+
+A PHP server will start on `http://localhost:3000`.
 
 ### Deploying this example to Heroku
 
@@ -93,7 +130,7 @@ Alternatively, you can install this example by using this shortcut to deploy to 
 
 ## Documentation
 
-For the complete integration guide, refer to the [Web Components documentation](https://docs.adyen.com/checkout/components-web/).
+For the complete integration guide, refer to https://docs.adyen.com/checkout/.
 
 ## Other sample projects
 
@@ -101,4 +138,5 @@ Find other sample projects in our [example projects repositories](https://github
 
 ## License
 
-This repository is open source and available under the MIT license. For more information, see the LICENSE file.
+This repository is open source and available under the MIT license. For more
+information, see the LICENSE file.

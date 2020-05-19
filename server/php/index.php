@@ -1,8 +1,4 @@
 <?php
-/**
- * Adyen Checkout Example (https://www.adyen.com/)
- * Copyright (c) 2019 Adyen BV (https://www.adyen.com/)
- */
 
 require('utils/env.php');
 require('utils/log.php');

@@ -34,6 +34,10 @@ h1 {
   line-height: 38px;
 }
 
+.intro {
+  font-size: 0.9em;
+}
+
 .sidebar .header {
   height: 60px;
   padding: 16px 24px;
@@ -74,6 +78,7 @@ h1 {
   list-style: none;
   margin: 0;
   padding: 14px 0 14px;
+  font-weight: 700;
 }
 
 @media (min-width: 780px) {
@@ -153,8 +158,15 @@ a:link:hover {
   padding: 7px 14px;
 }
 
+.warning {
+  background: #ffffe0;
+  border-left: 7px solid #ffcc00;
+  margin: 28px 0 0;
+  padding: 7px 14px;
+}
+
 @media (min-width: 780px) {
-  .info {
+  .info, .warning {
     padding: 7px 21px;
   }
 }

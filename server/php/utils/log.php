@@ -1,8 +1,4 @@
 <?php
-/**
- * Adyen Checkout Example (https://www.adyen.com/)
- * Copyright (c) 2019 Adyen BV (https://www.adyen.com/)
- */
 
 function logApiCall($method, $url, $headers, $body) {
   $encodedJson = json_decode($body, true);

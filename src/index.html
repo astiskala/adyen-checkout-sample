@@ -7,21 +7,28 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Adyen Checkout Components sample code</title>
+    <title>Adyen Checkout samples</title>
     <link rel="stylesheet" href="./demo.css" />
   </head>
   <body>
     <div class="container">
-      <h1>Adyen Checkout Components sample code</h1>
-
-      <p>
-        Components are our drop-in JavaScript modules that you can add to your
-        payment page.
-        <br />
-        They render as input fields that collect required shopper details, and
-        provide the values you need to make a payment.
-      </p>
-
+      <h1>Adyen Checkout samples</h1>
+      <div class="intro">
+        <p>
+          This project been designed to highlight the capabilities of the Adyen Checkout
+          SDK and to help developers familiarise themselves with various payment flows. It
+          contains the following features:
+        </p>
+        <ul>
+          <li>Ability to view the request and response of all synchronous API calls in your
+            browser and in the console</li>
+          <li>Ability to view Webhook notification responses</li>
+          <li>UI-based toggles for various Component and Drop-in configuration options</li>
+          <li>Native 3DS2 support</li>
+          <li>Support for many alternative payment methods</li>
+        </ul>
+      </div>
+      <div class="warning">⚠️ This sample project is for demonstration purposes only. It is purposefully insecure and as such, this code should not be used for any production implementations.</div>
       <ul class="payment_methods__list">
         <li class="payment_methods__list__element">
           <a href="./dropin">Drop-in</a>
@@ -77,14 +84,12 @@
         <p>
           For more information, please refer to the
           <a
-            href="https://docs.adyen.com/checkout/components-web/"
+            href="https://docs.adyen.com/checkout/"
             target="_blank"
-            >Checkout Components documentation</a
+            >Adyen documentation</a
           >.
         </p>
       </div>
     </div>
-
-    <script src="utils.js"></script>
   </body>
 </html>
