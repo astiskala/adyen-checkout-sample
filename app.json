@@ -1,6 +1,6 @@
 {
-  "name": "Adyen Components Sample Code",
-  "description": "A php server example containing our Javascript SDK",
+  "name": "Adyen Checkout sample",
+  "description": "Designed to highlight the capabilities of the Adyen Checkout SDK and to help developers familiarise themselves with various payment flows.",
   "keywords": [
     "Adyen",
     "Checkout",
@@ -11,13 +11,44 @@
     "payments"
   ],
   "website": "https://www.adyen.com/",
-  "repository": "https://github.com/Adyen/adyen-components-js-sample-code",
+  "repository": "https://github.com/astiskala/adyen-checkout-sample",
   "env": {
-    "MERCHANT_ACCOUNT": {
-      "description": "Your merchant account"
-    },
-    "CHECKOUT_APIKEY": {
-      "description": "Your Checkout API key"
-    }
+    "CHECKOUT_APIKEY": { },
+    "MERCHANT_ACCOUNT": { },
+    "WEBHOOKRELAY_KEY": { },
+    "WEBHOOKRELAY_SERCRET": { },
+    "WEBHOOKRELAY_BUCKET": { },
+    "PAYPAL_MERCHANT_ID": { },
+    "PAYPAL_INTENT": { "value": "capture" },
+    "ENVIRONMENT": { "value": "test" },
+    "PREFIX": { "value": "" },
+    "DC": { "value": "" },
+    "SDK_VERSION": { "value": "3.8.0" },
+    "CHECKOUT_API_VERSION": { "value": "53" },
+    "COUNTRY": { "value": "AU" },
+    "CURRENCY": { "value": "AUD" },
+    "VALUE": { "value": "1000" },
+    "SHOPPER_LOCALE": { "value": "en-US" },
+    "REFERENCE": { "value": "TEST-123" },
+    "SHOPPER_REFERENCE": { "value": "JohnSmith" },
+    "CARD_HOLDERNAME": { "value": "John Smith" },
+    "SHOPPERNAME_FIRSTNAME": { "value": "John" },
+    "SHOPPERNAME_LASTNAME": { "value": "Smith" },
+    "SHOPPER_EMAIL": { "value": "shopper@email.com" },
+    "TELEPHONE_NUMBER": { "value": "+61404040404" },
+    "BILLING_ADDRESS_CITY": { "value": "Sydney" },
+    "BILLING_ADDRESS_COUNTRY": { "value": "AU" },
+    "BILLING_ADDRESS_HOUSENUMBERORNAME": { "value": "123" },
+    "BILLING_ADDRESS_POSTALCODE": { "value": "2000" },
+    "BILLING_ADDRESS_STATEORPROVINCE": { "value": "NSW" },
+    "BILLING_ADDRESS_STREET": { "value": "Happy Street" },
+    "DELIVERY_ADDRESS_CITY": { "value": "Sydney" },
+    "DELIVERY_ADDRESS_COUNTRY": { "value": "AU" },
+    "DELIVERY_ADDRESS_HOUSENUMBERORNAME": { "value": "123" },
+    "DELIVERY_ADDRESS_POSTALCODE": { "value": "2000" },
+    "DELIVERY_ADDRESS_STATEORPROVINCE": { "value": "NSW" },
+    "DELIVERY_ADDRESS_STREET": { "value": "Happy Street" },
+    "DATE_OF_BIRTH": { "value": "2000-01-01" },
+    "ZIP_CLICKANDCOLLECT": { "value": "false" }
   }
 }
