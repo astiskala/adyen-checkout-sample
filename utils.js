@@ -108,9 +108,9 @@ const getPaymentsDefaultConfig = async () => {
     channel: 'Web',
     applicationInfo: {
       externalPlatform: {
-        name: 'adyen-components-js-sample-code',
+        name: 'adyen-checkout-sample',
         version: 'N/A',
-        integrator: 'https://github.com/Adyen',
+        integrator: 'https://github.com/astiskala/adyen-checkout-sample',
       },
     },
     amount: {},
