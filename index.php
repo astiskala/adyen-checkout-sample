@@ -31,52 +31,52 @@
       <div class="warning">⚠️ This sample project is for demonstration purposes only. It is purposefully insecure and as such, this code should not be used for any production implementations.</div>
       <ul class="payment_methods__list">
         <li class="payment_methods__list__element">
-          <a href="./dropin">Drop-in</a>
+          <a href="/dropin/">Drop-in</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./card">Card Component</a>
+          <a href="/card/">Card Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./ach">ACH Component</a>
+          <a href="/ach/">ACH Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./afterpaytouch">AfterPay Touch</a>
+          <a href="/afterpaytouch/">AfterPay Touch</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./alipay">AliPay Component</a>
+          <a href="/alipay/">AliPay Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./boleto">Boleto Bancario Component</a>
+          <a href="/boleto/">Boleto Bancario Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./bancontact">Bancontact Mobile Component</a>
+          <a href="/bancontact/">Bancontact Mobile Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./boleto">Boleto Bancario Component</a>
+          <a href="/boleto/">Boleto Bancario Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./googlepay">Google Pay Component</a>
+          <a href="/googlepay/">Google Pay Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./ideal">iDEAL Component</a>
+          <a href="/ideal/">iDEAL Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./multibanco">Multibanco Component</a>
+          <a href="/multibanco/">Multibanco Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./paypal">PayPal Component</a>
+          <a href="/paypal/">PayPal Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./sepa">SEPA Direct Debit Component</a>
+          <a href="/sepa/">SEPA Direct Debit Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./swish">Swish Component</a>
+          <a href="/swish/">Swish Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./wechatpay">WeChat Pay Component</a>
+          <a href="/wechatpay/">WeChat Pay Component</a>
         </li>
         <li class="payment_methods__list__element">
-          <a href="./zip">Zip Component</a>
+          <a href="/zip/">Zip Component</a>
         </li>
       </ul>
 
