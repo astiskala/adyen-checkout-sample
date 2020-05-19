@@ -2,7 +2,7 @@
 
 require('../utils/log.php');
 
-if ($_SERVER['QUERY_STRING'] != '') {
-    $envValue = getenv($_SERVER['QUERY_STRING']);
+$envValue = $_SERVER['QUERY_STRING'];
+if ($envVar != '' && $envVar != 'CHECKOUT_APIKEY') {
     echo $envValue;
 }
