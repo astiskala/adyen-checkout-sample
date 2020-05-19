@@ -3,6 +3,6 @@
 require('../utils/log.php');
 
 $envValue = $_SERVER['QUERY_STRING'];
-if ($envVar != '' && $envVar != 'CHECKOUT_APIKEY') {
+if ($envValue != '' && $envValue != 'CHECKOUT_APIKEY') {
     echo getenv($envValue);
 }
