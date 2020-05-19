@@ -105,7 +105,7 @@ real time as payments are made.
 Navigate to the root of the project and run the `start.sh` script:
 
 ```sh
-$ cd adyen-components-js-sample-code
+$ cd adyen-checkout-sample
 $ ./start.sh
 ```
 
@@ -116,7 +116,7 @@ A PHP server will start on `http://localhost:3000`.
 Navigate to the root of the project and run the `Start.ps1` script:
 
 ```powershell
-PS> cd adyen-components-js-sample-code
+PS> cd adyen-checkout-sample
 PS> .\Start.ps1
 ```
 
