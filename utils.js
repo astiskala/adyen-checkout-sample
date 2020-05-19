@@ -74,13 +74,13 @@ function updateResultContainer(response) {
 
 // Generic GET Helper
 const httpGet = async (endpoint, data) => {
-  const response = await fetch(`/${endpoint}?${data}`);
+  const response = await fetch(`/server/api/${endpoint}.php?${data}`);
   const text = await response.text();
   return text;
 };
 
 // Generic POST Helper
-const httpPost = (endpoint, data) => fetch(`/${endpoint}`, {
+const httpPost = (endpoint, data) => fetch(`/server/api/${endpoint}.php`, {
   method: 'POST',
   headers: {
     Accept: 'application/json, text/plain, */*',
