@@ -50,7 +50,7 @@ function Set-PsEnv {
         }
 
         Write-Verbose $cmd
-        
+
         if ($PSCmdlet.ShouldProcess("$($cmd)", "Execute")) {
             Invoke-Expression $cmd
         }
@@ -60,4 +60,4 @@ function Set-PsEnv {
 $localEnvFile='.env'
 Set-PsEnv
 
-php -S localhost:3000 -t src/ server/php/index.php
+php -S localhost:3000 -t src/ server/index.php

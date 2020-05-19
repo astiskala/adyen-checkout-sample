@@ -12,6 +12,11 @@
   ],
   "website": "https://www.adyen.com/",
   "repository": "https://github.com/astiskala/adyen-checkout-sample",
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-php"
+    }
+  ],
   "env": {
     "CHECKOUT_APIKEY": { },
     "MERCHANT_ACCOUNT": { },
