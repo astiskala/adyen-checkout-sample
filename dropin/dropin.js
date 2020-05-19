@@ -115,7 +115,7 @@ const loadDropIn = function loadDropIn() {
             onError: (state, component) => {
               // Sets your prefered status of Drop-in when an error occurs.
               // In this example, return to the initial state.
-              component.setStatus('ready');
+              dropin.setStatus('ready');
             },
           })
           .mount('#dropin-container');
