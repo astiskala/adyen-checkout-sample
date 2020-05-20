@@ -7,7 +7,8 @@ contains the following features:
 - Ability to view the request and response of all synchronous API calls in your
   browser and in the console
 - Ability to view Webhook notification responses
-- UI-based toggles for various Component and Drop-in configuration options
+- Support for Pay by Link, Drop-in and Components
+- UI-based toggles for various configuration options
 - Native 3DS2 support
 - Support for many alternative payment methods
 
@@ -81,6 +82,8 @@ DELIVERY_ADDRESS_STREET=Happy Street
 DATE_OF_BIRTH=2000-01-01
 
 ZIP_CLICKANDCOLLECT=false
+
+PAYBYLINK_DESCRIPTION=Your payment
 ```
 
 These variables can be found in Adyen Customer Area. For more information, visit
