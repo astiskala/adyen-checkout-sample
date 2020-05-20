@@ -23,10 +23,7 @@
             </div>
             <div class="info">
                 <p>
-                    Check the Source Code to see the full implementation.
-                </p>
-                <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/swish/web-component" target="_blank">Swish Component documentation</a>.
                 </p>
             </div>
         </div>

@@ -12,7 +12,7 @@ getPaymentMethods().then((response) => {
       makePayment(state.data);
     },
     onChange: (state, component) => {
-      updateStateContainer(state); // Demo purposes only
+      updateStateContainer(state);
     },
   });
 

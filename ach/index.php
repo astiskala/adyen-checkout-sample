@@ -14,7 +14,7 @@
             <div class="checkout-container">
                 <a href="../">Back</a>
 
-                <h1>ACH Component</h1>
+                <h1>ACH Direct Debit Component</h1>
                 <div class="payment-method">
                     <div id="ach-container" class="payment-method__container">
                         <!-- ACH Component will be rendered here -->
@@ -22,15 +22,23 @@
                 </div>
             </div>
 
+            <h2>Configuration Options</h2>
+            <div class="configuration-options">
+            <form id="toggles">
+                <h3>ACH Direct Debit Component</h3>
+                <label for="hasHolderName">hasHolderName:</label>
+                <input type="checkbox" id="hasHolderName" name="hasHolderName" checked="checked" /><br />
+                <label for="showPayButton">showPayButton:</label>
+                <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+            </form>
+            </div>
+
             <div class="info">
                 <p>
-                    Check the Source Code to see the full implementation.
+                    To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers#ach" target="_blank">ACH test credentials</a>.
                 </p>
                 <p>
-                    To make a payment, use a valid ABA routing number: <a href="https://www.usbanklocations.com/u-s-bank-routing-number.shtml" target="_blank">bank routing numbers</a>.
-                </p>
-                <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/ach-direct-debit/web-component" target="_blank">ACH Direct Debit Component documentation</a>.
                 </p>
             </div>
         </div>

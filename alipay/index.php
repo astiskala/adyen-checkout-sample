@@ -23,8 +23,10 @@
             </div>
 
             <div class="info">
-                <p>Check the Source Code to see the full implementation.</p>
-                <p>For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.</p>
+                <p>
+                    To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers#alipay" target="_blank">Alipay test credentials</a>.
+                </p>
+                <p>For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/alipay/web-component" target="_blank">Alipay Component documentation</a>.</p>
             </div>
         </div>
 

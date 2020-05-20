@@ -49,13 +49,10 @@
 
             <div class="info">
                 <p>
-                    Check the Source Code to see the full implementation.
+                    To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers" target="_blank">test card numbers</a>.
                 </p>
                 <p>
-                    To make a payment, use our <a href="https://docs.adyen.com/developers/development-resources/test-cards/test-card-numbers" target="_blank">test card numbers</a>.
-                </p>
-                <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/cards/web-component" target="_blank">Card Component documentation</a>.
                 </p>
             </div>
         </div>

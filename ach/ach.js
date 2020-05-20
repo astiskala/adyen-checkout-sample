@@ -1,62 +1,95 @@
-// 0. Get originKey
-getOriginKey().then((originKey) => {
-  // 1. Create an instance of AdyenCheckout
-  const checkout = new AdyenCheckout({
-    environment: 'test',
-    originKey, // Mandatory. originKey from Customer Area
+const getConfig = async () => {
+  const config = { achConfig: { data: { billingAddress: {} }, amount: {} } };
+  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+  config.environment = await httpGet('env', 'ENVIRONMENT');
+
+  config.hasHolderName = document.querySelector('#hasHolderName').checked;
+  config.showPayButton = document.querySelector('#showPayButton').checked;
+
+  config.achConfig.data.holderName = await httpGet('env', 'CARD_HOLDERNAME');
+  config.achConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
+  config.achConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
+  config.achConfig.data.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
+  config.achConfig.data.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
+  config.achConfig.data.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
+  config.achConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
+
+  config.achConfig.amount.currency = await httpGet('env', 'CURRENCY');
+  config.achConfig.amount.value = await httpGet('env', 'VALUE');
+  return config;
+};
+
+let achComponent;
+
+const loadComponent = function loadComponent() {
+  getConfig().then((config) => {
+    getOriginKey().then((originKey) => {
+      // 1. Create an instance of AdyenCheckout
+      const checkout = new AdyenCheckout({
+        environment: config.environment,
+        originKey,
+        locale: config.locale,
+      });
+
+      // 2. Create and mount the Component
+      achComponent = checkout
+        .create('ach', {
+          // Optional Configuration
+          hasHolderName: config.hasHolderName,
+
+          // Optional. Customize the look and feel of the payment form
+          // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
+          styles: {},
+
+          // Optional. Define custom placeholders for the Ach fields
+          // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
+          placeholders: {
+            // encryptedBankAccountNumber: '9999 9999 9999 9999',
+            // encryptedBankLocationId: '987654321',
+          },
+
+          // Optionally show a Pay Button
+          showPayButton: config.showPayButton,
+          data: config.achConfig.data,
+
+          // Events
+          onSubmit: (state, component) => {
+            if (state.isValid) {
+              // ACH only works in US or PR, with payment in USD
+              const additionalConfig = {
+                countryCode: state.data.billingAddress.country,
+                amount: config.achConfig.amount,
+              };
+
+              makePayment(achComponent.data, additionalConfig);
+            }
+          },
+
+          onChange: (state, component) => {
+            // state.data;
+            // state.isValid;
+
+            updateStateContainer(state);
+          },
+        })
+        .mount('#ach-container');
+    });
   });
+};
 
-  // 2. Create and mount the Component
-  const ach = checkout
-    .create('ach', {
-      // Optional Configuration
-      // hasHolderName: true,
+loadComponent();
 
-      // Optional. Customize the look and feel of the payment form
-      // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-      styles: {},
+const reloadComponent = function reloadComponent() {
+  achComponent.unmount('#ach-container');
+  clearRequests();
+  loadComponent();
+};
 
-      // Optional. Define custom placeholders for the Ach fields
-      // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-      placeholders: {
-        // encryptedBankAccountNumber: '9999 9999 9999 9999',
-        // encryptedBankLocationId: '987654321',
-      },
+const addReloadEventListener = function addReloadEventListener(element) {
+  element.addEventListener('change', () => {
+    reloadComponent();
+  });
+};
 
-      // Optionally show a Pay Button
-      showPayButton: true,
-
-      // Events
-      onSubmit: (state, component) => {
-        if (state.isValid) {
-          // ACH only works in US or PR, with payment in USD
-          const additionalConfig = {
-            countryCode: state.data.billingAddress.country,
-            amount: { value: 1000, currency: 'USD' },
-          };
-          makePayment(ach.data, additionalConfig);
-        }
-      },
-
-      onChange: (state, component) => {
-        // state.data;
-        // state.isValid;
-
-        updateStateContainer(state); // Demo purposes only
-      },
-
-      // Optional: insert address information, if you already have it
-      //            data: {
-      //                holderName: 'B. Fish',
-      //                billingAddress: {
-      //                    street: 'Infinite Loop',
-      //                        postalCode: '95014',
-      //                        city: 'Cupertino',
-      //                        houseNumberOrName: '1',
-      //                        country: 'US',
-      //                        stateOrProvince: 'CA'
-      //                }
-      //            }
-    })
-    .mount('#ach-container');
-});
+const componentToggles = document.querySelectorAll('#toggles input');
+componentToggles.forEach(addReloadEventListener);

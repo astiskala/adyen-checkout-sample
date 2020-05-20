@@ -43,7 +43,7 @@ const loadComponent = function loadComponent() {
         onSubmit: (state, component) => {
           // Submit Payment
           makePayment(state.data);
-          updateStateContainer(state); // Demo purposes only
+          updateStateContainer(state);
         },
         onError: (error) => {
           console.error(error);

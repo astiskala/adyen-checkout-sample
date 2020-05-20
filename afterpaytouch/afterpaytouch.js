@@ -9,28 +9,25 @@ let afterpaytouchComponent;
 
 const loadComponent = function loadComponent() {
   getConfig().then((config) => {
-    // 0. Get originKey
     getOriginKey().then((originKey) => {
       getPaymentMethods().then((paymentMethodsResponse) => {
-        // 1. Create an instance of AdyenCheckout
         const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey, // Mandatory. originKey from Customer Area
+          originKey,
           paymentMethodsResponse,
           locale: config.locale,
         });
 
-        // 2. Create and mount the Component
         afterpaytouchComponent = checkout
           .create('afterpaytouch', {
             onChange: (state, component) => {
               updateStateContainer(state);
             },
             onSelect: (activeComponent) => {
-              updateStateContainer(activeComponent.data); // Demo purposes only
+              updateStateContainer(activeComponent.data);
             },
             onSubmit: (state) => {
-              updateStateContainer(state); // Demo purposes only
+              updateStateContainer(state);
               if (state.isValid) {
                 makePayment(state.data).then((response) => {
                   if (response.action) {

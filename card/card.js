@@ -28,10 +28,8 @@ let card;
 
 const loadComponent = function loadComponent() {
   getConfig().then((config) => {
-    // 0. Get originKey
     getOriginKey().then((originKey) => {
       getPaymentMethods().then((paymentMethodsResponse) => {
-        // 1. Create an instance of AdyenCheckout
         const checkout = new AdyenCheckout({
           environment: config.environment,
           originKey,
@@ -39,7 +37,6 @@ const loadComponent = function loadComponent() {
           locale: config.locale,
         });
 
-        // 2. Create and mount the Component
         card = checkout
           .create('card', {
             showPayButton: config.showPayButton,

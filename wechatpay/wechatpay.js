@@ -21,7 +21,7 @@ const loadComponent = function loadComponent() {
         // 1. Create an instance of AdyenCheckout providing an originKey
         const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey, // Mandatory. originKey from Customer Area
+          originKey,
           amount: { currency: 'CNY', value: 1000 }, // amount to be shown next to the qrcode
           paymentMethodsResponse,
           locale: config.locale,

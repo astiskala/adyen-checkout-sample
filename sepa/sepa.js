@@ -5,7 +5,7 @@ const checkout = new AdyenCheckout({
     // state.data;
     // state.isValid;
 
-    updateStateContainer(state); // Demo purposes only
+    updateStateContainer(state);
   },
 });
 

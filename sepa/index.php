@@ -24,13 +24,10 @@
 
             <div class="info">
                 <p>
-                    Check the Source Code to see the full implementation.
+                    To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers#sepa-direct-debit" target="_blank">SEPA Direct Debit test credentials</a>.
                 </p>
                 <p>
-                    To make a payment, use our <a href="https://docs.adyen.com/developers/development-resources/test-cards/test-card-numbers#sepadirectdebit" target="_blank">SEPA Direct Debit test credentials</a>.
-                </p>
-                <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/sepa-direct-debit/web-component" target="_blank">SEPA Direct Debit Component documentation</a>.
                 </p>
             </div>
         </div>

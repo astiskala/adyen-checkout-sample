@@ -24,10 +24,10 @@
 
             <div class="info">
                 <p>
-                    Check the Source Code to see the full implementation.
+                    To make a payment, follow the instructions at our <a href="https://docs.adyen.com/payment-methods/zip/web-component#test-and-go-live" target="_blank">test and go live documentation</a>.
                 </p>
                 <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/zip/web-component" target="_blank">Zip Component documentation</a>.
                 </p>
             </div>
         </div>

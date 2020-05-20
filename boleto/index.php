@@ -14,7 +14,7 @@
             <a href="../">Back</a>
 
             <div class="checkout-container">
-                <h1>Boleto Bancario Component</h1>
+                <h1>Boleto Bancário Component</h1>
                 <h2>Shopper Details Form</h2>
                 <div class="payment-method">
                     <div id="boletobancario-container" class="payment-method__container">
@@ -32,10 +32,10 @@
 
             <div class="info">
                 <p>
-                    Check the Source Code to see the full implementation.
+                    To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers#boleto" target="_blank">Boleto Bancário test credentials</a>.
                 </p>
                 <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/components-web/" target="_blank">Checkout Components documentation</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/boleto-bancario/web-component" target="_blank">Boleto Bancário Component documentation</a>.
                 </p>
             </div>
         </div>

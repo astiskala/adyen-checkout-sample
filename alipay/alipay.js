@@ -13,7 +13,7 @@ const loadComponent = function loadComponent() {
       getPaymentMethods().then((paymentMethodsResponse) => {
         const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey, // Mandatory. originKey from Customer Area
+          originKey,
           paymentMethodsResponse,
           locale: config.locale,
         });
@@ -21,7 +21,7 @@ const loadComponent = function loadComponent() {
         alipayComponent = checkout
           .create('alipay', {
             onChange: (state) => {
-              updateStateContainer(state); // Demo purposes only
+              updateStateContainer(state);
             },
             onSubmit: (state, component) => {
               // state.data;

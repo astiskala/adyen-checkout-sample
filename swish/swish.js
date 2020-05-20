@@ -2,7 +2,7 @@
 getOriginKey().then((originKey) => {
   // 1. Create an instance of AdyenCheckout
   const checkout = new AdyenCheckout({
-    originKey, // Mandatory. originKey from Customer Area
+    originKey,
     environment: 'test',
     amount: { currency: 'EUR', value: 1000 },
     onAdditionalDetails: (result) => {

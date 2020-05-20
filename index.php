@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Adyen Checkout samples</title>
     <link rel="stylesheet" href="assets/style.css" />
@@ -29,7 +26,10 @@
           <li>Support for many alternative payment methods</li>
         </ul>
       </div>
-      <div class="warning"><p>⚠️ This sample project is for demonstration purposes only. It is purposefully insecure and as such, this code should not be used for any production implementations.</p></div>
+      <div class="warning">
+        <span class="warning-symbol">⚠️</span>
+        <p class="warning-text">This sample project is for demonstration purposes only. It is purposefully insecure and as such, this code should not be used for any production implementations.</p>
+      </div>
       <ul class="payment_methods__list">
         <li class="payment_methods__list__toplevel">
           <a href="/dropin/">Drop-in</a>
@@ -44,7 +44,7 @@
               <a href="/card/">Card</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="/ach/">ACH</a>
+              <a href="/ach/">ACH Direct Debit</a>
             </li>
             <li class="payment_methods__list__element">
               <a href="/afterpaytouch/">AfterPay Touch</a>
@@ -53,13 +53,10 @@
               <a href="/alipay/">AliPay</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="/boleto/">Boleto Bancario</a>
-            </li>
-            <li class="payment_methods__list__element">
               <a href="/bancontact/">Bancontact Mobile</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="/boleto/">Boleto Bancario</a>
+              <a href="/boleto/">Boleto Bancário</a>
             </li>
             <li class="payment_methods__list__element">
               <a href="/googlepay/">Google Pay</a>

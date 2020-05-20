@@ -18,12 +18,11 @@ let paypalComponent;
 
 const loadComponent = function loadComponent() {
   getConfig().then((config) => {
-    // 0. Get originKey
     getOriginKey().then((originKey) => {
       // 1. Create an instance of AdyenCheckout
       const checkout = new AdyenCheckout({
         environment: config.environment,
-        originKey, // Mandatory. originKey from Customer Area
+        originKey,
         locale: config.locale,
       });
 
@@ -33,10 +32,10 @@ const loadComponent = function loadComponent() {
           ...config.paypalConfig,
           // Events
           onSelect: (activeComponent) => {
-            updateStateContainer(activeComponent.data); // Demo purposes only
+            updateStateContainer(activeComponent.data);
           },
           onChange: (state) => {
-            updateStateContainer(state); // Demo purposes only
+            updateStateContainer(state);
           },
           onSubmit: (state, component) => {
             // state.data;

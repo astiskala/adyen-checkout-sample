@@ -44,13 +44,11 @@ let dropin;
 
 const loadDropIn = function loadDropIn() {
   getConfig().then((config) => {
-    // 0. Get originKey
     getOriginKey().then((originKey) => {
       getPaymentMethods().then((paymentMethodsResponse) => {
-        // 1. Create an instance of AdyenCheckout
         const checkout = new AdyenCheckout({
           environment: config.environment,
-          originKey, // Mandatory. originKey from Customer Area
+          originKey,
           paymentMethodsResponse,
           locale: config.locale,
         });
@@ -79,10 +77,10 @@ const loadDropIn = function loadDropIn() {
             showPayButton: config.showPayButton,
             // Events
             onSelect: (activeComponent) => {
-              updateStateContainer(activeComponent.data); // Demo purposes only
+              updateStateContainer(activeComponent.data);
             },
             onChange: (state) => {
-              updateStateContainer(state); // Demo purposes only
+              updateStateContainer(state);
             },
             onSubmit: (state, component) => {
               // state.data;

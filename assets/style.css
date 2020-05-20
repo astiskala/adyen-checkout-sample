@@ -18,8 +18,6 @@ body {
   font: 16px/1.21 "Fakt", sans-serif, Helvetica, Arial;
   font-weight: 400;
   margin: 0;
-  min-height: 100vh;
-  overflow: auto;
 }
 
 h1,
@@ -165,8 +163,17 @@ a:link:hover {
 .warning {
   background: #ffffe0;
   border-left: 7px solid #ffcc00;
-  margin: 28px 0 0;
+  margin: 28px 0 0 0;
   padding: 7px 14px;
+}
+
+.warning-symbol {
+  float: left;
+  margin-top: 25px;
+}
+
+.warning-text {
+  padding-left: 40px;
 }
 
 @media (min-width: 780px) {
