@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout samples</title>
     <link rel="stylesheet" href="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
-    <link rel="stylesheet" href="../demo.css">
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
     <div class="container container--full-width">
@@ -49,7 +49,7 @@
     </div>
 
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
-    <script src="../utils.js"></script>
+    <script src="../assets/utils.js"></script>
     <script src="/boleto/boleto.js"></script>
 </body>
 </html>

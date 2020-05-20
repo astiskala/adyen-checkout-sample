@@ -8,7 +8,7 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Adyen Checkout samples</title>
-    <link rel="stylesheet" href="./demo.css" />
+    <link rel="stylesheet" href="assets/style.css" />
   </head>
   <body>
     <div class="container">
@@ -32,6 +32,9 @@
       <ul class="payment_methods__list">
         <li class="payment_methods__list__element">
           <a href="/dropin/">Drop-in</a>
+        </li>
+        <li class="payment_methods__list__element">
+          <a href="/paybylink/">Pay by Link</a>
         </li>
         <li class="payment_methods__list__element">
           <a href="/card/">Card Component</a>

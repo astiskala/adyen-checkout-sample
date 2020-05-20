@@ -52,6 +52,7 @@
     "DELIVERY_ADDRESS_STATEORPROVINCE": { "value": "NSW" },
     "DELIVERY_ADDRESS_STREET": { "value": "Happy Street" },
     "DATE_OF_BIRTH": { "value": "2000-01-01" },
-    "ZIP_CLICKANDCOLLECT": { "value": "false" }
+    "ZIP_CLICKANDCOLLECT": { "value": "false" },
+    "PAYBYLINK_DESCRIPTION": { "value": "Your payment" }
   }
 }
