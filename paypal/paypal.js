@@ -35,8 +35,6 @@ const loadComponent = function loadComponent() {
             updateStateContainer(state);
           },
           onSubmit: (state, component) => {
-            // state.data;
-            // state.isValid;
             makePayment(state.data, {}, config.includeDeliveryAddress)
               .then((response) => {
                 if (response.action) {
@@ -58,13 +56,9 @@ const loadComponent = function loadComponent() {
             });
           },
           onCancel: (data, component) => {
-            // Sets your prefered status of the component when a PayPal payment is cancelled.
-            // In this example, return to the initial state.
             component.setStatus('ready');
           },
           onError: (error, component) => {
-            // Sets your prefered status of Drop-in when an error occurs.
-            // In this example, return to the initial state.
             component.setStatus('ready');
           },
         })

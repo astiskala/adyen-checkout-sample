@@ -77,8 +77,6 @@ const loadDropIn = function loadDropIn() {
               updateStateContainer(state);
             },
             onSubmit: (state, component) => {
-              // state.data;
-              // state.isValid;
               makePayment(state.data, {}, true, config.native3ds2)
                 .then((response) => {
                   if (response.action) {
@@ -96,7 +94,6 @@ const loadDropIn = function loadDropIn() {
             onAdditionalDetails: (state, component) => {
               submitAdditionalDetails(state.data).then((result) => {
                 if (result.action) {
-                  // Drop-in handles the action object from the /payments/details response.
                   dropin.handleAction(result.action);
                 } else {
                   updateResultContainer(result.resultCode);
@@ -104,8 +101,6 @@ const loadDropIn = function loadDropIn() {
               });
             },
             onError: (state, component) => {
-              // Sets your prefered status of Drop-in when an error occurs.
-              // In this example, return to the initial state.
               dropin.setStatus('ready');
             },
           })

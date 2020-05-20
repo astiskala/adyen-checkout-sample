@@ -67,10 +67,7 @@ const createPaymentLink = function createPaymentLink() {
           updateResponseContainer('/paymentLinks', response);
 
           const paybylinkContainer = document.querySelector('#paybylink-container');
-          paybylinkContainer.insertAdjacentHTML(
-            'beforeend',
-            `<a href="${response.url}" target="_blank">${response.url}</a>`,
-          );
+          paybylinkContainer.innerHTML = `<a href="${response.url}" target="_blank">${response.url}</a>`;
 
           return response;
         });

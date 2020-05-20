@@ -24,8 +24,6 @@ const loadComponent = function loadComponent() {
               updateStateContainer(state);
             },
             onSubmit: (state, component) => {
-              // state.data;
-              // state.isValid;
               makePayment(state.data)
                 .then((response) => {
                   if (response.action) {

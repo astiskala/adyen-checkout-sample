@@ -1,15 +1,10 @@
-// 1. Create an instance of AdyenCheckout
 const checkout = new AdyenCheckout({
   environment: 'test',
   onChange: (state, component) => {
-    // state.data;
-    // state.isValid;
-
     updateStateContainer(state);
   },
 });
 
-// 2. Create and mount the Component
 const sepa = checkout
   .create('sepadirectdebit', {
     showPayButton: true,

@@ -32,7 +32,6 @@ const loadComponent = function loadComponent() {
 
       achComponent = checkout
         .create('ach', {
-          // Optional Configuration
           hasHolderName: config.hasHolderName,
 
           // Optional. Customize the look and feel of the payment form
@@ -62,9 +61,6 @@ const loadComponent = function loadComponent() {
           },
 
           onChange: (state, component) => {
-            // state.data;
-            // state.isValid;
-
             updateStateContainer(state);
           },
         })
