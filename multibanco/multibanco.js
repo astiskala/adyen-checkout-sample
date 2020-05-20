@@ -1,6 +1,5 @@
 getOriginKey().then((originKey) => {
   getPaymentMethods().then((paymentMethodsResponse) => {
-    // 1. Create an instance of AdyenCheckout
     const checkout = new AdyenCheckout({
       originKey,
       environment: 'test',
@@ -14,7 +13,6 @@ getOriginKey().then((originKey) => {
       onSubmit: (state, component) => {
         makePayment(state.data).then((response) => {
           component.unmount();
-          // 3. present the voucher using the action object returned from /payments
           checkout
             .createFromAction(response.action)
             .mount('#multibanco-container');
@@ -23,7 +21,6 @@ getOriginKey().then((originKey) => {
       paymentMethodsResponse,
     });
 
-    // 2. create Multibanco component
     checkout.create('multibanco').mount('#multibanco-container');
   });
 });

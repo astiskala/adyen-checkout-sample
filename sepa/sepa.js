@@ -20,7 +20,6 @@ const sepa = checkout
       // ibanNumber: ''
     },
 
-    // Events
     onSubmit: (state, component) => {
       makePayment(state.data);
     },

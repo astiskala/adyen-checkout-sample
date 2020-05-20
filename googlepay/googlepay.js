@@ -33,13 +33,11 @@ const loadComponent = function loadComponent() {
       locale: config.locale,
     });
 
-    // 2. Create and mount the Component
     googlepayComponent = checkout
       .create('paywithgoogle', {
         showPayButton: true,
         ...config.googlePayConfig,
 
-        // Events
         onSubmit: (state, component) => {
           // Submit Payment
           makePayment(state.data);

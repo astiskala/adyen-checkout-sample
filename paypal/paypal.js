@@ -19,7 +19,6 @@ let paypalComponent;
 const loadComponent = function loadComponent() {
   getConfig().then((config) => {
     getOriginKey().then((originKey) => {
-      // 1. Create an instance of AdyenCheckout
       const checkout = new AdyenCheckout({
         environment: config.environment,
         originKey,
@@ -29,7 +28,6 @@ const loadComponent = function loadComponent() {
       paypalComponent = checkout
         .create('paypal', {
           ...config.paypalConfig,
-          // Events
           onSelect: (activeComponent) => {
             updateStateContainer(activeComponent.data);
           },

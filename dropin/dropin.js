@@ -53,20 +53,15 @@ const loadDropIn = function loadDropIn() {
           locale: config.locale,
         });
 
-        // 2. Handle any additional configuration required for specific payment methods
         const paymentMethodsConfiguration = {
-          // Example required configuration for PayPal
           paypal: config.paypalConfig,
           card: config.cardConfig,
         };
 
         paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
           component.setStatus('ready');
-          // Sets your prefered status of the Drop-in component when a PayPal payment is cancelled.
-          // In this example, return to the initial state.
         };
 
-        // 3. Create and mount the Component
         dropin = checkout
           .create('dropin', {
             paymentMethodsConfiguration,
@@ -75,7 +70,6 @@ const loadDropIn = function loadDropIn() {
             showStoredPaymentMethods: config.showStoredPaymentMethods,
             showPaymentMethods: config.showPaymentMethods,
             showPayButton: config.showPayButton,
-            // Events
             onSelect: (activeComponent) => {
               updateStateContainer(activeComponent.data);
             },

@@ -24,7 +24,6 @@ let achComponent;
 const loadComponent = function loadComponent() {
   getConfig().then((config) => {
     getOriginKey().then((originKey) => {
-      // 1. Create an instance of AdyenCheckout
       const checkout = new AdyenCheckout({
         environment: config.environment,
         originKey,
@@ -47,11 +46,9 @@ const loadComponent = function loadComponent() {
             // encryptedBankLocationId: '987654321',
           },
 
-          // Optionally show a Pay Button
           showPayButton: config.showPayButton,
           data: config.achConfig.data,
 
-          // Events
           onSubmit: (state, component) => {
             if (state.isValid) {
               // ACH only works in US or PR, with payment in USD

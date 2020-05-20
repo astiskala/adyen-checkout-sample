@@ -1,14 +1,10 @@
 getPaymentMethods().then((response) => {
-  // 1. Create an instance of AdyenCheckout
   const checkout = new AdyenCheckout({
     paymentMethodsResponse: response,
 
-    // Optionally show a Pay Button
     showPayButton: true,
 
-    // Events
     onSubmit: (state, component) => {
-      // Triggered when a shopper clicks on the Pay button
       makePayment(state.data);
     },
     onChange: (state, component) => {
@@ -16,6 +12,5 @@ getPaymentMethods().then((response) => {
     },
   });
 
-  // 2. Create and mount the Component
   const ideal = checkout.create('ideal').mount('#ideal-container');
 });
