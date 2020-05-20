@@ -1,41 +1,69 @@
-// 0. Get originKey
-getOriginKey().then((originKey) => {
-  // 1. Create an instance of AdyenCheckout providing an originKey
-  const checkout = new AdyenCheckout({
-    originKey,
-    environment: 'test',
-    amount: { currency: 'EUR', value: 1000 }, // amount to be shown next to the qrcode
-    onAdditionalDetails: (result) => {
-      console.log(result);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+const getConfig = async () => {
+  const config = { bancontactConfig: { amount: {} } };
+  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+  config.environment = await httpGet('env', 'ENVIRONMENT');
+  config.country = await httpGet('env', 'COUNTRY');
 
-  // Override our default demo config for this payment method
-  const bancontactData = {
-    countryCode: 'BE',
-    amount: {
-      value: 1000,
-      currency: 'EUR',
-    },
-    paymentMethod: {
-      type: 'bcmc_mobile_QR',
-    },
-  };
+  config.bancontactConfig.amount.currency = await httpGet('env', 'CURRENCY');
+  config.bancontactConfig.amount.value = await httpGet('env', 'VALUE');
+  return config;
+};
 
-  /** Call the /payments endpoint to retrieve the necessary data to start the Bancontact component
-   *  We need the following parts of the response
-   *  - qrCodeData (redirect.data.qrCodeData): The data the QR Code will contain
-   *  - paymentData Necessary to communicate with Adyen to check the current payment status
-   */
-  makePayment(bancontactData).then((response) => {
-    if (response.action) {
-      // 2. Create and mount the Component
-      const bancontact = checkout
-        .createFromAction(response.action)
-        .mount('#bancontact-container');
-    }
+let bancontactComponent;
+
+const loadComponent = function loadComponent() {
+  getConfig().then((config) => {
+    getOriginKey().then((originKey) => {
+      const checkout = new AdyenCheckout({
+        originKey,
+        environment: config.environment,
+        amount: config.bancontactConfig.amount,
+        locale: config.locale,
+        onAdditionalDetails: (result) => {
+          console.log(result);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      });
+
+      const bancontactData = {
+        countryCode: config.country,
+        amount: config.bancontactConfig.amount,
+        paymentMethod: {
+          type: 'bcmc_mobile_QR',
+        },
+      };
+
+      /** Call the /payments endpoint to retrieve the data to start the Bancontact component
+       *  We need the following parts of the response
+       *  - qrCodeData (redirect.data.qrCodeData): The data the QR Code will contain
+       *  - paymentData Necessary to communicate with Adyen to check the current payment status
+       */
+      makePayment(bancontactData).then((response) => {
+        if (response.action) {
+          bancontactComponent = checkout
+            .createFromAction(response.action)
+            .mount('#bancontact-container');
+        }
+      });
+    });
   });
-});
+};
+
+loadComponent();
+
+const reloadComponent = function reloadComponent() {
+  bancontactComponent.unmount('#bancontact-container');
+  clearRequests();
+  loadComponent();
+};
+
+const addReloadEventListener = function addReloadEventListener(element) {
+  element.addEventListener('change', () => {
+    reloadComponent();
+  });
+};
+
+const componentToggles = document.querySelectorAll('#toggles input');
+componentToggles.forEach(addReloadEventListener);

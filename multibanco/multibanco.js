@@ -1,4 +1,3 @@
-// 0. Get originKey
 getOriginKey().then((originKey) => {
   getPaymentMethods().then((paymentMethodsResponse) => {
     // 1. Create an instance of AdyenCheckout

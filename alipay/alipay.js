@@ -29,7 +29,6 @@ const loadComponent = function loadComponent() {
               makePayment(state.data)
                 .then((response) => {
                   if (response.action) {
-                    // Drop-in handles the action object from the /payments response.
                     component.handleAction(response.action);
                   } else if (response.resultCode) {
                     updateResultContainer(response.resultCode);

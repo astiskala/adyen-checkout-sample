@@ -88,7 +88,6 @@ const loadDropIn = function loadDropIn() {
               makePayment(state.data, {}, true, config.native3ds2)
                 .then((response) => {
                   if (response.action) {
-                    // Drop-in handles the action object from the /payments response.
                     dropin.handleAction(response.action);
                   } else if (response.resultCode) {
                     updateResultContainer(response.resultCode);

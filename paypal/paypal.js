@@ -26,7 +26,6 @@ const loadComponent = function loadComponent() {
         locale: config.locale,
       });
 
-      // 2. Create and mount the Component
       paypalComponent = checkout
         .create('paypal', {
           ...config.paypalConfig,
@@ -43,7 +42,6 @@ const loadComponent = function loadComponent() {
             makePayment(state.data, {}, config.includeDeliveryAddress)
               .then((response) => {
                 if (response.action) {
-                  // Drop-in handles the action object from the /payments response.
                   component.handleAction(response.action);
                 } else if (response.resultCode) {
                   updateResultContainer(response.resultCode);

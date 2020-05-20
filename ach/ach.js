@@ -31,7 +31,6 @@ const loadComponent = function loadComponent() {
         locale: config.locale,
       });
 
-      // 2. Create and mount the Component
       achComponent = checkout
         .create('ach', {
           // Optional Configuration

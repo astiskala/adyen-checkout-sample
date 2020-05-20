@@ -1,4 +1,3 @@
-// 0. Get originKey
 getOriginKey().then((originKey) => {
   // 1. Create an instance of AdyenCheckout
   const checkout = new AdyenCheckout({

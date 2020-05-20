@@ -54,7 +54,6 @@ const getPaymentLinkConfig = async () => {
 };
 
 const createPaymentLink = function createPaymentLink() {
-  // 0. Get originKey
   getOriginKey().then((originKey) => {
     getPaymentLinkConfig().then((paymentLinkConfig) => {
       updateRequestContainer('/paymentLinks', paymentLinkConfig);

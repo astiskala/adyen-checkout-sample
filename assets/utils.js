@@ -1,14 +1,14 @@
 const sidebar = document.querySelector('.sidebar');
 const stateContainer = document.querySelector('.current-state');
 
-// Demo - Update current component state container
 function updateStateContainer(newState) {
+  console.log('State', newState);
   stateContainer.innerText = JSON.stringify(newState, null, 2);
 }
 
-// Demo - Update request container
 function updateRequestContainer(name, response) {
   const formattedJson = JSON.stringify(response, null, 2);
+  console.log(`${name} Request`, response);
   sidebar.insertAdjacentHTML(
     'beforeend',
     `<div class="request-container request-container--visible">
@@ -22,9 +22,9 @@ function updateRequestContainer(name, response) {
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
-// Demo - Update server response container
 function updateResponseContainer(name, response) {
   const formattedJson = JSON.stringify(response, null, 2);
+  console.log(`${name} Response`, response);
   sidebar.insertAdjacentHTML(
     'beforeend',
     `<div class="response-container response-container--visible">
@@ -38,7 +38,6 @@ function updateResponseContainer(name, response) {
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
-/* exported clearRequests */
 const clearRequests = function clearRequests() {
   const requestContainers = document.getElementsByClassName('request-container');
   while (requestContainers[0]) {
@@ -59,6 +58,7 @@ const clearRequests = function clearRequests() {
 };
 
 function updateResultContainer(response) {
+  console.log('Result', response);
   sidebar.insertAdjacentHTML(
     'beforeend',
     `<div class="result-container result-container--visible">

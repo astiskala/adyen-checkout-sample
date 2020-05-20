@@ -18,11 +18,10 @@ const loadComponent = function loadComponent() {
   getConfig().then((config) => {
     getOriginKey().then((originKey) => {
       getPaymentMethods().then((paymentMethodsResponse) => {
-        // 1. Create an instance of AdyenCheckout providing an originKey
         const checkout = new AdyenCheckout({
           environment: config.environment,
           originKey,
-          amount: { currency: 'CNY', value: 1000 }, // amount to be shown next to the qrcode
+          amount: config.wechatConfig.amount,
           paymentMethodsResponse,
           locale: config.locale,
         });
