@@ -30,6 +30,22 @@
                 </div>
             </div>
 
+            <h2>Configuration Options</h2>
+            <div class="configuration-options">
+            <form id="toggles">
+                <h3>Component</h3>
+                <label for="showPayButton">showPayButton:</label>
+                <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+                <h3>Boleto Bancário Component</h3>
+                <label for="personalDetailsRequired">personalDetailsRequired:</label>
+                <input type="checkbox" id="personalDetailsRequired" name="personalDetailsRequired" checked="checked" /><br />
+                <label for="billingAddressRequired">billingAddressRequired:</label>
+                <input type="checkbox" id="billingAddressRequired" name="billingAddressRequired" checked="checked" /><br />
+                <label for="showEmailAddress">showEmailAddress:</label>
+                <input type="checkbox" id="showEmailAddress" name="showEmailAddress" checked="checked" />
+            </form>
+            </div>
+
             <div class="info">
                 <p>
                     To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers#boleto" target="_blank">Boleto Bancário test credentials</a>.
