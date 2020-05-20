@@ -59,7 +59,7 @@ COUNTRY=AU
 CURRENCY=AUD
 VALUE=1000
 SHOPPER_LOCALE=en-US
-REFERENCE=TEST-123
+REFERENCE=TEST-{guid}
 SHOPPER_REFERENCE=JohnSmith
 
 CARD_HOLDERNAME=John Smith
@@ -85,6 +85,8 @@ ZIP_CLICKANDCOLLECT=false
 
 PAYBYLINK_DESCRIPTION=Your payment
 ```
+
+You can use {guid} to have a random GUID inserted in any variable.
 
 These variables can be found in Adyen Customer Area. For more information, visit
 [Get started with Adyen guide](https://docs.adyen.com/payments-essentials/get-started-with-adyen).

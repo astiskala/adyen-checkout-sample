@@ -1,6 +1,7 @@
 const getPaymentLinkConfig = async () => {
   const config = {
     amount: {},
+    shopperName: {},
     billingAddress: {},
     deliveryAddress: {},
     lineItems: [],
@@ -18,6 +19,9 @@ const getPaymentLinkConfig = async () => {
 
   config.amount.currency = await httpGet('env', 'CURRENCY');
   config.amount.value = await httpGet('env', 'VALUE');
+
+  config.shopperName.firstName = await httpGet('env', 'SHOPPERNAME_FIRSTNAME');
+  config.shopperName.lastName = await httpGet('env', 'SHOPPERNAME_LASTNAME');
 
   config.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
   config.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');

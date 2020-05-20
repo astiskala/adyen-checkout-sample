@@ -46,10 +46,6 @@
         </div>
 
         <div class="sidebar">
-            <div class="header">
-                <h2>Current state</h2>
-            </div>
-            <pre class="current-state">{}</pre>
         </div>
     </div>
 
