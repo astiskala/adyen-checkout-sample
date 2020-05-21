@@ -1,5 +1,5 @@
 const getConfig = async () => {
-  const config = { afterpaytouchConfig: { amount: {} } };
+  const config = { };
   config.environment = await httpGet('env', 'ENVIRONMENT');
   return config;
 };
@@ -55,3 +55,12 @@ const loadComponent = function loadComponent() {
 };
 
 loadComponent();
+
+const reload = function reload() {
+  if (afterpaytouchComponent !== undefined) {
+    afterpaytouchComponent.unmount('#afterpaytouch-container');
+  }
+
+  clearRequests();
+  loadComponent();
+};

@@ -61,3 +61,12 @@ const loadComponent = function loadComponent() {
 };
 
 loadComponent();
+
+const reload = function reload() {
+  if (googlepayComponent !== undefined) {
+    googlepayComponent.unmount('#googlepay-container');
+  }
+
+  clearRequests();
+  loadComponent();
+};

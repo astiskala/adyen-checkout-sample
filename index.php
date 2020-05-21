@@ -65,6 +65,9 @@
               <a href="components/ideal/">iDEAL</a>
             </li>
             <li class="payment_methods__list__element">
+              <a href="components/klarna/">Klarna</a>
+            </li>
+            <li class="payment_methods__list__element">
               <a href="components/multibanco/">Multibanco</a>
             </li>
             <li class="payment_methods__list__element">

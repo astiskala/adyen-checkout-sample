@@ -48,3 +48,12 @@ const loadComponent = function loadComponent() {
 };
 
 loadComponent();
+
+const reload = function reload() {
+  if (alipayComponent !== undefined) {
+    alipayComponent.unmount('#alipay-container');
+  }
+
+  clearRequests();
+  loadComponent();
+};

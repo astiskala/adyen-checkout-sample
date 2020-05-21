@@ -4,7 +4,7 @@ const getConfig = async () => {
   return config;
 };
 
-let zipComponent;
+let klarnaComponent;
 
 const loadComponent = function loadComponent() {
   defaultLocaleConfig().then(() => {
@@ -19,8 +19,8 @@ const loadComponent = function loadComponent() {
             locale: localeConfig.locale,
           });
 
-          zipComponent = checkout
-            .create('zip', {
+          klarnaComponent = checkout
+            .create('klarna', {
               onChange: (state, component) => {
                 updateStateContainer(state);
               },
@@ -32,7 +32,7 @@ const loadComponent = function loadComponent() {
                 if (state.isValid) {
                   makePayment(localeConfig, state.data).then((response) => {
                     if (response.action) {
-                      zipComponent.handleAction(response.action);
+                      klarnaComponent.handleAction(response.action);
                     } else if (response.resultCode) {
                       updateResultContainer(response.resultCode);
                     } else if (response.message) {
@@ -47,7 +47,7 @@ const loadComponent = function loadComponent() {
                 });
               },
             })
-            .mount('#zip-container');
+            .mount('#klarna-container');
         });
       });
     });
@@ -57,8 +57,8 @@ const loadComponent = function loadComponent() {
 loadComponent();
 
 const reload = function reload() {
-  if (zipComponent !== undefined) {
-    zipComponent.unmount('#zip-container');
+  if (klarnaComponent !== undefined) {
+    klarnaComponent.unmount('#klarna-container');
   }
 
   clearRequests();
