@@ -10,12 +10,11 @@
 <body>
     <div class="container container--full-width">
         <div class="main">
-            <div class="checkout-container">
-                <a href="../">Back</a>
-            </div>
+            <a href="../">Back</a>
+
             <div class="info">
                 <p>
-                    Welcome back!
+                    Welcome back! Please see the result on the right.
                 </p>
             </div>
         </div>

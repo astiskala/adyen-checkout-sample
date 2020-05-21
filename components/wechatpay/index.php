@@ -6,19 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout samples</title>
     <link rel="stylesheet" href="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
-    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="../../assets/style.css">
 </head>
 <body>
     <div class="container container--full-width">
         <div class="main">
-            <a href="../">Back</a>
+            <a href="../../">Back</a>
 
             <div class="checkout-container">
-                <h1>Google Pay Component</h1>
+                <h1>WeChat Pay Component</h1>
                 <div class="payment-method">
-
-                    <div id="googlepay-container">
-                        <!-- Google Pay Component will be rendered here -->
+                    <div id="wechatpay-container">
+                        <!-- WeChat Pay Component will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -40,23 +39,16 @@
             </div>
 
             <div class="info">
-                <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/google-pay/web-component" target="_blank">Google Pay Component documentation</a>.
-                </p>
+                <p>For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/wechat-pay/wechat-pay-desktop-qr-payments/web-component" target="_blank">WeChat Pay Component documentation</a>.</p>
             </div>
         </div>
 
         <div class="sidebar">
-            <div class="header">
-                <h2>Current state</h2>
-            </div>
-            <pre class="current-state">{}</pre>
         </div>
     </div>
 
-    <script src="https://pay.google.com/gp/p/js/pay.js"></script>
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
-    <script src="../assets/utils.js"></script>
-    <script src="/googlepay/googlepay.js"></script>
+    <script src="../../assets/utils.js"></script>
+    <script src="wechatpay.js"></script>
 </body>
 </html>

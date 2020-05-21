@@ -6,18 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout samples</title>
     <link rel="stylesheet" href="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.css">
-    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="../../assets/style.css">
 </head>
 <body>
     <div class="container container--full-width">
         <div class="main">
-            <a href="../">Back</a>
+            <a href="../../">Back</a>
 
             <div class="checkout-container">
-                <h1>AliPay Component</h1>
+                <h1>Multibanco Component</h1>
                 <div class="payment-method">
-                    <div id="alipay-container">
-                        <!-- AliPay Component will be rendered here -->
+
+                    <div id="multibanco-container">
+                        <!-- Multibanco Component will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -40,9 +41,8 @@
 
             <div class="info">
                 <p>
-                    To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers#alipay" target="_blank">Alipay test credentials</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/multibanco/web-component" target="_blank">Multibanco Component documentation</a>.
                 </p>
-                <p>For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/alipay/web-component" target="_blank">Alipay Component documentation</a>.</p>
             </div>
         </div>
 
@@ -51,7 +51,7 @@
     </div>
 
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
-    <script src="../assets/utils.js"></script>
-    <script src="/alipay/alipay.js"></script>
+    <script src="../../assets/utils.js"></script>
+    <script src="multibanco.js"></script>
 </body>
 </html>

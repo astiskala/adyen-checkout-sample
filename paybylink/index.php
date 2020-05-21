@@ -10,9 +10,9 @@
 <body>
     <div class="container container--full-width">
         <div class="main">
+            <a href="../">Back</a>
+            
             <div class="checkout-container">
-                <a href="../">Back</a>
-
                 <h1>Pay by Link</h1>
                 <div class="payment-method">
                     <div id="paybylink-container">
