@@ -1,24 +1,21 @@
-const getPaymentLinkConfig = async () => {
+const getPaymentLinkConfig = async (localeConfig) => {
   const config = {
     amount: {},
     shopperName: {},
     billingAddress: {},
     deliveryAddress: {},
     lineItems: [],
+    ...localeConfig,
   };
 
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
   config.reference = await httpGet('env', 'REFERENCE');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
-  config.countryCode = await httpGet('env', 'COUNTRY');
   config.returnUrl = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/returnUrl`;
   config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
   config.description = await httpGet('env', 'PAYBYLINK_DESCRIPTION');
   config.reusable = document.querySelector('#reusable').checked;
   config.storePaymentMethod = document.querySelector('#storePaymentMethod').checked;
-
-  config.amount.currency = await httpGet('env', 'CURRENCY');
-  config.amount.value = await httpGet('env', 'VALUE');
 
   config.shopperName.firstName = await httpGet('env', 'SHOPPERNAME_FIRSTNAME');
   config.shopperName.lastName = await httpGet('env', 'SHOPPERNAME_LASTNAME');
@@ -54,39 +51,33 @@ const getPaymentLinkConfig = async () => {
 };
 
 const createPaymentLink = function createPaymentLink() {
-  getOriginKey().then((originKey) => {
-    getPaymentLinkConfig().then((paymentLinkConfig) => {
-      updateRequestContainer('/paymentLinks', paymentLinkConfig);
+  defaultLocaleConfig().then(() => {
+    const localeConfig = collectLocaleConfig();
+    getOriginKey().then((originKey) => {
+      getPaymentLinkConfig(localeConfig).then((paymentLinkConfig) => {
+        updateRequestContainer('/paymentLinks', paymentLinkConfig);
 
-      return httpPost('paymentLinks', paymentLinkConfig)
-        .then((response) => {
-          if (response.error) {
-            console.error('Unable to create payment link');
-          }
+        return httpPost('paymentLinks', paymentLinkConfig)
+          .then((response) => {
+            if (response.error) {
+              console.error('Unable to create payment link');
+            }
 
-          updateResponseContainer('/paymentLinks', response);
+            updateResponseContainer('/paymentLinks', response);
 
-          const paybylinkContainer = document.querySelector('#paybylink-container');
-          paybylinkContainer.innerHTML = `<a href="${response.url}" target="_blank">${response.url}</a>`;
+            const paybylinkContainer = document.querySelector('#paybylink-container');
+            paybylinkContainer.innerHTML = `<a href="${response.url}" target="_blank">${response.url}</a>`;
 
-          return response;
-        });
+            return response;
+          });
+      });
     });
   });
 };
 
 createPaymentLink();
 
-const recreatePaymentLink = function recreatePaymentLink() {
+const reload = function reload() {
   clearRequests();
   createPaymentLink();
 };
-
-const addReloadEventListener = function addReloadEventListener(element) {
-  element.addEventListener('change', () => {
-    recreatePaymentLink();
-  });
-};
-
-const toggles = document.querySelectorAll('#toggles input');
-toggles.forEach(addReloadEventListener);

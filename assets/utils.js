@@ -19,6 +19,7 @@ function updateRequestContainer(name, response) {
     </div>
   `,
   );
+
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
@@ -35,6 +36,7 @@ function updateResponseContainer(name, response) {
     </div>
   `,
   );
+
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
@@ -69,6 +71,7 @@ function updateResultContainer(response) {
     </div>
   `,
   );
+
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
@@ -89,17 +92,11 @@ const httpPost = (endpoint, data) => fetch(`/server/api/${endpoint}.php`, {
   body: JSON.stringify(data),
 }).then((response) => response.json());
 
-const getPaymentMethodsConfig = async () => {
-  const config = {
-    amount: {},
-  };
+const getPaymentMethodsDefaultConfig = async () => {
+  const config = {};
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
   config.reference = await httpGet('env', 'REFERENCE');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
-  config.countryCode = await httpGet('env', 'COUNTRY');
-  config.shopperLocale = await httpGet('env', 'SHOPPER_LOCALE');
-  config.amount.currency = await httpGet('env', 'CURRENCY');
-  config.amount.value = await httpGet('env', 'VALUE');
   return config;
 };
 
@@ -113,7 +110,6 @@ const getPaymentsDefaultConfig = async () => {
         integrator: 'https://github.com/astiskala/adyen-checkout-sample',
       },
     },
-    amount: {},
     shopperName: {},
     billingAddress: {},
     deliveryAddress: {},
@@ -124,7 +120,6 @@ const getPaymentsDefaultConfig = async () => {
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
   config.reference = await httpGet('env', 'REFERENCE');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
-  config.countryCode = await httpGet('env', 'COUNTRY');
 
   const ipResponse = await fetch('https://api.ipify.org');
   config.shopperIP = await ipResponse.text();
@@ -140,9 +135,6 @@ const getPaymentsDefaultConfig = async () => {
   config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
   config.telephoneNumber = await httpGet('env', 'TELEPHONE_NUMBER');
   config.dateOfBirth = await httpGet('env', 'DATE_OF_BIRTH');
-
-  config.amount.currency = await httpGet('env', 'CURRENCY');
-  config.amount.value = await httpGet('env', 'VALUE');
 
   config.shopperName.firstName = await httpGet('env', 'SHOPPERNAME_FIRSTNAME');
   config.shopperName.lastName = await httpGet('env', 'SHOPPERNAME_LASTNAME');
@@ -163,24 +155,16 @@ const getPaymentsDefaultConfig = async () => {
 
   config.paymentMethod.clickAndCollect = await httpGet('env', 'ZIP_CLICKANDCOLLECT');
 
-  config.lineItems = [
-    {
-      id: '1',
-      description: 'Test Item 1',
-      amountExcludingTax: config.amount.value,
-      amountIncludingTax: config.amount.value,
-      taxAmount: 0,
-      taxPercentage: 0,
-      quantity: 1,
-      taxCategory: 'High',
-    },
-  ];
-
   return config;
 };
 
 // Get all available payment methods from the local server
-const getPaymentMethods = () => getPaymentMethodsConfig().then((paymentMethodsConfig) => {
+const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig().then((paymentMethodsDefaultConfig) => {
+  const paymentMethodsConfig = {
+    ...paymentMethodsDefaultConfig,
+    ...localeConfig
+  };
+
   updateRequestContainer('/paymentMethods', paymentMethodsConfig);
 
   return httpPost('paymentMethods', paymentMethodsConfig)
@@ -196,6 +180,7 @@ const getPaymentMethods = () => getPaymentMethodsConfig().then((paymentMethodsCo
 
 // Posts a new payment into the local server
 const makePayment = (
+  localeConfig,
   rawPaymentMethod,
   config = {},
   includeDeliveryAddress = true,
@@ -203,8 +188,22 @@ const makePayment = (
 ) => getPaymentsDefaultConfig().then((paymentsDefaultConfig) => {
   const paymentsConfig = {
     ...paymentsDefaultConfig,
+    ...localeConfig,
     ...config,
   };
+
+  paymentsConfig.lineItems = [
+    {
+      id: '1',
+      description: 'Test Item 1',
+      amountExcludingTax: paymentsConfig.amount.value,
+      amountIncludingTax: paymentsConfig.amount.value,
+      taxAmount: 0,
+      taxPercentage: 0,
+      quantity: 1,
+      taxCategory: 'High',
+    },
+  ];
 
   const paymentMethod = rawPaymentMethod;
   if (paymentMethod.paymentMethod.type === 'zip') {
@@ -238,6 +237,33 @@ const makePayment = (
       return response;
     });
 });
+
+const defaultLocaleConfig = async () => {
+  if (!document.querySelector('#locale').value) {
+    document.querySelector('#locale').value = await httpGet('env', 'SHOPPER_LOCALE');
+  }
+
+  if (!document.querySelector('#countryCode').value) {
+    document.querySelector('#countryCode').value = await httpGet('env', 'COUNTRY');
+  }
+
+  if (!document.querySelector('#currency').value) {
+    document.querySelector('#currency').value = await httpGet('env', 'CURRENCY');
+  }
+
+  if (!document.querySelector('#value').value) {
+    document.querySelector('#value').value= await httpGet('env', 'VALUE');
+  }
+};
+
+const collectLocaleConfig = function collectLocaleConfig() {
+  const localeConfig = { amount: {} }
+  localeConfig.shopperLocale = document.querySelector('#locale').value;
+  localeConfig.countryCode = document.querySelector('#countryCode').value;
+  localeConfig.amount.currency = document.querySelector('#currency').value;
+  localeConfig.amount.value = document.querySelector('#value').value;
+  return localeConfig;
+}
 
 // Posts additional details into the local server
 const submitAdditionalDetails = (stateData, config = {}) => {
@@ -309,3 +335,10 @@ const subscribeToWebhooks = async () => {
 };
 
 subscribeToWebhooks();
+
+const reloadButton = document.querySelector('#toggles #reload');
+if (reloadButton) {
+  reloadButton.addEventListener('click', () => {
+    reload();
+  });
+}

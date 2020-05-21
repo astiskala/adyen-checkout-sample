@@ -1,26 +1,49 @@
-getOriginKey().then((originKey) => {
-  getPaymentMethods().then((paymentMethodsResponse) => {
-    const checkout = new AdyenCheckout({
-      originKey,
-      environment: 'test',
-      amount: { currency: 'EUR', value: 1000 },
-      onAdditionalDetails: (result) => {
-        console.log(result);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-      onSubmit: (state, component) => {
-        makePayment(state.data).then((response) => {
-          component.unmount();
-          checkout
-            .createFromAction(response.action)
-            .mount('#multibanco-container');
-        });
-      },
-      paymentMethodsResponse,
-    });
+const getConfig = async () => {
+  const config = { };
+  config.environment = await httpGet('env', 'ENVIRONMENT');
+  return config;
+};
 
-    checkout.create('multibanco').mount('#multibanco-container');
+let multibanco;
+
+const loadComponent = function loadComponent() {
+  defaultLocaleConfig().then(() => {
+    const localeConfig = collectLocaleConfig();
+    getConfig().then((config) => {
+      getOriginKey().then((originKey) => {
+        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+          const checkout = new AdyenCheckout({
+            environment: config.environment,
+            originKey,
+            paymentMethodsResponse,
+            locale: localeConfig.locale,
+
+            onSubmit: (state, component) => {
+              makePayment(localeConfig, state.data).then((response) => {
+                if (response.action) {
+                  multibanco = checkout
+                    .createFromAction(response.action)
+                    .mount('#multibanco-container');
+                }
+              });
+            },
+            paymentMethodsResponse,
+          });
+
+          multibanco = checkout.create('multibanco').mount('#multibanco-container');
+        });
+      });
+    });
   });
-});
+};
+
+loadComponent();
+
+const reload = function reload() {
+  if (multibanco !== undefined) {
+    multibanco.unmount('#multibanco-container');
+  }
+
+  clearRequests();
+  loadComponent();
+};

@@ -51,8 +51,18 @@
                     <input type="checkbox" id="showBrandIcon" name="showBrandIcon" checked="checked" /><br />
                     <label for="billingAddressRequired">billingAddressRequired:</label>
                     <input type="checkbox" id="billingAddressRequired" name="billingAddressRequired" />
-                  </form>
-                </div>
+                    <h3>Locale Configuration</h3>
+                    <label for="locale">locale:</label>
+                    <input type="text" id="locale" name="locale" /><br />
+                    <label for="countryCode">countryCode:</label>
+                    <input type="text" id="countryCode" name="countryCode" /><br />
+                    <label for="currency">currency:</label>
+                    <input type="text" id="currency" name="currency" /><br />
+                    <label for="value">value:</label>
+                    <input type="text" id="value" name="value" /><br />
+                    <input type="button" id="reload" name="reload" value="Reload Drop-in" />
+                </form>
+              </div>
             </div>
 
             <div class="info">

@@ -32,7 +32,7 @@
 
             <h2>Configuration Options</h2>
             <div class="configuration-options">
-            <form id="toggles">
+              <form id="toggles">
                 <h3>Component</h3>
                 <label for="showPayButton">showPayButton:</label>
                 <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
@@ -43,7 +43,17 @@
                 <input type="checkbox" id="billingAddressRequired" name="billingAddressRequired" checked="checked" /><br />
                 <label for="showEmailAddress">showEmailAddress:</label>
                 <input type="checkbox" id="showEmailAddress" name="showEmailAddress" checked="checked" />
-            </form>
+                <h3>Locale Configuration</h3>
+                <label for="locale">locale:</label>
+                <input type="text" id="locale" name="locale" /><br />
+                <label for="countryCode">countryCode:</label>
+                <input type="text" id="countryCode" name="countryCode" /><br />
+                <label for="currency">currency:</label>
+                <input type="text" id="currency" name="currency" /><br />
+                <label for="value">value:</label>
+                <input type="text" id="value" name="value" /><br />
+                <input type="button" id="reload" name="reload" value="Reload Component" />
+              </form>
             </div>
 
             <div class="info">

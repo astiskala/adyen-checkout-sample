@@ -22,6 +22,22 @@
                 </div>
             </div>
 
+            <h2>Configuration Options</h2>
+            <div class="configuration-options">
+              <form id="toggles">
+                <h3>Locale Configuration</h3>
+                <label for="locale">locale:</label>
+                <input type="text" id="locale" name="locale" /><br />
+                <label for="countryCode">countryCode:</label>
+                <input type="text" id="countryCode" name="countryCode" /><br />
+                <label for="currency">currency:</label>
+                <input type="text" id="currency" name="currency" /><br />
+                <label for="value">value:</label>
+                <input type="text" id="value" name="value" /><br />
+                <input type="button" id="reload" name="reload" value="Reload Component" />
+              </form>
+            </div>
+
             <div class="info">
                 <p>For more information, please refer to the <a href="https://docs.adyen.com/payment-methods/wechat-pay/wechat-pay-desktop-qr-payments/web-component" target="_blank">WeChat Pay Component documentation</a>.</p>
             </div>

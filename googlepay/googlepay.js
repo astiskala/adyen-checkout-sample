@@ -2,10 +2,9 @@ const getConfig = async () => {
   const config = {
     googlePayConfig: {
       configuration: { merchantName: 'Adyen Test' },
-      amount: {},
     },
   };
-  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+
   config.environment = await httpGet('env', 'ENVIRONMENT');
 
   const adyenEnvironment = await httpGet('env', 'ENVIRONMENT');
@@ -19,38 +18,45 @@ const getConfig = async () => {
     'env',
     'MERCHANT_ACCOUNT',
   );
-  config.googlePayConfig.amount.currency = await httpGet('env', 'CURRENCY');
-  config.googlePayConfig.amount.value = await httpGet('env', 'VALUE');
+
   return config;
 };
 
 let googlepayComponent;
 
 const loadComponent = function loadComponent() {
-  getConfig().then((config) => {
-    const checkout = new AdyenCheckout({
-      environment: config.environment,
-      locale: config.locale,
+  defaultLocaleConfig().then(() => {
+    const localeConfig = collectLocaleConfig();
+    getConfig().then((config) => {
+      getOriginKey().then((originKey) => {
+        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+          const checkout = new AdyenCheckout({
+            environment: config.environment,
+            originKey,
+            paymentMethodsResponse,
+            locale: localeConfig.locale,
+          });
+
+          const googlePayConfig = config.googlePayConfig;
+          googlePayConfig.amount = localeConfig.amount;
+
+          googlepayComponent = checkout
+            .create('paywithgoogle', {
+              showPayButton: true,
+              ...googlePayConfig,
+
+              onSubmit: (state, component) => {
+                makePayment(localeConfig, state.data);
+                updateStateContainer(state);
+              }
+            })
+            // Normally, you should check if Google Pay is available before mounting it.
+            // Here we are mounting it directly for demo purposes.
+            // Please refer to the documentation for more information on Google Pay's availability.
+            .mount('#googlepay-container');
+        });
+      });
     });
-
-    googlepayComponent = checkout
-      .create('paywithgoogle', {
-        showPayButton: true,
-        ...config.googlePayConfig,
-
-        onSubmit: (state, component) => {
-          // Submit Payment
-          makePayment(state.data);
-          updateStateContainer(state);
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      })
-      // Normally, you should check if Google Pay is available before mounting it.
-      // Here we are mounting it directly for demo purposes.
-      // Please refer to the documentation for more information on Google Pay's availability.
-      .mount('#googlepay-container');
   });
 };
 

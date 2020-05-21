@@ -1,6 +1,5 @@
 const getConfig = async () => {
-  const config = { boletobancarioConfig: { data: { billingAddress: {} }, amount: {} } };
-  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
+  const config = { boletobancarioConfig: { data: { billingAddress: {} } } };
   config.environment = await httpGet('env', 'ENVIRONMENT');
 
   config.showPayButton = document.querySelector('#showPayButton').checked;
@@ -18,9 +17,6 @@ const getConfig = async () => {
   config.boletobancarioConfig.data.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
   config.boletobancarioConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
   config.boletobancarioConfig.data.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
-
-  config.boletobancarioConfig.amount.currency = await httpGet('env', 'CURRENCY');
-  config.boletobancarioConfig.amount.value = await httpGet('env', 'VALUE');
   return config;
 };
 
@@ -28,40 +24,52 @@ let boletoComponent;
 let boletoVoucher;
 
 const loadComponent = function loadComponent() {
-  getConfig().then((config) => {
-    getOriginKey().then((originKey) => {
-      const checkout = new AdyenCheckout({
-        environment: config.environment,
-        locale: config.locale,
-        showPayButton: config.showPayButton,
-        onSubmit: (state, component) => {
-          makePayment(state.data).then((paymentResponse) => {
-            boletoVoucher = checkout
-              .createFromAction(paymentResponse.action)
-              .mount('#boletobancario-result-container');
+  defaultLocaleConfig().then(() => {
+    const localeConfig = collectLocaleConfig();
+    getConfig().then((config) => {
+      getOriginKey().then((originKey) => {
+        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+          const checkout = new AdyenCheckout({
+            environment: config.environment,
+            originKey,
+            paymentMethodsResponse,
+            locale: localeConfig.locale,
+            showPayButton: config.showPayButton,
+            onSubmit: (state, component) => {
+              makePayment(localeConfig, state.data).then((paymentResponse) => {
+                if (response.action) {
+                  boletoVoucher = checkout
+                    .createFromAction(paymentResponse.action)
+                    .mount('#boletobancario-result-container');
+                }
+              });
+            },
+            onChange: (state, component) => {
+              updateStateContainer(state);
+            },
           });
-        },
-        onChange: (state, component) => {
-          updateStateContainer(state);
-        },
-      });
 
-      boletoComponent = checkout
-        .create('boletobancario', {
-          personalDetailsRequired: config.boletobancarioConfig.personalDetailsRequired,
-          billingAddressRequired: config.boletobancarioConfig.billingAddressRequired,
-          showEmailAddress: config.boletobancarioConfig.showEmailAddress,
-          data: config.boletobancarioConfig.data,
-        })
-        .mount('#boletobancario-container');
+          boletoComponent = checkout
+            .create('boletobancario', {
+              personalDetailsRequired: config.boletobancarioConfig.personalDetailsRequired,
+              billingAddressRequired: config.boletobancarioConfig.billingAddressRequired,
+              showEmailAddress: config.boletobancarioConfig.showEmailAddress,
+              data: config.boletobancarioConfig.data,
+            })
+            .mount('#boletobancario-container');
+        });
+      });
     });
   });
 };
 
 loadComponent();
 
-const reloadComponent = function reloadComponent() {
-  boletoComponent.unmount('#boletobancario-container');
+const reload = function reload() {
+  if (boletoComponent !== undefined) {
+    boletoComponent.unmount('#boletobancario-container');
+  }
+
   if (boletoVoucher !== undefined) {
     boletoVoucher.unmount('#boletobancario-result-container');
   }
@@ -69,12 +77,3 @@ const reloadComponent = function reloadComponent() {
   clearRequests();
   loadComponent();
 };
-
-const addReloadEventListener = function addReloadEventListener(element) {
-  element.addEventListener('change', () => {
-    reloadComponent();
-  });
-};
-
-const componentToggles = document.querySelectorAll('#toggles input');
-componentToggles.forEach(addReloadEventListener);

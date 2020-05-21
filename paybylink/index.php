@@ -23,6 +23,22 @@
                 <h2>Configuration Options</h2>
                 <div class="configuration-options">
                   <form id="toggles">
+                    <h3>Locale Configuration</h3>
+                    <label for="locale">locale:</label>
+                    <input type="text" id="locale" name="locale" /><br />
+                    <label for="countryCode">countryCode:</label>
+                    <input type="text" id="countryCode" name="countryCode" /><br />
+                    <label for="currency">currency:</label>
+                    <input type="text" id="currency" name="currency" /><br />
+                    <label for="value">value:</label>
+                    <input type="text" id="value" name="value" /><br />
+                    <input type="button" id="reload" name="reload" value="Generate New Link" />
+                  </form>
+                </div>
+
+                <h2>Configuration Options</h2>
+                <div class="configuration-options">
+                  <form id="toggles">
                     <h3>Pay by Link</h3>
                     <label for="reusable">reusable:</label>
                     <input type="checkbox" id="reusable" name="reusable" checked="checked" /><br />

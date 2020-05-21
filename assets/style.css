@@ -265,3 +265,8 @@ pre {
   text-align: left;
   padding: 0;
 }
+
+input#reload {
+  padding: 5px 10px;
+  margin: 10px 0 0 20em;
+}

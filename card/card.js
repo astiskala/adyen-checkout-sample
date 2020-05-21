@@ -1,6 +1,5 @@
 const getConfig = async () => {
   const config = { cardConfig: { data: { billingAddress: {} } } };
-  config.locale = await httpGet('env', 'SHOPPER_LOCALE');
   config.environment = await httpGet('env', 'ENVIRONMENT');
 
   config.native3ds2 = document.querySelector('#native3ds2').checked;
@@ -27,60 +26,63 @@ const getConfig = async () => {
 let card;
 
 const loadComponent = function loadComponent() {
-  getConfig().then((config) => {
-    getOriginKey().then((originKey) => {
-      getPaymentMethods().then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          originKey,
-          paymentMethodsResponse,
-          locale: config.locale,
-        });
+  defaultLocaleConfig().then(() => {
+    const localeConfig = collectLocaleConfig();
+    getConfig().then((config) => {
+      getOriginKey().then((originKey) => {
+        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+          const checkout = new AdyenCheckout({
+            environment: config.environment,
+            originKey,
+            paymentMethodsResponse,
+            locale: localeConfig.locale,
+          });
 
-        card = checkout
-          .create('card', {
-            showPayButton: config.showPayButton,
-            ...config.cardConfig,
+          card = checkout
+            .create('card', {
+              showPayButton: config.showPayButton,
+              ...config.cardConfig,
 
-            // Optional. Customize the look and feel of the payment form
-            // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-            styles: {},
+              // Optional. Customize the look and feel of the payment form
+              // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
+              styles: {},
 
-            // Optional. Define custom placeholders for the Card fields
-            // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-            placeholders: {
-              // encryptedCardNumber: '9999 9999 9999 9999',
-              // encryptedExpiryDate: '01/22',
-              // encryptedSecurityCode : '123'
-            },
+              // Optional. Define custom placeholders for the Card fields
+              // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
+              placeholders: {
+                // encryptedCardNumber: '9999 9999 9999 9999',
+                // encryptedExpiryDate: '01/22',
+                // encryptedSecurityCode : '123'
+              },
 
-            onSubmit: (state, component) => {
-              if (state.isValid) {
-                makePayment(card.data, {}, true, config.native3ds2).then((response) => {
-                  if (response.action) {
-                    component.handleAction(response.action);
-                  } else if (response.resultCode) {
-                    updateResultContainer(response.resultCode);
-                  } else if (response.message) {
-                    updateResultContainer(response.message);
+              onSubmit: (state, component) => {
+                if (state.isValid) {
+                  makePayment(localeConfig, card.data, {}, true, config.native3ds2).then((response) => {
+                    if (response.action) {
+                      component.handleAction(response.action);
+                    } else if (response.resultCode) {
+                      updateResultContainer(response.resultCode);
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                    }
+                  });
+                }
+              },
+              onChange: (state, component) => {
+                updateStateContainer(state);
+              },
+              onAdditionalDetails: (state, component) => {
+                submitAdditionalDetails(state.data).then((result) => {
+                  if (result.action) {
+                    component.handleAction(result.action);
+                  } else {
+                    updateResultContainer(result.resultCode);
                   }
                 });
-              }
-            },
-            onChange: (state, component) => {
-              updateStateContainer(state);
-            },
-            onAdditionalDetails: (state, component) => {
-              submitAdditionalDetails(state.data).then((result) => {
-                if (result.action) {
-                  component.handleAction(result.action);
-                } else {
-                  updateResultContainer(result.resultCode);
-                }
-              });
-            },
-          })
-          .mount('#card-container');
+              },
+            })
+            .mount('#card-container');
+        });
       });
     });
   });
@@ -88,17 +90,11 @@ const loadComponent = function loadComponent() {
 
 loadComponent();
 
-const reloadComponent = function reloadComponent() {
-  card.unmount('#card-container');
+const reload = function reload() {
+  if (card !== undefined) {
+    card.unmount('#card-container');
+  }
+
   clearRequests();
   loadComponent();
 };
-
-const addReloadEventListener = function addReloadEventListener(element) {
-  element.addEventListener('change', () => {
-    reloadComponent();
-  });
-};
-
-const toggles = document.querySelectorAll('#toggles input');
-toggles.forEach(addReloadEventListener);
