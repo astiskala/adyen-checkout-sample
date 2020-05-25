@@ -24,6 +24,7 @@
           <li>UI-based toggles for various configuration options</li>
           <li>Native 3DS2 support</li>
           <li>Support for many alternative payment methods</li>
+          <li>Adyen Giving example</li>
         </ul>
       </div>
       <div class="warning">
@@ -36,6 +37,9 @@
         </li>
         <li class="payment_methods__list__toplevel">
           <a href="paybylink/">Pay by Link</a>
+        </li>
+        <li class="payment_methods__list__toplevel">
+          <a href="adyengiving/">Adyen Giving</a>
         </li>
         <li class="payment_methods__list__toplevel">
           Components

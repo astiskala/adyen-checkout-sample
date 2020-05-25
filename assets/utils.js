@@ -194,14 +194,14 @@ const makePayment = (
 
   paymentsConfig.lineItems = [
     {
-      id: '1',
-      description: 'Test Item 1',
+      id: '001',
+      description: 'Product',
       amountExcludingTax: paymentsConfig.amount.value,
       amountIncludingTax: paymentsConfig.amount.value,
       taxAmount: 0,
       taxPercentage: 0,
       quantity: 1,
-      taxCategory: 'High',
+      taxCategory: 'Zero',
     },
   ];
 
@@ -261,7 +261,7 @@ const collectLocaleConfig = function collectLocaleConfig() {
   localeConfig.shopperLocale = document.querySelector('#locale').value;
   localeConfig.countryCode = document.querySelector('#countryCode').value;
   localeConfig.amount.currency = document.querySelector('#currency').value;
-  localeConfig.amount.value = document.querySelector('#value').value;
+  localeConfig.amount.value = parseInt(document.querySelector('#value').value);
   return localeConfig;
 }
 

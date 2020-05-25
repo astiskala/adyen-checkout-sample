@@ -14,12 +14,21 @@
             <a href="../">Back</a>
 
             <div class="checkout-container">
-                <h1>Drop-in</h1>
+                <h1>Adyen Giving</h1>
+                <h2>Original Payment</h2>
                 <div class="payment-method">
                     <div id="dropin-container">
                         <!-- Drop-in will be rendered here -->
                     </div>
                 </div>
+
+                <h2>Donation</h2>
+                <div class="payment-method">
+                    <div id="donation-container">
+                        <!-- Adyen Giving will be rendered here -->
+                    </div>
+                </div>
+
 
                 <h2>Configuration Options</h2>
                 <div class="configuration-options">
@@ -70,7 +79,7 @@
                     To make a payment, use our <a href="https://docs.adyen.com/development-resources/test-cards/test-card-numbers" target="_blank">test card numbers</a>.
                 </p>
                 <p>
-                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/drop-in-web/" target="_blank">Drop-in documentation</a>.
+                    For more information, please refer to the <a href="https://docs.adyen.com/checkout/donate/web-component" target="_blank">Adyen Giving Component documentation</a>.
                 </p>
             </div>
         </div>
@@ -85,6 +94,6 @@
 
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../assets/utils.js"></script>
-    <script src="dropin.js"></script>
+    <script src="adyengiving.js"></script>
 </body>
 </html>

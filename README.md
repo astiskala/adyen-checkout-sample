@@ -11,6 +11,7 @@ contains the following features:
 - UI-based toggles for various configuration options
 - Native 3DS2 support
 - Support for many alternative payment methods
+- Adyen Giving example
 
 > ⚠️ **This sample project is for demonstration purposes only. It is
   purposefully insecure and as such, this code should not be used for any
@@ -43,6 +44,9 @@ CHECKOUT_APIKEY=
 
 # See https://docs.adyen.com/user-management/company-and-merchant-accounts
 MERCHANT_ACCOUNT=
+
+# See https://docs.adyen.com/checkout/donate/
+CHARITY_ACCOUNT=
 
 # See "Setting up Webhook Relay" in README.md
 WEBHOOKRELAY_KEY=

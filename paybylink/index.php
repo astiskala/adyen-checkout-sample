@@ -11,7 +11,7 @@
     <div class="container container--full-width">
         <div class="main">
             <a href="../">Back</a>
-            
+
             <div class="checkout-container">
                 <h1>Pay by Link</h1>
                 <div class="payment-method">
@@ -63,6 +63,6 @@
     </div>
 
     <script src="../assets/utils.js"></script>
-    <script src="/paybylink/paybylink.js"></script>
+    <script src="paybylink.js"></script>
 </body>
 </html>
