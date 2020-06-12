@@ -46,7 +46,15 @@ const loadComponent = function loadComponent() {
               ...googlePayConfig,
 
               onSubmit: (state, component) => {
-                makePayment(localeConfig, state.data);
+                makePayment(localeConfig, state.data).then((response) => {
+                  if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
+                  }
+                });
+              },
+              onChange: (state, component) => {
                 updateStateContainer(state);
               }
             })

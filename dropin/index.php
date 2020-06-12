@@ -83,6 +83,7 @@
         </div>
     </div>
 
+    <script src="https://pay.google.com/gp/p/js/pay.js"></script>
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?><?php if (getenv('DC')) { print '-' . getenv('DC'); }?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../assets/utils.js"></script>
     <script src="dropin.js"></script>
