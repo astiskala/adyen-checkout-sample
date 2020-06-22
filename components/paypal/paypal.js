@@ -42,11 +42,17 @@ const loadComponent = function loadComponent() {
                 makePayment(localeConfig, state.data, {}, config.includeDeliveryAddress)
                   .then((response) => {
                     if (response.action) {
-                      component.handleAction(response.action);
+                      paypalComponent.handleAction(response.action);
                     } else if (response.resultCode) {
                       updateResultContainer(response.resultCode);
+                      if (paypalComponent !== undefined) {
+                        paypalComponent.unmount('#paypal-container');
+                      }
                     } else if (response.message) {
                       updateResultContainer(response.message);
+                      if (paypalComponent !== undefined) {
+                        paypalComponent.unmount('#paypal-container');
+                      }
                     }
                   })
                   .catch((error) => {
@@ -55,15 +61,26 @@ const loadComponent = function loadComponent() {
               },
               onAdditionalDetails: (state, component) => {
                 submitAdditionalDetails(state.data).then((result) => {
-                  updateResultContainer(result.resultCode);
-                  paypalComponent.unmount('#paypal-container');
+                  if (response.action) {
+                    paypalComponent.handleAction(response.action);
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                    if (paypalComponent !== undefined) {
+                      paypalComponent.unmount('#paypal-container');
+                    }
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
+                    if (paypalComponent !== undefined) {
+                      paypalComponent.unmount('#paypal-container');
+                    }
+                  }
                 });
               },
               onCancel: (data, component) => {
                 component.setStatus('ready');
               },
               onError: (error, component) => {
-                component.setStatus('ready');
+                component.setStatus('error');
               },
             })
             .mount('#paypal-container');

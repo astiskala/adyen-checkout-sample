@@ -57,7 +57,19 @@ const loadComponent = function loadComponent() {
                     amount: localeConfig.amount,
                   };
 
-                  makePayment(localeConfig, achComponent.data, additionalConfig);
+                  makePayment(localeConfig, achComponent.data, additionalConfig).then((response) => {
+                    if (response.resultCode) {
+                      updateResultContainer(response.resultCode);
+                      if (achComponent !== undefined) {
+                        achComponent.unmount('#ach-container');
+                      }
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                      if (achComponent !== undefined) {
+                        achComponent.unmount('#ach-container');
+                      }
+                    }
+                  });
                 }
               },
 

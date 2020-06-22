@@ -35,15 +35,31 @@ const loadComponent = function loadComponent() {
                       afterpaytouchComponent.handleAction(response.action);
                     } else if (response.resultCode) {
                       updateResultContainer(response.resultCode);
+                      if (afterpaytouchComponent !== undefined) {
+                        afterpaytouchComponent.unmount('#afterpaytouch-container');
+                      }
                     } else if (response.message) {
                       updateResultContainer(response.message);
+                      if (afterpaytouchComponent !== undefined) {
+                        afterpaytouchComponent.unmount('#afterpaytouch-container');
+                      }
                     }
                   });
                 }
               },
               onAdditionalDetails: (state, component) => {
                 submitAdditionalDetails(state.data).then((result) => {
-                  updateResultContainer(result.resultCode);
+                  if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                    if (afterpaytouchComponent !== undefined) {
+                      afterpaytouchComponent.unmount('#afterpaytouch-container');
+                    }
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
+                    if (afterpaytouchComponent !== undefined) {
+                      afterpaytouchComponent.unmount('#afterpaytouch-container');
+                    }
+                  }
                 });
               },
             })

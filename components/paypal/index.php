@@ -25,6 +25,10 @@
             <h2>Configuration Options</h2>
             <div class="configuration-options">
               <form id="toggles">
+                <h3>PayPal Component</h3>
+                <label for="includeDeliveryAddress">Include Delivery Address and Shopper Name:</label>
+                <input type="checkbox" id="includeDeliveryAddress" name="includeDeliveryAddress" checked="checked" />
+
                 <h3>Locale Configuration</h3>
                 <label for="locale">locale:</label>
                 <input type="text" id="locale" name="locale" /><br />
@@ -35,15 +39,10 @@
                 <label for="value">value:</label>
                 <input type="text" id="value" name="value" /><br />
                 <input type="button" id="reload" name="reload" value="Reload Component" />
-              </form>
-            </div>
 
-            <h2>Configuration Options</h2>
-            <div class="configuration-options">
-              <form id="toggles">
-                <h3>PayPal Component</h3>
-                <label for="includeDeliveryAddress">Include Delivery Address and Shopper Name:</label>
-                <input type="checkbox" id="includeDeliveryAddress" name="includeDeliveryAddress" checked="checked" />
+                <h3>/payments Configuration</h3>
+                <label for="captureDelayHours">captureDelayHours:</label>
+                <input type="text" id="captureDelayHours" name="captureDelayHours" />
               </form>
             </div>
 

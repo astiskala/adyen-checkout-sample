@@ -192,16 +192,20 @@ pre {
 }
 
 .request-container .request-code,
-.response-container .response-code,
-.result-container .result-code {
+.response-container .response-code {
   opacity: 0;
   transition: opacity 0.2s ease-out;
 }
 
 .request-container--visible .request-code,
-.response-container--visible .response-code,
-.result-container--visible .result-code {
+.response-container--visible .response-code {
   opacity: 1;
+}
+
+.result-code {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .request-container p,

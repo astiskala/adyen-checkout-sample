@@ -27,6 +27,7 @@
                     <h3>3DS2</h3>
                     <label for="native3ds2">Enable Native 3DS2:</label>
                     <input type="checkbox" id="native3ds2" name="native3ds2" checked="checked" />
+
                     <h3>Drop-in</h3>
                     <label for="openFirstPaymentMethod">openFirstPaymentMethod:</label>
                     <input type="checkbox" id="openFirstPaymentMethod" name="openFirstPaymentMethod" checked="checked" /><br />
@@ -38,6 +39,7 @@
                     <input type="checkbox" id="showPaymentMethods" name="showPaymentMethods" checked="checked" /><br />
                     <label for="showPayButton">showPayButton:</label>
                     <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+
                     <h3>Cards Component</h3>
                     <label for="enableStoreDetails">enableStoreDetails:</label>
                     <input type="checkbox" id="enableStoreDetails" name="enableStoreDetails" /><br />
@@ -51,6 +53,7 @@
                     <input type="checkbox" id="showBrandIcon" name="showBrandIcon" checked="checked" /><br />
                     <label for="billingAddressRequired">billingAddressRequired:</label>
                     <input type="checkbox" id="billingAddressRequired" name="billingAddressRequired" />
+
                     <h3>Locale Configuration</h3>
                     <label for="locale">locale:</label>
                     <input type="text" id="locale" name="locale" /><br />
@@ -61,6 +64,10 @@
                     <label for="value">value:</label>
                     <input type="text" id="value" name="value" /><br />
                     <input type="button" id="reload" name="reload" value="Reload Drop-in" />
+
+                    <h3>/payments Configuration</h3>
+                    <label for="captureDelayHours">captureDelayHours:</label>
+                    <input type="text" id="captureDelayHours" name="captureDelayHours" />
                 </form>
               </div>
             </div>

@@ -83,26 +83,28 @@ const loadDropIn = function loadDropIn() {
                     if (response.action) {
                       dropin.handleAction(response.action);
                     } else if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
+                      dropin.setStatus('success', { message: response.resultCode });
                     } else if (response.message) {
-                      updateResultContainer(response.message);
+                      dropin.setStatus('success', { message: response.message });
                     }
                   })
                   .catch((error) => {
-                    throw Error(error);
+                    dropin.setStatus('error');
                   });
               },
               onAdditionalDetails: (state, component) => {
                 submitAdditionalDetails(state.data).then((result) => {
                   if (result.action) {
                     dropin.handleAction(result.action);
-                  } else {
-                    updateResultContainer(result.resultCode);
+                  } else if (response.resultCode) {
+                    dropin.setStatus('success', { message: response.resultCode });
+                  } else if (response.message) {
+                    dropin.setStatus('success', { message: response.message });
                   }
                 });
               },
               onError: (state, component) => {
-                dropin.setStatus('ready');
+                dropin.setStatus('error');
               },
             })
             .mount('#dropin-container');

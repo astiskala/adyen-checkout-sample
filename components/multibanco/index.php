@@ -36,6 +36,10 @@
                 <label for="value">value:</label>
                 <input type="text" id="value" name="value" /><br />
                 <input type="button" id="reload" name="reload" value="Reload Component" />
+
+                <h3>/payments Configuration</h3>
+                <label for="captureDelayHours">captureDelayHours:</label>
+                <input type="text" id="captureDelayHours" name="captureDelayHours" />
               </form>
             </div>
 

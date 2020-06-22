@@ -31,8 +31,14 @@ const loadComponent = function loadComponent() {
                       component.handleAction(response.action);
                     } else if (response.resultCode) {
                       updateResultContainer(response.resultCode);
+                      if (alipayComponent !== undefined) {
+                        alipayComponent.unmount('#alipay-container');
+                      }
                     } else if (response.message) {
-                      updateResultContainer(response.message);
+                      updateResultContainer(response.message)
+                      if (alipayComponent !== undefined) {
+                        alipayComponent.unmount('#alipay-container');
+                      };
                     }
                   })
                   .catch((error) => {

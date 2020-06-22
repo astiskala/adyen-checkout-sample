@@ -17,11 +17,24 @@ const loadComponent = function loadComponent() {
             originKey,
             paymentMethodsResponse,
             locale: localeConfig.locale,
-
             showPayButton: true,
 
             onSubmit: (state, component) => {
-              makePayment(state.data);
+              makePayment(localeConfig, state.data).then((response) => {
+                if (response.action) {
+                  ideal.handleAction(response.action);
+                } else if (response.resultCode) {
+                  updateResultContainer(response.resultCode);
+                  if (ideal !== undefined) {
+                    ideal.unmount('#ideal-container');
+                  }
+                } else if (response.message) {
+                  updateResultContainer(response.message);
+                  if (ideal !== undefined) {
+                    ideal.unmount('#ideal-container');
+                  }
+                }
+              });
             },
             onChange: (state, component) => {
               updateStateContainer(state);

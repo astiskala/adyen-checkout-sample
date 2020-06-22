@@ -38,6 +38,17 @@ const getConfig = async () => {
   return config;
 };
 
+function updateDonationContainer(response) {
+  console.log('Result', response);
+  const donationContainer = document.querySelector('#donation-container');
+  donationContainer.insertAdjacentHTML(
+    'afterbegin',
+    `<div class="result-code">${response}</div>`,
+  );
+
+  sidebar.scrollTop = sidebar.scrollHeight;
+}
+
 const makeDonation = function makeDonation(donation) {
   updateRequestContainer('/donate', donation);
   return httpPost('donate', donation)
@@ -99,7 +110,7 @@ const loadDropIn = function loadDropIn() {
                     if (response.action) {
                       dropin.handleAction(response.action);
                     } else if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
+                      dropin.setStatus('success', { message: response.resultCode });
                       if (response.resultCode == "Authorised") {
                         const donationConfig = {
                             amounts: {
@@ -112,7 +123,7 @@ const loadDropIn = function loadDropIn() {
                             showCancelButton: true,
                             onDonate: (state, component) => {
                               if (state.isValid) {
-                                const donation = {
+                                const donationRequest = {
                                   merchantAccount: config.merchantAccount,
                                   donationAccount: config.charityAccount,
                                   reference: response.merchantReference,
@@ -120,11 +131,11 @@ const loadDropIn = function loadDropIn() {
                                   originalReference: response.pspReference,
                                 };
 
-                                makeDonation(donation).then((response) => {
-                                  if (response.resultCode) {
-                                    updateResultContainer(response.resultCode);
-                                  } else if (response.message) {
-                                    updateResultContainer(response.message);
+                                makeDonation(donationRequest).then((response) => {
+                                  if (response.response === '[donation-received]') {
+                                    donation.setStatus('success');
+                                  } else {
+                                    updateDonationContainer(response.response);
                                   }
                                 });
                               }
@@ -139,24 +150,26 @@ const loadDropIn = function loadDropIn() {
                         donation = checkout.create('donation', donationConfig).mount('#donation-container');
                       }
                     } else if (response.message) {
-                      updateResultContainer(response.message);
+                      dropin.setStatus('success', { message: response.message });
                     }
                   })
                   .catch((error) => {
-                    throw Error(error);
+                    dropin.setStatus('error');
                   });
               },
               onAdditionalDetails: (state, component) => {
-                submitAdditionalDetails(state.data).then((result) => {
+                submitAdditionalDetails(state.data).then((response) => {
                   if (result.action) {
-                    dropin.handleAction(result.action);
-                  } else {
-                    updateResultContainer(result.resultCode);
+                    dropin.handleAction(response.action);
+                  } else if (response.resultCode) {
+                    dropin.setStatus('success', { message: response.resultCode });
+                  } else if (response.message) {
+                    dropin.setStatus('success', { message: response.message });
                   }
                 });
               },
               onError: (state, component) => {
-                dropin.setStatus('ready');
+                dropin.setStatus('error');
               },
             })
             .mount('#dropin-container');

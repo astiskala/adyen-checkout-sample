@@ -33,7 +33,21 @@ const loadComponent = function loadComponent() {
               },
 
               onSubmit: (state, component) => {
-                makePayment(state.data);
+                makePayment(localeConfig, state.data).then((response) => {
+                  if (response.action) {
+                    sepa.handleAction(response.action);
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                    if (sepa !== undefined) {
+                      sepa.unmount('#sepa-container');
+                    }
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
+                    if (sepa !== undefined) {
+                      sepa.unmount('#sepa-container');
+                    }
+                  }
+                });
               },
             })
             .mount('#sepa-container');

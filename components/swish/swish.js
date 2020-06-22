@@ -29,6 +29,16 @@ const loadComponent = function loadComponent() {
           makePayment(localeConfig, swishData).then((response) => {
             if (response.action) {
               swish = checkout.createFromAction(response.action).mount('#swish-container');
+            } else if (response.resultCode) {
+              updateResultContainer(response.resultCode);
+              if (swish !== undefined) {
+                swish.unmount('#swish-container');
+              }
+            } else if (response.message) {
+              updateResultContainer(response.message);
+              if (swish !== undefined) {
+                swish.unmount('#swish-container');
+              }
             }
           });
         });

@@ -35,15 +35,33 @@ const loadComponent = function loadComponent() {
                       zipComponent.handleAction(response.action);
                     } else if (response.resultCode) {
                       updateResultContainer(response.resultCode);
+                      if (zipComponent !== undefined) {
+                        zipComponent.unmount('#zip-container');
+                      }
                     } else if (response.message) {
-                      updateResultContainer(response.message);
+                      updateResultContainer(response.message)
+                      if (zipComponent !== undefined) {
+                        zipComponent.unmount('#zip-container');
+                      };
                     }
                   });
                 }
               },
               onAdditionalDetails: (state, component) => {
                 submitAdditionalDetails(state.data).then((result) => {
-                  updateResultContainer(result.resultCode);
+                  if (response.action) {
+                    zipComponent.handleAction(response.action);
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                    if (zipComponent !== undefined) {
+                      zipComponent.unmount('#zip-container');
+                    }
+                  } else if (response.message) {
+                    updateResultContainer(response.message)
+                    if (zipComponent !== undefined) {
+                      zipComponent.unmount('#zip-container');
+                    };
+                  }
                 });
               },
             })

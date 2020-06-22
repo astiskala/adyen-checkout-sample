@@ -12,10 +12,10 @@
         <div class="main">
             <a href="../">Back</a>
 
-            <div class="info">
-                <p>
-                    Welcome back! Please see the result on the right.
-                </p>
+            <div class="checkout-container">
+                <h1>Redirect Result</h1>
+
+                <div class="payment-method"></div>
             </div>
         </div>
 

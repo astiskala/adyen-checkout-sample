@@ -24,6 +24,16 @@ const loadComponent = function loadComponent() {
                   multibanco = checkout
                     .createFromAction(response.action)
                     .mount('#multibanco-container');
+                } else if (response.resultCode) {
+                  updateResultContainer(response.resultCode);
+                  if (multibanco !== undefined) {
+                    multibanco.unmount('#multibanco-container');
+                  }
+                } else if (response.message) {
+                  updateResultContainer(response.message);
+                  if (multibanco !== undefined) {
+                    multibanco.unmount('#multibanco-container');
+                  }
                 }
               });
             },

@@ -36,6 +36,7 @@
                 <h3>Component</h3>
                 <label for="showPayButton">showPayButton:</label>
                 <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+                
                 <h3>Boleto Bancário Component</h3>
                 <label for="personalDetailsRequired">personalDetailsRequired:</label>
                 <input type="checkbox" id="personalDetailsRequired" name="personalDetailsRequired" checked="checked" /><br />
@@ -43,6 +44,7 @@
                 <input type="checkbox" id="billingAddressRequired" name="billingAddressRequired" checked="checked" /><br />
                 <label for="showEmailAddress">showEmailAddress:</label>
                 <input type="checkbox" id="showEmailAddress" name="showEmailAddress" checked="checked" />
+
                 <h3>Locale Configuration</h3>
                 <label for="locale">locale:</label>
                 <input type="text" id="locale" name="locale" /><br />
@@ -53,6 +55,10 @@
                 <label for="value">value:</label>
                 <input type="text" id="value" name="value" /><br />
                 <input type="button" id="reload" name="reload" value="Reload Component" />
+
+                <h3>/payments Configuration</h3>
+                <label for="captureDelayHours">captureDelayHours:</label>
+                <input type="text" id="captureDelayHours" name="captureDelayHours" />
               </form>
             </div>
 

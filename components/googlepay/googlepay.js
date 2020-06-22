@@ -1,7 +1,7 @@
 const getConfig = async () => {
   const config = {
     googlePayConfig: {
-      configuration: { merchantName: 'Adyen Test' },
+      configuration: { merchantName: 'THIS IS AN EXAMPLE' },
     },
   };
 
@@ -49,8 +49,14 @@ const loadComponent = function loadComponent() {
                 makePayment(localeConfig, state.data).then((response) => {
                   if (response.resultCode) {
                     updateResultContainer(response.resultCode);
+                    if (googlepayComponent !== undefined) {
+                      googlepayComponent.unmount('#googlepay-container');
+                    }
                   } else if (response.message) {
                     updateResultContainer(response.message);
+                    if (googlepayComponent !== undefined) {
+                      googlepayComponent.unmount('#googlepay-container');
+                    }
                   }
                 });
               },

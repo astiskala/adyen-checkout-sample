@@ -1,3 +1,4 @@
+const checkoutContainer = document.querySelector('.payment-method');
 const sidebar = document.querySelector('.sidebar');
 const stateContainer = document.querySelector('.current-state');
 
@@ -46,14 +47,12 @@ const clearRequests = function clearRequests() {
     requestContainers[0].parentNode.removeChild(requestContainers[0]);
   }
 
-  const responseContainers = document.getElementsByClassName(
-    'response-container',
-  );
+  const responseContainers = document.getElementsByClassName('response-container');
   while (responseContainers[0]) {
     responseContainers[0].parentNode.removeChild(responseContainers[0]);
   }
 
-  const resultContainers = document.getElementsByClassName('result-container');
+  const resultContainers = document.getElementsByClassName('result-code');
   while (resultContainers[0]) {
     resultContainers[0].parentNode.removeChild(resultContainers[0]);
   }
@@ -61,28 +60,20 @@ const clearRequests = function clearRequests() {
 
 function updateResultContainer(response) {
   console.log('Result', response);
-  sidebar.insertAdjacentHTML(
-    'beforeend',
-    `<div class="result-container result-container--visible">
-        <div class="header">
-            <h2>Result</h2>
-        </div>
-        <p class="result-code">${response}</p>
-    </div>
-  `,
+  checkoutContainer.insertAdjacentHTML(
+    'afterbegin',
+    `<div class="result-code">${response}</div>`,
   );
 
   sidebar.scrollTop = sidebar.scrollHeight;
 }
 
-// Generic GET Helper
 const httpGet = async (endpoint, data) => {
   const response = await fetch(`/server/api/${endpoint}.php?${data}`);
   const text = await response.text();
   return text;
 };
 
-// Generic POST Helper
 const httpPost = (endpoint, data) => fetch(`/server/api/${endpoint}.php`, {
   method: 'POST',
   headers: {
@@ -124,12 +115,7 @@ const getPaymentsDefaultConfig = async () => {
   const ipResponse = await fetch('https://api.ipify.org');
   config.shopperIP = await ipResponse.text();
 
-  config.origin = `${window.location.protocol
-  }//${
-    window.location.hostname
-  }:${
-    window.location.port}`;
-
+  config.origin = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
   config.returnUrl = `${config.origin}/returnUrl`;
 
   config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
@@ -158,7 +144,6 @@ const getPaymentsDefaultConfig = async () => {
   return config;
 };
 
-// Get all available payment methods from the local server
 const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig().then((paymentMethodsDefaultConfig) => {
   const paymentMethodsConfig = {
     ...paymentMethodsDefaultConfig,
@@ -178,14 +163,7 @@ const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig().the
     });
 });
 
-// Posts a new payment into the local server
-const makePayment = (
-  localeConfig,
-  rawPaymentMethod,
-  config = {},
-  includeDeliveryAddress = true,
-  native3ds2 = false,
-) => getPaymentsDefaultConfig().then((paymentsDefaultConfig) => {
+const makePayment = (localeConfig, rawPaymentMethod, config = {}, includeDeliveryAddress = true, native3ds2 = false) => getPaymentsDefaultConfig().then((paymentsDefaultConfig) => {
   const paymentsConfig = {
     ...paymentsDefaultConfig,
     ...localeConfig,
@@ -223,6 +201,14 @@ const makePayment = (
   if (native3ds2 === true) {
     paymentRequest.additionalData = {};
     paymentRequest.additionalData.allow3DS2 = true;
+  }
+
+  const captureDelayHoursField = document.querySelector('#captureDelayHours');
+  if (captureDelayHoursField) {
+    const captureDelayHours = captureDelayHoursField.value;
+    if (captureDelayHours) {
+      paymentRequest.captureDelayHours = parseInt(captureDelayHours);
+    }
   }
 
   updateRequestContainer('/payments', paymentRequest);
@@ -265,8 +251,8 @@ const collectLocaleConfig = function collectLocaleConfig() {
   return localeConfig;
 }
 
-// Posts additional details into the local server
 const submitAdditionalDetails = (stateData, config = {}) => {
+
   updateRequestContainer('/payments/details', stateData);
 
   return httpPost('paymentDetails', stateData)

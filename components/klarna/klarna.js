@@ -35,15 +35,33 @@ const loadComponent = function loadComponent() {
                       klarnaComponent.handleAction(response.action);
                     } else if (response.resultCode) {
                       updateResultContainer(response.resultCode);
+                      if (klarnaComponent !== undefined) {
+                        klarnaComponent.unmount('#klarna-container');
+                      }
                     } else if (response.message) {
                       updateResultContainer(response.message);
+                      if (klarnaComponent !== undefined) {
+                        klarnaComponent.unmount('#klarna-container');
+                      }
                     }
                   });
                 }
               },
               onAdditionalDetails: (state, component) => {
-                submitAdditionalDetails(state.data).then((result) => {
-                  updateResultContainer(result.resultCode);
+                submitAdditionalDetails(state.data).then((response) => {
+                  if (response.action) {
+                    klarnaComponent.handleAction(response.action);
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                    if (klarnaComponent !== undefined) {
+                      klarnaComponent.unmount('#klarna-container');
+                    }
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
+                    if (klarnaComponent !== undefined) {
+                      klarnaComponent.unmount('#klarna-container');
+                    }
+                  }
                 });
               },
             })

@@ -41,6 +41,16 @@ const loadComponent = function loadComponent() {
                   boletoVoucher = checkout
                     .createFromAction(paymentResponse.action)
                     .mount('#boletobancario-result-container');
+                } else if (response.resultCode) {
+                  updateResultContainer(response.resultCode);
+                  if (boletoComponent !== undefined) {
+                    boletoComponent.unmount('#boletobancario-container');
+                  }
+                } else if (response.message) {
+                  updateResultContainer(response.message);
+                  if (boletoComponent !== undefined) {
+                    boletoComponent.unmount('#boletobancario-container');
+                  }
                 }
               });
             },

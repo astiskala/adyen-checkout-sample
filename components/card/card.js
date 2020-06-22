@@ -62,8 +62,14 @@ const loadComponent = function loadComponent() {
                       component.handleAction(response.action);
                     } else if (response.resultCode) {
                       updateResultContainer(response.resultCode);
+                      if (card !== undefined) {
+                        card.unmount('#card-container');
+                      }
                     } else if (response.message) {
                       updateResultContainer(response.message);
+                      if (card !== undefined) {
+                        card.unmount('#card-container');
+                      }
                     }
                   });
                 }
@@ -77,6 +83,9 @@ const loadComponent = function loadComponent() {
                     component.handleAction(result.action);
                   } else {
                     updateResultContainer(result.resultCode);
+                    if (card !== undefined) {
+                      card.unmount('#card-container');
+                    }
                   }
                 });
               },
