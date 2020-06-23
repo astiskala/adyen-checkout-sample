@@ -42,6 +42,7 @@ const loadComponent = function loadComponent() {
 
           googlepayComponent = checkout
             .create('paywithgoogle', {
+              amount: localeConfig.amount,
               showPayButton: true,
               ...googlePayConfig,
 

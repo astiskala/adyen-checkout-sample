@@ -46,6 +46,7 @@ const loadComponent = function loadComponent() {
                 // encryptedBankLocationId: '987654321',
               },
 
+              amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               data: config.achConfig.data,
 

@@ -34,6 +34,7 @@ const loadComponent = function loadComponent() {
             originKey,
             paymentMethodsResponse,
             locale: localeConfig.locale,
+            amount: localeConfig.amount,
             showPayButton: config.showPayButton,
             onSubmit: (state, component) => {
               makePayment(localeConfig, state.data).then((paymentResponse) => {

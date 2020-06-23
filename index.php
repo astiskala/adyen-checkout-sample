@@ -63,6 +63,9 @@
               <a href="components/boleto/">Boleto Bancário</a>
             </li>
             <li class="payment_methods__list__element">
+              <a href="components/giftcard/">Gift Card</a>
+            </li>
+            <li class="payment_methods__list__element">
               <a href="components/googlepay/">Google Pay</a>
             </li>
             <li class="payment_methods__list__element">

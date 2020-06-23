@@ -97,6 +97,7 @@ const loadDropIn = function loadDropIn() {
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,
               showPaymentMethods: config.showPaymentMethods,
+              amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               onSelect: (activeComponent) => {
                 updateStateContainer(activeComponent.data);

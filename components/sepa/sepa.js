@@ -24,6 +24,7 @@ const loadComponent = function loadComponent() {
 
           sepa = checkout
             .create('sepadirectdebit', {
+              amount: localeConfig.amount,
               showPayButton: true,
               countryCode: localeConfig.countryCode,
               placeholders: {

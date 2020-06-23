@@ -17,6 +17,7 @@ const loadComponent = function loadComponent() {
             originKey,
             paymentMethodsResponse,
             locale: localeConfig.locale,
+            amount: localeConfig.amount,
             showPayButton: true,
 
             onSubmit: (state, component) => {
