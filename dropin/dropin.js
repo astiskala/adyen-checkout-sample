@@ -94,9 +94,9 @@ const loadDropIn = function loadDropIn() {
                   });
               },
               onAdditionalDetails: (state, component) => {
-                submitAdditionalDetails(state.data).then((result) => {
-                  if (result.action) {
-                    dropin.handleAction(result.action);
+                submitAdditionalDetails(state.data).then((response) => {
+                  if (response.action) {
+                    dropin.handleAction(response.action);
                   } else if (response.resultCode) {
                     dropin.setStatus('success', { message: response.resultCode });
                   } else if (response.message) {
