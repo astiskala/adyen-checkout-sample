@@ -14,8 +14,8 @@ contains the following features:
 - Adyen Giving example
 
 > ⚠️ **This sample project is for demonstration purposes only. It is
-  purposefully insecure and as such, this code should not be used for any
-  production implementations.**
+> purposefully insecure and as such, this code should not be used for any
+> production implementations.**
 
 ## Requirements
 

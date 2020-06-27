@@ -33,10 +33,10 @@ const loadComponent = function loadComponent() {
                 wechatpayComponent.unmount('#wechatpay-container');
               }
             } else if (response.message) {
-              updateResultContainer(response.message)
+              updateResultContainer(response.message);
               if (wechatpayComponent !== undefined) {
                 wechatpayComponent.unmount('#wechatpay-container');
-              };
+              }
             }
           });
         });

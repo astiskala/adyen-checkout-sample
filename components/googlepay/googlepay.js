@@ -37,7 +37,7 @@ const loadComponent = function loadComponent() {
             locale: localeConfig.locale,
           });
 
-          const googlePayConfig = config.googlePayConfig;
+          const { googlePayConfig } = config;
           googlePayConfig.amount = localeConfig.amount;
 
           googlepayComponent = checkout
@@ -63,7 +63,7 @@ const loadComponent = function loadComponent() {
               },
               onChange: (state, component) => {
                 updateStateContainer(state);
-              }
+              },
             })
             // Normally, you should check if Google Pay is available before mounting it.
             // Here we are mounting it directly for demo purposes.

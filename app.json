@@ -18,8 +18,8 @@
     }
   ],
   "env": {
-    "CHECKOUT_APIKEY": { },
-    "MERCHANT_ACCOUNT": { },
+    "CHECKOUT_APIKEY": {},
+    "MERCHANT_ACCOUNT": {},
     "WEBHOOKRELAY_KEY": { "required": false },
     "WEBHOOKRELAY_SERCRET": { "required": false },
     "WEBHOOKRELAY_BUCKET": { "required": false },

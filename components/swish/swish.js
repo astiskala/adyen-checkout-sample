@@ -45,15 +45,15 @@ const loadComponent = function loadComponent() {
       });
     });
   });
-}
+};
 
+loadComponent();
+
+const reload = function reload() {
+  if (swish !== undefined) {
+    swish.unmount('#swish-container');
+  }
+
+  clearRequests();
   loadComponent();
-
-  const reload = function reload() {
-    if (swish !== undefined) {
-      swish.unmount('#swish-container');
-    }
-
-    clearRequests();
-    loadComponent();
-  };
+};

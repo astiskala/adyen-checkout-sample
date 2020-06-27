@@ -25,7 +25,7 @@ const loadComponent = function loadComponent() {
             locale: localeConfig.locale,
           });
 
-          const paypalConfig = config.paypalConfig;
+          const { paypalConfig } = config;
           paypalConfig.amount = localeConfig.amount;
           paypalConfig.countryCode = localeConfig.countryCode;
 

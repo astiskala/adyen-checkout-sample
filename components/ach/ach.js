@@ -34,18 +34,6 @@ const loadComponent = function loadComponent() {
           achComponent = checkout
             .create('ach', {
               hasHolderName: config.hasHolderName,
-
-              // Optional. Customize the look and feel of the payment form
-              // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-              styles: {},
-
-              // Optional. Define custom placeholders for the Ach fields
-              // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-              placeholders: {
-                // encryptedBankAccountNumber: '9999 9999 9999 9999',
-                // encryptedBankLocationId: '987654321',
-              },
-
               amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               data: config.achConfig.data,
@@ -58,19 +46,20 @@ const loadComponent = function loadComponent() {
                     amount: localeConfig.amount,
                   };
 
-                  makePayment(localeConfig, achComponent.data, additionalConfig).then((response) => {
-                    if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
-                      if (achComponent !== undefined) {
-                        achComponent.unmount('#ach-container');
+                  makePayment(localeConfig, achComponent.data, additionalConfig)
+                    .then((response) => {
+                      if (response.resultCode) {
+                        updateResultContainer(response.resultCode);
+                        if (achComponent !== undefined) {
+                          achComponent.unmount('#ach-container');
+                        }
+                      } else if (response.message) {
+                        updateResultContainer(response.message);
+                        if (achComponent !== undefined) {
+                          achComponent.unmount('#ach-container');
+                        }
                       }
-                    } else if (response.message) {
-                      updateResultContainer(response.message);
-                      if (achComponent !== undefined) {
-                        achComponent.unmount('#ach-container');
-                      }
-                    }
-                  });
+                    });
                 }
               },
 

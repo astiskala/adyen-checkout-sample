@@ -35,10 +35,10 @@ const loadComponent = function loadComponent() {
                         alipayComponent.unmount('#alipay-container');
                       }
                     } else if (response.message) {
-                      updateResultContainer(response.message)
+                      updateResultContainer(response.message);
                       if (alipayComponent !== undefined) {
                         alipayComponent.unmount('#alipay-container');
-                      };
+                      }
                     }
                   })
                   .catch((error) => {

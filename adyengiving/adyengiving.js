@@ -112,40 +112,40 @@ const loadDropIn = function loadDropIn() {
                       dropin.handleAction(response.action);
                     } else if (response.resultCode) {
                       dropin.setStatus('success', { message: response.resultCode });
-                      if (response.resultCode == "Authorised") {
+                      if (response.resultCode === 'Authorised') {
                         const donationConfig = {
-                            amounts: {
-                                currency: localeConfig.amount.currency,
-                                values: [300, 500, 1000]
-                            },
-                            description: "The Charitable Foundation is...",
-                            name: "The Charitable Foundation",
-                            url: "https://example.org",
-                            showCancelButton: true,
-                            onDonate: (state, component) => {
-                              if (state.isValid) {
-                                const donationRequest = {
-                                  merchantAccount: config.merchantAccount,
-                                  donationAccount: config.charityAccount,
-                                  reference: response.merchantReference,
-                                  modificationAmount: state.data.amount,
-                                  originalReference: response.pspReference,
-                                };
+                          amounts: {
+                            currency: localeConfig.amount.currency,
+                            values: [300, 500, 1000],
+                          },
+                          description: 'The Charitable Foundation is...',
+                          name: 'The Charitable Foundation',
+                          url: 'https://example.org',
+                          showCancelButton: true,
+                          onDonate: (donateState) => {
+                            if (donateState.isValid) {
+                              const donationRequest = {
+                                merchantAccount: config.merchantAccount,
+                                donationAccount: config.charityAccount,
+                                reference: response.merchantReference,
+                                modificationAmount: donateState.data.amount,
+                                originalReference: response.pspReference,
+                              };
 
-                                makeDonation(donationRequest).then((response) => {
-                                  if (response.response === '[donation-received]') {
-                                    donation.setStatus('success');
-                                  } else {
-                                    updateDonationContainer(response.response);
-                                  }
-                                });
-                              }
-                            },
-                            onCancel: (state, component) => {
-                              if (donation !== undefined) {
-                                donation.unmount('#donation-container');
-                              }
-                            },
+                              makeDonation(donationRequest).then((donateResponse) => {
+                                if (donateResponse.response === '[donation-received]') {
+                                  donation.setStatus('success');
+                                } else {
+                                  updateDonationContainer(donateResponse.response);
+                                }
+                              });
+                            }
+                          },
+                          onCancel: () => {
+                            if (donation !== undefined) {
+                              donation.unmount('#donation-container');
+                            }
+                          },
                         };
 
                         donation = checkout.create('donation', donationConfig).mount('#donation-container');

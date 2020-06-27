@@ -43,36 +43,24 @@ const loadComponent = function loadComponent() {
               amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               ...config.cardConfig,
-
-              // Optional. Customize the look and feel of the payment form
-              // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-              styles: {},
-
-              // Optional. Define custom placeholders for the Card fields
-              // https://docs.adyen.com/developers/checkout/api-integration/configure-secured-fields/styling-secured-fields
-              placeholders: {
-                // encryptedCardNumber: '9999 9999 9999 9999',
-                // encryptedExpiryDate: '01/22',
-                // encryptedSecurityCode : '123'
-              },
-
               onSubmit: (state, component) => {
                 if (state.isValid) {
-                  makePayment(localeConfig, card.data, {}, true, config.native3ds2).then((response) => {
-                    if (response.action) {
-                      component.handleAction(response.action);
-                    } else if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
-                      if (card !== undefined) {
-                        card.unmount('#card-container');
+                  makePayment(localeConfig, card.data, {}, true, config.native3ds2)
+                    .then((response) => {
+                      if (response.action) {
+                        component.handleAction(response.action);
+                      } else if (response.resultCode) {
+                        updateResultContainer(response.resultCode);
+                        if (card !== undefined) {
+                          card.unmount('#card-container');
+                        }
+                      } else if (response.message) {
+                        updateResultContainer(response.message);
+                        if (card !== undefined) {
+                          card.unmount('#card-container');
+                        }
                       }
-                    } else if (response.message) {
-                      updateResultContainer(response.message);
-                      if (card !== undefined) {
-                        card.unmount('#card-container');
-                      }
-                    }
-                  });
+                    });
                 }
               },
               onChange: (state, component) => {

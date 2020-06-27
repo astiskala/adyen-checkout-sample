@@ -37,7 +37,6 @@ const loadComponent = function loadComponent() {
                 }
               });
             },
-            paymentMethodsResponse,
           });
 
           multibanco = checkout.create('multibanco').mount('#multibanco-container');

@@ -39,10 +39,10 @@ const loadComponent = function loadComponent() {
                         zipComponent.unmount('#zip-container');
                       }
                     } else if (response.message) {
-                      updateResultContainer(response.message)
+                      updateResultContainer(response.message);
                       if (zipComponent !== undefined) {
                         zipComponent.unmount('#zip-container');
-                      };
+                      }
                     }
                   });
                 }
@@ -57,10 +57,10 @@ const loadComponent = function loadComponent() {
                       zipComponent.unmount('#zip-container');
                     }
                   } else if (response.message) {
-                    updateResultContainer(response.message)
+                    updateResultContainer(response.message);
                     if (zipComponent !== undefined) {
                       zipComponent.unmount('#zip-container');
-                    };
+                    }
                   }
                 });
               },

@@ -144,85 +144,91 @@ const getPaymentsDefaultConfig = async () => {
   return config;
 };
 
-const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig().then((paymentMethodsDefaultConfig) => {
-  const paymentMethodsConfig = {
-    ...paymentMethodsDefaultConfig,
-    ...localeConfig
-  };
+const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig()
+  .then((paymentMethodsDefaultConfig) => {
+    const paymentMethodsConfig = {
+      ...paymentMethodsDefaultConfig,
+      ...localeConfig,
+    };
 
-  updateRequestContainer('/paymentMethods', paymentMethodsConfig);
+    updateRequestContainer('/paymentMethods', paymentMethodsConfig);
 
-  return httpPost('paymentMethods', paymentMethodsConfig)
-    .then((response) => {
-      if (response.error) {
-        console.error('No paymentMethods available');
-      }
+    return httpPost('paymentMethods', paymentMethodsConfig)
+      .then((response) => {
+        if (response.error) {
+          console.error('No paymentMethods available');
+        }
 
-      updateResponseContainer('/paymentMethods', response);
-      return response;
-    });
-});
+        updateResponseContainer('/paymentMethods', response);
+        return response;
+      });
+  });
 
-const makePayment = (localeConfig, rawPaymentMethod, config = {}, includeDeliveryAddress = true, native3ds2 = false) => getPaymentsDefaultConfig().then((paymentsDefaultConfig) => {
-  const paymentsConfig = {
-    ...paymentsDefaultConfig,
-    ...localeConfig,
-    ...config,
-  };
+const makePayment = (localeConfig,
+  rawPaymentMethod,
+  config = {},
+  includeDeliveryAddress = true,
+  native3ds2 = false) => getPaymentsDefaultConfig()
+  .then((paymentsDefaultConfig) => {
+    const paymentsConfig = {
+      ...paymentsDefaultConfig,
+      ...localeConfig,
+      ...config,
+    };
 
-  paymentsConfig.lineItems = [
-    {
-      id: '001',
-      description: 'Product',
-      amountExcludingTax: paymentsConfig.amount.value,
-      amountIncludingTax: paymentsConfig.amount.value,
-      taxAmount: 0,
-      taxPercentage: 0,
-      quantity: 1,
-      taxCategory: 'Zero',
-    },
-  ];
+    paymentsConfig.lineItems = [
+      {
+        id: '001',
+        description: 'Product',
+        amountExcludingTax: paymentsConfig.amount.value,
+        amountIncludingTax: paymentsConfig.amount.value,
+        taxAmount: 0,
+        taxPercentage: 0,
+        quantity: 1,
+        taxCategory: 'Zero',
+      },
+    ];
 
-  const paymentMethod = rawPaymentMethod;
-  if (paymentMethod.paymentMethod.type === 'zip') {
-    paymentMethod.paymentMethod.clickAndCollect = paymentsConfig.paymentMethod.clickAndCollect;
-  }
-
-  const paymentRequest = {
-    ...paymentsConfig,
-    ...paymentMethod,
-  };
-
-  if (includeDeliveryAddress === false) {
-    paymentRequest.shopperName = null;
-    paymentRequest.deliveryAddress = null;
-  }
-
-  if (native3ds2 === true) {
-    paymentRequest.additionalData = {};
-    paymentRequest.additionalData.allow3DS2 = true;
-  }
-
-  const captureDelayHoursField = document.querySelector('#captureDelayHours');
-  if (captureDelayHoursField) {
-    const captureDelayHours = captureDelayHoursField.value;
-    if (captureDelayHours) {
-      paymentRequest.captureDelayHours = parseInt(captureDelayHours);
+    const paymentMethod = rawPaymentMethod;
+    if (paymentMethod.paymentMethod.type === 'zip') {
+      paymentMethod.paymentMethod.clickAndCollect = paymentsConfig.paymentMethod.clickAndCollect;
     }
-  }
 
-  updateRequestContainer('/payments', paymentRequest);
+    const paymentRequest = {
+      ...paymentsConfig,
+      ...paymentMethod,
+    };
 
-  return httpPost('payments', paymentRequest)
-    .then((response) => {
-      if (response.error) {
-        console.error('Payment initiation failed');
+    if (includeDeliveryAddress === false) {
+      paymentRequest.shopperName = null;
+      paymentRequest.deliveryAddress = null;
+    }
+
+    if (native3ds2 === true) {
+      paymentRequest.additionalData = {};
+      paymentRequest.additionalData.allow3DS2 = true;
+    }
+
+    const captureDelayHoursField = document.querySelector('#captureDelayHours');
+    if (captureDelayHoursField) {
+      const captureDelayHours = captureDelayHoursField.value;
+      if (captureDelayHours) {
+        paymentRequest.captureDelayHours = parseInt(captureDelayHours, 10);
       }
+    }
 
-      updateResponseContainer('/payments', response);
-      return response;
-    });
-});
+    updateRequestContainer('/payments', paymentRequest);
+
+    return httpPost('payments', paymentRequest)
+      .then((response) => {
+        if (response.error) {
+          console.error('Payment initiation failed');
+        }
+
+        updateResponseContainer('/payments', response);
+        return response;
+      });
+  });
 
 const defaultLocaleConfig = async () => {
   if (!document.querySelector('#locale').value) {
@@ -238,21 +244,20 @@ const defaultLocaleConfig = async () => {
   }
 
   if (!document.querySelector('#value').value) {
-    document.querySelector('#value').value= await httpGet('env', 'VALUE');
+    document.querySelector('#value').value = await httpGet('env', 'VALUE');
   }
 };
 
 const collectLocaleConfig = function collectLocaleConfig() {
-  const localeConfig = { amount: {} }
+  const localeConfig = { amount: {} };
   localeConfig.shopperLocale = document.querySelector('#locale').value;
   localeConfig.countryCode = document.querySelector('#countryCode').value;
   localeConfig.amount.currency = document.querySelector('#currency').value;
-  localeConfig.amount.value = parseInt(document.querySelector('#value').value);
+  localeConfig.amount.value = parseInt(document.querySelector('#value').value, 10);
   return localeConfig;
-}
+};
 
 const submitAdditionalDetails = (stateData, config = {}) => {
-
   updateRequestContainer('/payments/details', stateData);
 
   return httpPost('paymentDetails', stateData)

@@ -52,19 +52,19 @@ const loadComponent = function loadComponent() {
               },
             })
             .mount('#sepa-container');
-          });
         });
       });
     });
-  };
+  });
+};
 
+loadComponent();
+
+const reload = function reload() {
+  if (sepa !== undefined) {
+    sepa.unmount('#sepa-container');
+  }
+
+  clearRequests();
   loadComponent();
-
-  const reload = function reload() {
-    if (sepa !== undefined) {
-      sepa.unmount('#sepa-container');
-    }
-
-    clearRequests();
-    loadComponent();
-  };
+};
