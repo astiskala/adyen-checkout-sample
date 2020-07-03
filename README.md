@@ -42,6 +42,8 @@ DC=
 # See https://docs.adyen.com/user-management/how-to-get-the-api-key
 CHECKOUT_APIKEY=
 
+CHECKOUT_CLIENTKEY=
+
 # See https://docs.adyen.com/user-management/company-and-merchant-accounts
 MERCHANT_ACCOUNT=
 

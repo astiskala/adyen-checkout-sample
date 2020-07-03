@@ -6,6 +6,7 @@ const getConfig = async () => {
   };
 
   config.environment = await httpGet('env', 'ENVIRONMENT');
+  config.clientKey = await httpGet('env', 'CHECKOUT_CLIENTKEY');
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
   config.charityAccount = await httpGet('env', 'CHARITY_ACCOUNT');
 
@@ -73,8 +74,9 @@ const loadDropIn = function loadDropIn() {
         getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
           const checkout = new AdyenCheckout({
             environment: config.environment,
-            originKey,
-            paymentMethodsResponse,
+            originKey: originKey,
+            clientKey: config.clientKey,
+            ...paymentMethodsResponse,
             locale: localeConfig.locale,
           });
 

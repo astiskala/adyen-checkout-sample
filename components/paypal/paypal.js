@@ -1,6 +1,7 @@
 const getConfig = async () => {
   const config = { paypalConfig: { } };
   config.environment = await httpGet('env', 'ENVIRONMENT');
+  config.clientKey = await httpGet('env', 'CHECKOUT_CLIENTKEY');
 
   config.includeDeliveryAddress = document.querySelector('#includeDeliveryAddress').checked;
 
@@ -20,8 +21,9 @@ const loadComponent = function loadComponent() {
         getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
           const checkout = new AdyenCheckout({
             environment: config.environment,
-            originKey,
-            paymentMethodsResponse,
+            originKey: originKey,
+            clientKey: config.clientKey,
+            ...paymentMethodsResponse,
             locale: localeConfig.locale,
           });
 

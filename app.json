@@ -19,6 +19,7 @@
   ],
   "env": {
     "CHECKOUT_APIKEY": {},
+    "CHECKOUT_CLIENTKEY": {},
     "MERCHANT_ACCOUNT": {},
     "WEBHOOKRELAY_KEY": { "required": false },
     "WEBHOOKRELAY_SERCRET": { "required": false },
@@ -26,7 +27,7 @@
     "PAYPAL_MERCHANT_ID": { "required": false },
     "PAYPAL_INTENT": { "value": "capture" },
     "ENVIRONMENT": { "value": "test" },
-    "SDK_VERSION": { "value": "3.8.0" },
+    "SDK_VERSION": { "value": "3.9.5" },
     "CHECKOUT_API_VERSION": { "value": "53" },
     "COUNTRY": { "value": "AU" },
     "CURRENCY": { "value": "AUD" },

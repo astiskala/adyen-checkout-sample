@@ -1,6 +1,7 @@
 const getConfig = async () => {
   const config = { boletobancarioConfig: { data: { billingAddress: {} } } };
   config.environment = await httpGet('env', 'ENVIRONMENT');
+  config.clientKey = await httpGet('env', 'CHECKOUT_CLIENTKEY');
 
   config.showPayButton = document.querySelector('#showPayButton').checked;
 
@@ -31,8 +32,9 @@ const loadComponent = function loadComponent() {
         getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
           const checkout = new AdyenCheckout({
             environment: config.environment,
-            originKey,
-            paymentMethodsResponse,
+            originKey: originKey,
+            clientKey: config.clientKey,
+            ...paymentMethodsResponse,
             locale: localeConfig.locale,
             amount: localeConfig.amount,
             showPayButton: config.showPayButton,
