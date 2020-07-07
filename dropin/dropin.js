@@ -49,7 +49,7 @@ const loadDropIn = function loadDropIn() {
             environment: config.environment,
             originKey: originKey,
             clientKey: config.clientKey,
-            ...paymentMethodsResponse,
+            paymentMethodsResponse: paymentMethodsResponse,
             locale: localeConfig.locale,
           });
 
@@ -67,7 +67,7 @@ const loadDropIn = function loadDropIn() {
 
           dropin = checkout
             .create('dropin', {
-              paymentMethodsConfiguration,
+              ...paymentMethodsConfiguration,
               openFirstPaymentMethod: config.openFirstPaymentMethod,
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,

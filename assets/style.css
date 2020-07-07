@@ -275,6 +275,7 @@ pre {
   padding: 0;
 }
 
+input#submit,
 input#reload {
   padding: 5px 10px;
   margin: 10px 0 0 20em;

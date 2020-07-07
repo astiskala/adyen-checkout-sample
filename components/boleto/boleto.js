@@ -34,7 +34,7 @@ const loadComponent = function loadComponent() {
             environment: config.environment,
             originKey: originKey,
             clientKey: config.clientKey,
-            ...paymentMethodsResponse,
+            paymentMethodsResponse: paymentMethodsResponse,
             locale: localeConfig.locale,
             amount: localeConfig.amount,
             showPayButton: config.showPayButton,

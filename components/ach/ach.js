@@ -29,7 +29,7 @@ const loadComponent = function loadComponent() {
             environment: config.environment,
             originKey: originKey,
             clientKey: config.clientKey,
-            ...paymentMethodsResponse,
+            paymentMethodsResponse: paymentMethodsResponse,
             locale: localeConfig.locale,
           });
 

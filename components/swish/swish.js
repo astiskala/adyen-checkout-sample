@@ -17,8 +17,25 @@ const loadComponent = function loadComponent() {
             environment: config.environment,
             originKey: originKey,
             clientKey: config.clientKey,
-            ...paymentMethodsResponse,
+            paymentMethodsResponse: paymentMethodsResponse,
             locale: localeConfig.locale,
+            onAdditionalDetails: (state, component) => {
+              submitAdditionalDetails(state.data).then((result) => {
+                if (response.action) {
+                  component.handleAction(result.action);
+                } else if (response.resultCode) {
+                  updateResultContainer(response.resultCode);
+                  if (swish !== undefined) {
+                    swish.unmount('#swish-container');
+                  }
+                } else if (response.message) {
+                  updateResultContainer(response.message);
+                  if (swish !== undefined) {
+                    swish.unmount('#swish-container');
+                  }
+                }
+              });
+            },
           });
 
           const swishData = {

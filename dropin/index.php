@@ -67,7 +67,9 @@
 
                     <h3>/payments Configuration</h3>
                     <label for="captureDelayHours">captureDelayHours:</label>
-                    <input type="text" id="captureDelayHours" name="captureDelayHours" />
+                    <input type="text" id="captureDelayHours" name="captureDelayHours" /><br />
+
+                    <input type="button" id="submit" name="submit" onclick="javascript:dropin.submit();" value="Pay" />
                 </form>
               </div>
             </div>

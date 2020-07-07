@@ -76,7 +76,7 @@ const loadDropIn = function loadDropIn() {
             environment: config.environment,
             originKey: originKey,
             clientKey: config.clientKey,
-            ...paymentMethodsResponse,
+            paymentMethodsResponse: paymentMethodsResponse,
             locale: localeConfig.locale,
           });
 
