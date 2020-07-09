@@ -15,10 +15,7 @@ const getConfig = async () => {
     config.googlePayConfig.environment = 'PRODUCTION';
   }
 
-  config.googlePayConfig.configuration.gatewayMerchantId = await httpGet(
-    'env',
-    'MERCHANT_ACCOUNT',
-  );
+  config.googlePayConfig.configuration.gatewayMerchantId = await httpGet('env', 'GOOGLE_PAY_MERCHANT_ID');
 
   return config;
 };
