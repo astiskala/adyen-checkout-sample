@@ -67,7 +67,7 @@ const loadDropIn = function loadDropIn() {
 
           dropin = checkout
             .create('dropin', {
-              ...paymentMethodsConfiguration,
+              paymentMethodsConfiguration,
               openFirstPaymentMethod: config.openFirstPaymentMethod,
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,
