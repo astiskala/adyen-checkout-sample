@@ -14,48 +14,45 @@ const loadComponent = function loadComponent() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
-      getOriginKey().then((originKey) => {
-        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-          const checkout = new AdyenCheckout({
-            environment: config.environment,
-            originKey: originKey,
-            clientKey: config.clientKey,
-            paymentMethodsResponse: paymentMethodsResponse,
-            locale: localeConfig.locale,
-            onAdditionalDetails: (state, component) => {
-              submitAdditionalDetails(state.data).then((result) => {
-                if (response.action) {
-                  component.handleAction(result.action);
-                } else if (response.resultCode) {
-                  updateResultContainer(response.resultCode);
-                  if (wechatpayComponent !== undefined) {
-                    wechatpayComponent.unmount('#wechatpay-container');
-                  }
-                } else if (response.message) {
-                  updateResultContainer(response.message);
-                  if (wechatpayComponent !== undefined) {
-                    wechatpayComponent.unmount('#wechatpay-container');
-                  }
+      getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+        const checkout = new AdyenCheckout({
+          environment: config.environment,
+          clientKey: config.clientKey,
+          paymentMethodsResponse: paymentMethodsResponse,
+          locale: localeConfig.locale,
+          onAdditionalDetails: (state, component) => {
+            submitAdditionalDetails(state.data).then((result) => {
+              if (response.action) {
+                component.handleAction(result.action);
+              } else if (response.resultCode) {
+                updateResultContainer(response.resultCode);
+                if (wechatpayComponent !== undefined) {
+                  wechatpayComponent.unmount('#wechatpay-container');
                 }
-              });
-            },
-          });
+              } else if (response.message) {
+                updateResultContainer(response.message);
+                if (wechatpayComponent !== undefined) {
+                  wechatpayComponent.unmount('#wechatpay-container');
+                }
+              }
+            });
+          },
+        });
 
-          makePayment(localeConfig, config.wechatConfig).then((response) => {
-            if (response.action) {
-              wechatpayComponent = checkout.createFromAction(response.action).mount('#wechatpay-container');
-            } else if (response.resultCode) {
-              updateResultContainer(response.resultCode);
-              if (wechatpayComponent !== undefined) {
-                wechatpayComponent.unmount('#wechatpay-container');
-              }
-            } else if (response.message) {
-              updateResultContainer(response.message);
-              if (wechatpayComponent !== undefined) {
-                wechatpayComponent.unmount('#wechatpay-container');
-              }
+        makePayment(localeConfig, config.wechatConfig).then((response) => {
+          if (response.action) {
+            wechatpayComponent = checkout.createFromAction(response.action).mount('#wechatpay-container');
+          } else if (response.resultCode) {
+            updateResultContainer(response.resultCode);
+            if (wechatpayComponent !== undefined) {
+              wechatpayComponent.unmount('#wechatpay-container');
             }
-          });
+          } else if (response.message) {
+            updateResultContainer(response.message);
+            if (wechatpayComponent !== undefined) {
+              wechatpayComponent.unmount('#wechatpay-container');
+            }
+          }
         });
       });
     });

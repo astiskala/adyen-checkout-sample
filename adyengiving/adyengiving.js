@@ -70,113 +70,110 @@ const loadDropIn = function loadDropIn() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
-      getOriginKey().then((originKey) => {
-        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-          const checkout = new AdyenCheckout({
-            environment: config.environment,
-            originKey: originKey,
-            clientKey: config.clientKey,
-            paymentMethodsResponse: paymentMethodsResponse,
-            locale: localeConfig.locale,
-          });
+      getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+        const checkout = new AdyenCheckout({
+          environment: config.environment,
+          clientKey: config.clientKey,
+          paymentMethodsResponse: paymentMethodsResponse,
+          locale: localeConfig.locale,
+        });
 
-          const paymentMethodsConfiguration = {
-            paypal: config.paypalConfig,
-            card: config.cardConfig,
-          };
+        const paymentMethodsConfiguration = {
+          paypal: config.paypalConfig,
+          card: config.cardConfig,
+        };
 
-          paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
-          paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
+        paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
+        paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
 
-          paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
-            component.setStatus('ready');
-          };
+        paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
+          component.setStatus('ready');
+        };
 
-          dropin = checkout
-            .create('dropin', {
-              paymentMethodsConfiguration,
-              openFirstPaymentMethod: config.openFirstPaymentMethod,
-              openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
-              showStoredPaymentMethods: config.showStoredPaymentMethods,
-              showPaymentMethods: config.showPaymentMethods,
-              amount: localeConfig.amount,
-              showPayButton: config.showPayButton,
-              onSelect: (activeComponent) => {
-                updateStateContainer(activeComponent.data);
-              },
-              onChange: (state) => {
-                updateStateContainer(state);
-              },
-              onSubmit: (state, component) => {
-                makePayment(localeConfig, state.data, {}, true, config.native3ds2)
-                  .then((response) => {
-                    if (response.action) {
-                      dropin.handleAction(response.action);
-                    } else if (response.resultCode) {
-                      dropin.setStatus('success', { message: response.resultCode });
-                      if (response.resultCode === 'Authorised') {
-                        const donationConfig = {
-                          amounts: {
-                            currency: localeConfig.amount.currency,
-                            values: [300, 500, 1000],
-                          },
-                          description: 'The Charitable Foundation is...',
-                          name: 'The Charitable Foundation',
-                          url: 'https://example.org',
-                          showCancelButton: true,
-                          onDonate: (donateState) => {
-                            if (donateState.isValid) {
-                              const donationRequest = {
-                                merchantAccount: config.merchantAccount,
-                                donationAccount: config.charityAccount,
-                                reference: response.merchantReference,
-                                modificationAmount: donateState.data.amount,
-                                originalReference: response.pspReference,
-                              };
-
-                              makeDonation(donationRequest).then((donateResponse) => {
-                                if (donateResponse.response === '[donation-received]') {
-                                  donation.setStatus('success');
-                                } else {
-                                  updateDonationContainer(donateResponse.response);
-                                }
-                              });
-                            }
-                          },
-                          onCancel: () => {
-                            if (donation !== undefined) {
-                              donation.unmount('#donation-container');
-                            }
-                          },
-                        };
-
-                        donation = checkout.create('donation', donationConfig).mount('#donation-container');
-                      }
-                    } else if (response.message) {
-                      dropin.setStatus('success', { message: response.message });
-                    }
-                  })
-                  .catch((error) => {
-                    dropin.setStatus('error');
-                  });
-              },
-              onAdditionalDetails: (state, component) => {
-                submitAdditionalDetails(state.data).then((response) => {
-                  if (result.action) {
+        dropin = checkout
+          .create('dropin', {
+            paymentMethodsConfiguration,
+            openFirstPaymentMethod: config.openFirstPaymentMethod,
+            openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
+            showStoredPaymentMethods: config.showStoredPaymentMethods,
+            showPaymentMethods: config.showPaymentMethods,
+            amount: localeConfig.amount,
+            showPayButton: config.showPayButton,
+            onSelect: (activeComponent) => {
+              updateStateContainer(activeComponent.data);
+            },
+            onChange: (state) => {
+              updateStateContainer(state);
+            },
+            onSubmit: (state, component) => {
+              makePayment(localeConfig, state.data, {}, true, config.native3ds2)
+                .then((response) => {
+                  if (response.action) {
                     dropin.handleAction(response.action);
                   } else if (response.resultCode) {
                     dropin.setStatus('success', { message: response.resultCode });
+                    if (response.resultCode === 'Authorised') {
+                      const donationConfig = {
+                        amounts: {
+                          currency: localeConfig.amount.currency,
+                          values: [300, 500, 1000],
+                        },
+                        description: 'The Charitable Foundation is...',
+                        name: 'The Charitable Foundation',
+                        url: 'https://example.org',
+                        showCancelButton: true,
+                        onDonate: (donateState) => {
+                          if (donateState.isValid) {
+                            const donationRequest = {
+                              merchantAccount: config.merchantAccount,
+                              donationAccount: config.charityAccount,
+                              reference: response.merchantReference,
+                              modificationAmount: donateState.data.amount,
+                              originalReference: response.pspReference,
+                            };
+
+                            makeDonation(donationRequest).then((donateResponse) => {
+                              if (donateResponse.response === '[donation-received]') {
+                                donation.setStatus('success');
+                              } else {
+                                updateDonationContainer(donateResponse.response);
+                              }
+                            });
+                          }
+                        },
+                        onCancel: () => {
+                          if (donation !== undefined) {
+                            donation.unmount('#donation-container');
+                          }
+                        },
+                      };
+
+                      donation = checkout.create('donation', donationConfig).mount('#donation-container');
+                    }
                   } else if (response.message) {
                     dropin.setStatus('success', { message: response.message });
                   }
+                })
+                .catch((error) => {
+                  dropin.setStatus('error');
                 });
-              },
-              onError: (state, component) => {
-                dropin.setStatus('error');
-              },
-            })
-            .mount('#dropin-container');
-        });
+            },
+            onAdditionalDetails: (state, component) => {
+              submitAdditionalDetails(state.data).then((response) => {
+                if (result.action) {
+                  dropin.handleAction(response.action);
+                } else if (response.resultCode) {
+                  dropin.setStatus('success', { message: response.resultCode });
+                } else if (response.message) {
+                  dropin.setStatus('success', { message: response.message });
+                }
+              });
+            },
+            onError: (state, component) => {
+              dropin.setStatus('error');
+            },
+          })
+          .mount('#dropin-container');
       });
     });
   });

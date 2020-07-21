@@ -53,24 +53,22 @@ const getPaymentLinkConfig = async (localeConfig) => {
 const createPaymentLink = function createPaymentLink() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
-    getOriginKey().then((originKey) => {
-      getPaymentLinkConfig(localeConfig).then((paymentLinkConfig) => {
-        updateRequestContainer('/paymentLinks', paymentLinkConfig);
+    getPaymentLinkConfig(localeConfig).then((paymentLinkConfig) => {
+      updateRequestContainer('/paymentLinks', paymentLinkConfig);
 
-        return httpPost('paymentLinks', paymentLinkConfig)
-          .then((response) => {
-            if (response.error) {
-              console.error('Unable to create payment link');
-            }
+      return httpPost('paymentLinks', paymentLinkConfig)
+        .then((response) => {
+          if (response.error) {
+            console.error('Unable to create payment link');
+          }
 
-            updateResponseContainer('/paymentLinks', response);
+          updateResponseContainer('/paymentLinks', response);
 
-            const paybylinkContainer = document.querySelector('#paybylink-container');
-            paybylinkContainer.innerHTML = `<a href="${response.url}" target="_blank">${response.url}</a>`;
+          const paybylinkContainer = document.querySelector('#paybylink-container');
+          paybylinkContainer.innerHTML = `<a href="${response.url}" target="_blank">${response.url}</a>`;
 
-            return response;
-          });
-      });
+          return response;
+        });
     });
   });
 };

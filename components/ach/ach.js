@@ -23,54 +23,51 @@ const loadComponent = function loadComponent() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
-      getOriginKey().then((originKey) => {
-        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-          const checkout = new AdyenCheckout({
-            environment: config.environment,
-            originKey: originKey,
-            clientKey: config.clientKey,
-            paymentMethodsResponse: paymentMethodsResponse,
-            locale: localeConfig.locale,
-          });
-
-          achComponent = checkout
-            .create('ach', {
-              hasHolderName: config.hasHolderName,
-              amount: localeConfig.amount,
-              showPayButton: config.showPayButton,
-              data: config.achConfig.data,
-
-              onSubmit: (state, component) => {
-                if (state.isValid) {
-                  // ACH only works in US or PR, with payment in USD
-                  const additionalConfig = {
-                    countryCode: state.data.billingAddress.country,
-                    amount: localeConfig.amount,
-                  };
-
-                  makePayment(localeConfig, achComponent.data, additionalConfig)
-                    .then((response) => {
-                      if (response.resultCode) {
-                        updateResultContainer(response.resultCode);
-                        if (achComponent !== undefined) {
-                          achComponent.unmount('#ach-container');
-                        }
-                      } else if (response.message) {
-                        updateResultContainer(response.message);
-                        if (achComponent !== undefined) {
-                          achComponent.unmount('#ach-container');
-                        }
-                      }
-                    });
-                }
-              },
-
-              onChange: (state, component) => {
-                updateStateContainer(state);
-              },
-            })
-            .mount('#ach-container');
+      getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+        const checkout = new AdyenCheckout({
+          environment: config.environment,
+          clientKey: config.clientKey,
+          paymentMethodsResponse: paymentMethodsResponse,
+          locale: localeConfig.locale,
         });
+
+        achComponent = checkout
+          .create('ach', {
+            hasHolderName: config.hasHolderName,
+            amount: localeConfig.amount,
+            showPayButton: config.showPayButton,
+            data: config.achConfig.data,
+
+            onSubmit: (state, component) => {
+              if (state.isValid) {
+                // ACH only works in US or PR, with payment in USD
+                const additionalConfig = {
+                  countryCode: state.data.billingAddress.country,
+                  amount: localeConfig.amount,
+                };
+
+                makePayment(localeConfig, achComponent.data, additionalConfig)
+                  .then((response) => {
+                    if (response.resultCode) {
+                      updateResultContainer(response.resultCode);
+                      if (achComponent !== undefined) {
+                        achComponent.unmount('#ach-container');
+                      }
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                      if (achComponent !== undefined) {
+                        achComponent.unmount('#ach-container');
+                      }
+                    }
+                  });
+              }
+            },
+
+            onChange: (state, component) => {
+              updateStateContainer(state);
+            },
+          })
+          .mount('#ach-container');
       });
     });
   });

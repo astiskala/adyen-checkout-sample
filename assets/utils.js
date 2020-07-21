@@ -217,6 +217,14 @@ const makePayment = (localeConfig,
       }
     }
 
+    const storeField = document.querySelector('#store');
+    if (storeField) {
+      const store = storeField.value;
+      if (store) {
+        paymentRequest.store = store;
+      }
+    }
+
     updateRequestContainer('/payments', paymentRequest);
 
     return httpPost('payments', paymentRequest)
@@ -270,16 +278,6 @@ const submitAdditionalDetails = (stateData, config = {}) => {
       return response;
     });
 };
-
-// Fetches an originKey from the local server
-const getOriginKey = () => httpPost('originKeys')
-  .then((response) => {
-    if (response.error || !response.originKeys) {
-      console.error('No originKey available');
-    }
-
-    return response.originKeys[Object.keys(response.originKeys)[0]];
-  });
 
 const subscribeToWebhooks = async () => {
   const webhookRelayKey = await httpGet('env', 'WEBHOOKRELAY_KEY');

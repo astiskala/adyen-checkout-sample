@@ -27,7 +27,7 @@
     "PAYPAL_MERCHANT_ID": { "required": false },
     "PAYPAL_INTENT": { "value": "capture" },
     "ENVIRONMENT": { "value": "test" },
-    "SDK_VERSION": { "value": "3.9.5" },
+    "SDK_VERSION": { "value": "3.10.1" },
     "CHECKOUT_API_VERSION": { "value": "53" },
     "COUNTRY": { "value": "AU" },
     "CURRENCY": { "value": "AUD" },

@@ -30,67 +30,64 @@ const loadComponent = function loadComponent() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
-      getOriginKey().then((originKey) => {
-        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-          const checkout = new AdyenCheckout({
-            environment: config.environment,
-            originKey: originKey,
-            clientKey: config.clientKey,
-            paymentMethodsResponse: paymentMethodsResponse,
-            locale: localeConfig.locale,
-          });
-
-          card = checkout
-            .create('card', {
-              amount: localeConfig.amount,
-              showPayButton: config.showPayButton,
-              ...config.cardConfig,
-              onSubmit: (state, component) => {
-                if (state.isValid) {
-                  makePayment(localeConfig, card.data, {}, true, config.native3ds2)
-                    .then((response) => {
-                      if (response.action) {
-                        component.handleAction(response.action);
-                      } else if (response.resultCode) {
-                        updateResultContainer(response.resultCode);
-                        if (card !== undefined) {
-                          card.unmount('#card-container');
-                        }
-                      } else if (response.message) {
-                        updateResultContainer(response.message);
-                        if (card !== undefined) {
-                          card.unmount('#card-container');
-                        }
-                      }
-                    });
-                }
-              },
-              onChange: (state, component) => {
-                updateStateContainer(state);
-              },
-              onBinValue: (state) => {
-                // TBA
-              },
-              onAdditionalDetails: (state, component) => {
-                submitAdditionalDetails(state.data).then((result) => {
-                  if (result.action) {
-                    component.handleAction(result.action);
-                  } else if (response.resultCode) {
-                    updateResultContainer(response.resultCode);
-                    if (card !== undefined) {
-                      card.unmount('#card-container');
-                    }
-                  } else if (response.message) {
-                    updateResultContainer(response.message);
-                    if (card !== undefined) {
-                      card.unmount('#card-container');
-                    }
-                  }
-                });
-              },
-            })
-            .mount('#card-container');
+      getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+        const checkout = new AdyenCheckout({
+          environment: config.environment,
+          clientKey: config.clientKey,
+          paymentMethodsResponse: paymentMethodsResponse,
+          locale: localeConfig.locale,
         });
+
+        card = checkout
+          .create('card', {
+            amount: localeConfig.amount,
+            showPayButton: config.showPayButton,
+            ...config.cardConfig,
+            onSubmit: (state, component) => {
+              if (state.isValid) {
+                makePayment(localeConfig, card.data, {}, true, config.native3ds2)
+                  .then((response) => {
+                    if (response.action) {
+                      component.handleAction(response.action);
+                    } else if (response.resultCode) {
+                      updateResultContainer(response.resultCode);
+                      if (card !== undefined) {
+                        card.unmount('#card-container');
+                      }
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                      if (card !== undefined) {
+                        card.unmount('#card-container');
+                      }
+                    }
+                  });
+              }
+            },
+            onChange: (state, component) => {
+              updateStateContainer(state);
+            },
+            onBinValue: (state) => {
+              // TBA
+            },
+            onAdditionalDetails: (state, component) => {
+              submitAdditionalDetails(state.data).then((result) => {
+                if (result.action) {
+                  component.handleAction(result.action);
+                } else if (response.resultCode) {
+                  updateResultContainer(response.resultCode);
+                  if (card !== undefined) {
+                    card.unmount('#card-container');
+                  }
+                } else if (response.message) {
+                  updateResultContainer(response.message);
+                  if (card !== undefined) {
+                    card.unmount('#card-container');
+                  }
+                }
+              });
+            },
+          })
+          .mount('#card-container');
       });
     });
   });

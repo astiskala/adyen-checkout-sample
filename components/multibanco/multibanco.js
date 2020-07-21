@@ -11,38 +11,35 @@ const loadComponent = function loadComponent() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
-      getOriginKey().then((originKey) => {
-        getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-          const checkout = new AdyenCheckout({
-            environment: config.environment,
-            originKey: originKey,
-            clientKey: config.clientKey,
-            paymentMethodsResponse: paymentMethodsResponse,
-            locale: localeConfig.locale,
+      getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+        const checkout = new AdyenCheckout({
+          environment: config.environment,
+          clientKey: config.clientKey,
+          paymentMethodsResponse: paymentMethodsResponse,
+          locale: localeConfig.locale,
 
-            onSubmit: (state, component) => {
-              makePayment(localeConfig, state.data).then((response) => {
-                if (response.action) {
-                  multibanco = checkout
-                    .createFromAction(response.action)
-                    .mount('#multibanco-container');
-                } else if (response.resultCode) {
-                  updateResultContainer(response.resultCode);
-                  if (multibanco !== undefined) {
-                    multibanco.unmount('#multibanco-container');
-                  }
-                } else if (response.message) {
-                  updateResultContainer(response.message);
-                  if (multibanco !== undefined) {
-                    multibanco.unmount('#multibanco-container');
-                  }
+          onSubmit: (state, component) => {
+            makePayment(localeConfig, state.data).then((response) => {
+              if (response.action) {
+                multibanco = checkout
+                  .createFromAction(response.action)
+                  .mount('#multibanco-container');
+              } else if (response.resultCode) {
+                updateResultContainer(response.resultCode);
+                if (multibanco !== undefined) {
+                  multibanco.unmount('#multibanco-container');
                 }
-              });
-            },
-          });
-
-          multibanco = checkout.create('multibanco').mount('#multibanco-container');
+              } else if (response.message) {
+                updateResultContainer(response.message);
+                if (multibanco !== undefined) {
+                  multibanco.unmount('#multibanco-container');
+                }
+              }
+            });
+          },
         });
+
+        multibanco = checkout.create('multibanco').mount('#multibanco-container');
       });
     });
   });
