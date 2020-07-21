@@ -63,6 +63,10 @@ const loadDropIn = function loadDropIn() {
           component.setStatus('ready');
         };
 
+        paymentMethodsConfiguration.card.onBinValue = (state) => {
+          console.log('onBinValue', state);
+        };
+
         dropin = checkout
           .create('dropin', {
             paymentMethodsConfiguration,
@@ -105,7 +109,7 @@ const loadDropIn = function loadDropIn() {
               });
             },
             onError: (state, component) => {
-              dropin.setStatus('error');
+              console.log('onError', state);
             },
           })
           .mount('#dropin-container');

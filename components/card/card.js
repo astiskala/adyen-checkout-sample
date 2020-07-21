@@ -67,7 +67,7 @@ const loadComponent = function loadComponent() {
               updateStateContainer(state);
             },
             onBinValue: (state) => {
-              // TBA
+              console.log('onBinValue', state);
             },
             onAdditionalDetails: (state, component) => {
               submitAdditionalDetails(state.data).then((result) => {

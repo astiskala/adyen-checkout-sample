@@ -44,7 +44,9 @@
 
                 <h3>/payments Configuration</h3>
                 <label for="captureDelayHours">captureDelayHours:</label>
-                <input type="text" id="captureDelayHours" name="captureDelayHours" />
+                <input type="text" id="captureDelayHours" name="captureDelayHours" /><br />
+                <label for="store">store:</label>
+                <input type="text" id="store" name="store" /><br />
               </form>
             </div>
 

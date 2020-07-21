@@ -28,7 +28,7 @@
                 <h3>3DS2</h3>
                 <label for="native3ds2">Enable Native 3DS2:</label>
                 <input type="checkbox" id="native3ds2" name="native3ds2" checked="checked" />
-                
+
                 <h3>Component</h3>
                 <label for="showPayButton">showPayButton:</label>
                 <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
@@ -60,7 +60,9 @@
 
                 <h3>/payments Configuration</h3>
                 <label for="captureDelayHours">captureDelayHours:</label>
-                <input type="text" id="captureDelayHours" name="captureDelayHours" />
+                <input type="text" id="captureDelayHours" name="captureDelayHours" /><br />
+                <label for="store">store:</label>
+                <input type="text" id="store" name="store" /><br />
               </form>
             </div>
 
