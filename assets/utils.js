@@ -192,6 +192,7 @@ const makePayment = (localeConfig,
 
     paymentsConfig.additionalData.riskdata.basket.item1 = [
       {
+        itemID: '001',
         productTitle: 'Product',
         amountPerItem: paymentsConfig.amount.value,
         quantity: 1,
