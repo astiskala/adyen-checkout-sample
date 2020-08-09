@@ -105,6 +105,7 @@ const getPaymentsDefaultConfig = async () => {
     billingAddress: {},
     deliveryAddress: {},
     paymentMethod: {},
+    additionalData: { riskdata: { basket: {} } },
     lineItems: [],
   };
 
@@ -189,6 +190,14 @@ const makePayment = (localeConfig,
       },
     ];
 
+    paymentsConfig.additionalData.riskdata.basket.item1 = [
+      {
+        productTitle: 'Product',
+        amountPerItem: paymentsConfig.amount.value,
+        quantity: 1,
+      },
+    ];
+
     const paymentMethod = rawPaymentMethod;
     if (paymentMethod.paymentMethod.type === 'zip') {
       paymentMethod.paymentMethod.clickAndCollect = paymentsConfig.paymentMethod.clickAndCollect;
@@ -208,6 +217,8 @@ const makePayment = (localeConfig,
       paymentRequest.additionalData = {};
       paymentRequest.additionalData.allow3DS2 = true;
     }
+
+    //paymentRequest.threeDSAuthenticationOnly = true;
 
     const captureDelayHoursField = document.querySelector('#captureDelayHours');
     if (captureDelayHoursField) {
