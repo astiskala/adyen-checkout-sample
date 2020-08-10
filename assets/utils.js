@@ -219,7 +219,13 @@ const makePayment = (localeConfig,
       paymentRequest.additionalData.allow3DS2 = true;
     }
 
-    //paymentRequest.threeDSAuthenticationOnly = true;
+    const threeDSAuthenticationOnlyField = document.querySelector('#threeDSAuthenticationOnly');
+    if (threeDSAuthenticationOnlyField) {
+      const threeDSAuthenticationOnly = threeDSAuthenticationOnlyField.checked;
+      if (threeDSAuthenticationOnly) {
+        paymentRequest.threeDSAuthenticationOnly = threeDSAuthenticationOnly;
+      }
+    }
 
     const captureDelayHoursField = document.querySelector('#captureDelayHours');
     if (captureDelayHoursField) {
