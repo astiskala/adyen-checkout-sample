@@ -67,6 +67,10 @@ const loadDropIn = function loadDropIn() {
           console.log('onBinValue', state);
         };
 
+        paymentMethodsConfiguration.card.onBrand = (state) => {
+          console.log('onBrand', state);
+        };
+
         dropin = checkout
           .create('dropin', {
             paymentMethodsConfiguration,

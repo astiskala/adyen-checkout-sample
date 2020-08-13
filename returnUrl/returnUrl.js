@@ -3,9 +3,12 @@ const queryStringToObject = (queryString) => {
   if (queryString) {
     queryString.split('&').map((item) => {
       const [k, v] = item.split('=');
-      v ? (obj[k] = v) : null;
+      if (v) {
+        obj[k] = decodeURIComponent(v);
+      }
     });
   }
+
   return obj;
 };
 
