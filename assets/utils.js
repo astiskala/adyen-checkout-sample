@@ -257,6 +257,14 @@ const makePayment = (localeConfig,
       }
     }
 
+    const enableOneClickField = document.querySelector('#enableOneClick');
+    if (enableOneClickField) {
+      const enableOneClick = enableOneClickField.checked;
+      if (enableOneClick) {
+        paymentRequest.enableOneClick = enableOneClick;
+      }
+    }
+
     const storeField = document.querySelector('#store');
     if (storeField) {
       const store = storeField.value;
