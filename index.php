@@ -41,6 +41,9 @@
         <li class="payment_methods__list__toplevel">
           <a href="adyengiving/">Adyen Giving</a>
         </li>
+          <li class="payment_methods__list__toplevel">
+            <a href="surcharging/">Surcharging</a>
+          </li>
         <li class="payment_methods__list__toplevel">
           Components
           <ul class="payment_methods__list">

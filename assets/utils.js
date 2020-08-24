@@ -83,6 +83,12 @@ const httpPost = (endpoint, data) => fetch(`/server/api/${endpoint}.php`, {
   body: JSON.stringify(data),
 }).then((response) => response.json());
 
+const getCostEstimateDefaultConfig = async () => {
+  const config = {};
+  config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
+  return config;
+};
+
 const getPaymentMethodsDefaultConfig = async () => {
   const config = {};
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
@@ -145,16 +151,32 @@ const getPaymentsDefaultConfig = async () => {
   return config;
 };
 
+const getCostEstimate = (costEstimate) => getCostEstimateDefaultConfig()
+  .then((costEstimateDefaultConfig) => {
+    const costEstimateRequest = {
+      ...costEstimateDefaultConfig,
+      ...costEstimate,
+    };
+
+    updateRequestContainer('/getCostEstimate', costEstimateRequest);
+
+    return httpPost('getCostEstimate', costEstimateRequest)
+      .then((response) => {
+        updateResponseContainer('/getCostEstimate', response);
+        return response;
+      });
+  });
+
 const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig()
   .then((paymentMethodsDefaultConfig) => {
-    const paymentMethodsConfig = {
+    const paymentMethodsRequest = {
       ...paymentMethodsDefaultConfig,
       ...localeConfig,
     };
 
-    updateRequestContainer('/paymentMethods', paymentMethodsConfig);
+    updateRequestContainer('/paymentMethods', paymentMethodsRequest);
 
-    return httpPost('paymentMethods', paymentMethodsConfig)
+    return httpPost('paymentMethods', paymentMethodsRequest)
       .then((response) => {
         if (response.error) {
           console.error('No paymentMethods available');
@@ -283,10 +305,10 @@ const collectLocaleConfig = function collectLocaleConfig() {
   return localeConfig;
 };
 
-const submitAdditionalDetails = (stateData, config = {}) => {
-  updateRequestContainer('/payments/details', stateData);
+const submitAdditionalDetails = (additionalDetailsRequest, config = {}) => {
+  updateRequestContainer('/payments/details', additionalDetailsRequest);
 
-  return httpPost('paymentDetails', stateData)
+  return httpPost('paymentDetails', additionalDetailsRequest)
     .then((response) => {
       if (response.error) {
         console.error('Payment details submission failed');
