@@ -5,8 +5,6 @@ const getConfig = async () => {
 
   config.includeDeliveryAddress = document.querySelector('#includeDeliveryAddress').checked;
 
-  config.paypalConfig.environment = await httpGet('env', 'ENVIRONMENT');
-  config.paypalConfig.merchantId = await httpGet('env', 'PAYPAL_MERCHANT_ID');
   config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
   return config;
 };
@@ -60,7 +58,7 @@ const loadComponent = function loadComponent() {
                 });
             },
             onAdditionalDetails: (state, component) => {
-              submitAdditionalDetails(state.data).then((result) => {
+              submitAdditionalDetails(state.data).then((response) => {
                 if (response.action) {
                   paypalComponent.handleAction(response.action);
                 } else if (response.resultCode) {

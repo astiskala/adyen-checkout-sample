@@ -8,16 +8,6 @@ const getConfig = async () => {
   config.environment = await httpGet('env', 'ENVIRONMENT');
   config.clientKey = await httpGet('env', 'CHECKOUT_CLIENTKEY');
 
-  const adyenEnvironment = await httpGet('env', 'ENVIRONMENT');
-  if (adyenEnvironment === 'test') {
-    config.googlePayConfig.environment = 'TEST';
-  } else if (adyenEnvironment === 'live') {
-    config.googlePayConfig.environment = 'PRODUCTION';
-  }
-
-  config.googlePayConfig.configuration.gatewayMerchantId = await httpGet('env', 'MERCHANT_ACCOUNT');
-  config.googlePayConfig.configuration.merchantIdentifier = await httpGet('env', 'GOOGLE_PAY_MERCHANT_ID');
-
   return config;
 };
 
@@ -42,7 +32,6 @@ const loadComponent = function loadComponent() {
           .create('paywithgoogle', {
             amount: localeConfig.amount,
             showPayButton: true,
-            ...googlePayConfig,
 
             onSubmit: (state, component) => {
               makePayment(localeConfig, state.data).then((response) => {

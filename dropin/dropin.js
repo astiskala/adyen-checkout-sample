@@ -31,7 +31,6 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
-  config.paypalConfig.merchantId = await httpGet('env', 'PAYPAL_MERCHANT_ID');
   config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
 
   return config;
