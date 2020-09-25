@@ -111,7 +111,6 @@ const getPaymentsDefaultConfig = async () => {
     billingAddress: {},
     deliveryAddress: {},
     paymentMethod: {},
-    additionalData: { riskdata: { basket: {} } },
     lineItems: [],
   };
 
@@ -212,15 +211,6 @@ const makePayment = (localeConfig,
       },
     ];
 
-    paymentsConfig.additionalData.riskdata.basket.item1 = [
-      {
-        itemID: '001',
-        productTitle: 'Product',
-        amountPerItem: paymentsConfig.amount.value,
-        quantity: 1,
-      },
-    ];
-
     const paymentMethod = rawPaymentMethod;
     if (paymentMethod.paymentMethod.type === 'zip') {
       paymentMethod.paymentMethod.clickAndCollect = paymentsConfig.paymentMethod.clickAndCollect;
@@ -236,10 +226,18 @@ const makePayment = (localeConfig,
       paymentRequest.deliveryAddress = null;
     }
 
+    paymentRequest.additionalData = {};
     if (native3ds2 === true) {
-      paymentRequest.additionalData = {};
       paymentRequest.additionalData.allow3DS2 = true;
     }
+
+    paymentRequest.additionalData = {
+      'riskdata.basket.item1.itemID': '001',
+      'riskdata.basket.item1.productTitle': 'Product',
+      'riskdata.basket.item1.currency': 'AUD',
+      'riskdata.basket.item1.amountPerItem': paymentsConfig.amount.value,
+      'riskdata.basket.item1.quantity': 1
+    };
 
     const threeDSAuthenticationOnlyField = document.querySelector('#threeDSAuthenticationOnly');
     if (threeDSAuthenticationOnlyField) {

@@ -65,9 +65,19 @@ const loadComponent = function loadComponent() {
             },
             onChange: (state, component) => {
               updateStateContainer(state);
+              console.log('onChange', state);
             },
             onBinValue: (state) => {
               console.log('onBinValue', state);
+            },
+            onFieldValid: (state) => {
+              console.log('onFieldValid', state);
+            },
+            onFocus: (state) => {
+              console.log('onFocus', state);
+            },
+            onError: (state) => {
+              console.log('onError', state);
             },
             onAdditionalDetails: (state, component) => {
               submitAdditionalDetails(state.data).then((result) => {
