@@ -227,10 +227,6 @@ const makePayment = (localeConfig,
     }
 
     paymentRequest.additionalData = {};
-    if (native3ds2 === true) {
-      paymentRequest.additionalData.allow3DS2 = true;
-    }
-
     paymentRequest.additionalData = {
       'riskdata.basket.item1.itemID': '001',
       'riskdata.basket.item1.productTitle': 'Product',
@@ -238,6 +234,10 @@ const makePayment = (localeConfig,
       'riskdata.basket.item1.amountPerItem': paymentsConfig.amount.value,
       'riskdata.basket.item1.quantity': 1
     };
+    
+    if (native3ds2 === true) {
+      paymentRequest.additionalData.allow3DS2 = true;
+    }
 
     const threeDSAuthenticationOnlyField = document.querySelector('#threeDSAuthenticationOnly');
     if (threeDSAuthenticationOnlyField) {

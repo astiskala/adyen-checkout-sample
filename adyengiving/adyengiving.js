@@ -79,13 +79,6 @@ const loadDropIn = function loadDropIn() {
           card: config.cardConfig,
         };
 
-        paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
-        paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
-
-        paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
-          component.setStatus('ready');
-        };
-
         dropin = checkout
           .create('dropin', {
             paymentMethodsConfiguration,
