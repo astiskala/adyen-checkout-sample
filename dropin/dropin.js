@@ -15,6 +15,7 @@ const getConfig = async () => {
   config.showStoredPaymentMethods = document.querySelector('#showStoredPaymentMethods').checked;
   config.showPaymentMethods = document.querySelector('#showPaymentMethods').checked;
   config.showPayButton = document.querySelector('#showPayButton').checked;
+  config.showRemovePaymentMethodButton = document.querySelector('#showRemovePaymentMethodButton').checked;
 
   config.cardConfig.enableStoreDetails = document.querySelector('#enableStoreDetails').checked;
   config.cardConfig.hasHolderName = document.querySelector('#hasHolderName').checked;
@@ -30,6 +31,8 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
   config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
+
+  config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
 
   config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
 
@@ -79,6 +82,7 @@ const loadDropIn = function loadDropIn() {
             showPaymentMethods: config.showPaymentMethods,
             amount: localeConfig.amount,
             showPayButton: config.showPayButton,
+            showRemovePaymentMethodButton: config.showRemovePaymentMethodButton,
             onSelect: (activeComponent) => {
               updateStateContainer(activeComponent.data);
             },
@@ -108,6 +112,21 @@ const loadDropIn = function loadDropIn() {
                   dropin.setStatus('success', { message: response.resultCode });
                 } else if (response.message) {
                   dropin.setStatus('success', { message: response.message });
+                }
+              });
+            },
+            onDisableStoredPaymentMethod: (storedPaymentMethodId, resolve, reject) => {
+              var disableObject = {
+                shopperReference: config.shopperReference,
+                recurringDetailReference: storedPaymentMethodId.props.storedPaymentMethodId
+              };
+
+              disable(disableObject).then((response) => {
+                if (response.response === '[detail-successfully-disabled]') {
+                  resolve();
+                }
+                else {
+                  reject();
                 }
               });
             },

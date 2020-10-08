@@ -89,6 +89,12 @@ const getCostEstimateDefaultConfig = async () => {
   return config;
 };
 
+const disableDefaultConfig = async () => {
+  const config = {};
+  config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
+  return config;
+};
+
 const getPaymentMethodsDefaultConfig = async () => {
   const config = {};
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
@@ -149,6 +155,22 @@ const getPaymentsDefaultConfig = async () => {
 
   return config;
 };
+
+const disable = (disableObject) => disableDefaultConfig()
+  .then((disableDefaultConfig) => {
+    var disableRequest = {
+      ...disableDefaultConfig,
+      ...disableObject
+    };
+
+    updateRequestContainer('/disable', disableRequest);
+
+    return httpPost('disable', disableRequest)
+      .then((response) => {
+        updateResponseContainer('/disable', response);
+        return response;
+      });
+  });
 
 const getCostEstimate = (costEstimate) => getCostEstimateDefaultConfig()
   .then((costEstimateDefaultConfig) => {
@@ -234,7 +256,7 @@ const makePayment = (localeConfig,
       'riskdata.basket.item1.amountPerItem': paymentsConfig.amount.value,
       'riskdata.basket.item1.quantity': 1
     };
-    
+
     if (native3ds2 === true) {
       paymentRequest.additionalData.allow3DS2 = true;
     }

@@ -38,7 +38,9 @@
                     <label for="showPaymentMethods">showPaymentMethods:</label>
                     <input type="checkbox" id="showPaymentMethods" name="showPaymentMethods" checked="checked" /><br />
                     <label for="showPayButton">showPayButton:</label>
-                    <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+                    <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" /><br />
+                    <label for="showRemovePaymentMethodButton">showRemovePaymentMethodButton:</label>
+                    <input type="checkbox" id="showRemovePaymentMethodButton" name="showRemovePaymentMethodButton" checked="checked" />
 
                     <h3>Cards Component</h3>
                     <label for="enableStoreDetails">enableStoreDetails:</label>
