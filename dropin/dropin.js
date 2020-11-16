@@ -1,6 +1,7 @@
 const getConfig = async () => {
   const config = {
     cardConfig: { data: { billingAddress: {} } },
+    applepayConfig: { configuration: {} },
     paypalConfig: { environment: 'test', amount: {} },
     paymentMethod: {},
   };
@@ -54,9 +55,16 @@ const loadDropIn = function loadDropIn() {
         });
 
         const paymentMethodsConfiguration = {
+          applepay: config.applepayConfig,
           paypal: config.paypalConfig,
           card: config.cardConfig,
         };
+
+        paymentMethodsConfiguration.applepay.amount = localeConfig.amount.value;
+        paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
+        paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
+        //paymentMethodsConfiguration.applepay.configuration.merchantName = 'Adam Stiskala Sample';
+        //paymentMethodsConfiguration.applepay.configuration.merchantIdentifier = localeConfig.countryCode;
 
         paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
         paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
