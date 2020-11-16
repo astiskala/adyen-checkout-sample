@@ -78,7 +78,7 @@ const loadDropIn = function loadDropIn() {
             .catch((error) => {
               dropin.setStatus('error');
             });
-        },
+        };
 
         paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
         paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
