@@ -1,7 +1,7 @@
 const getConfig = async () => {
   const config = {
     cardConfig: { data: { billingAddress: {} } },
-    applepayConfig: { configuration: {} },
+    applepayConfig: { },
     paypalConfig: { environment: 'test', amount: {} },
     paymentMethod: {},
   };
@@ -63,8 +63,22 @@ const loadDropIn = function loadDropIn() {
         paymentMethodsConfiguration.applepay.amount = localeConfig.amount.value;
         paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
         paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
-        //paymentMethodsConfiguration.applepay.configuration.merchantName = 'Adam Stiskala Sample';
-        //paymentMethodsConfiguration.applepay.configuration.merchantIdentifier = localeConfig.countryCode;
+
+        paymentMethodsConfiguration.applepay.onSubmit = (state) => {
+          makePayment(localeConfig, state.data, {}, true, config.native3ds2)
+            .then((response) => {
+              if (response.action) {
+                dropin.handleAction(response.action);
+              } else if (response.resultCode) {
+                dropin.setStatus('success', { message: response.resultCode });
+              } else if (response.message) {
+                dropin.setStatus('success', { message: response.message });
+              }
+            })
+            .catch((error) => {
+              dropin.setStatus('error');
+            });
+        },
 
         paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
         paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
