@@ -64,7 +64,7 @@ const loadDropIn = function loadDropIn() {
         paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
         paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
 
-        paymentMethodsConfiguration.applepay.onSubmit = (state) => {
+        /*paymentMethodsConfiguration.applepay.onSubmit = (state) => {
           makePayment(localeConfig, state.data, {}, true, config.native3ds2)
             .then((response) => {
               if (response.action) {
@@ -78,7 +78,7 @@ const loadDropIn = function loadDropIn() {
             .catch((error) => {
               dropin.setStatus('error');
             });
-        };
+        };*/
 
         paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
         paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
