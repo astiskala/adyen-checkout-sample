@@ -66,7 +66,7 @@ const loadDropIn = function loadDropIn() {
 
         paymentMethodsConfiguration.applepay.configuration = {};
         paymentMethodsConfiguration.applepay.configuration.merchantId = "000000000200023";
-        paymentMethodsConfiguration.applepay.configuration.merchantName = "Adam Stiskala";
+        paymentMethodsConfiguration.applepay.configuration.merchantName = "AdamStiskala";
 
         paymentMethodsConfiguration.applepay.onChange = (state) => {
           makePayment(localeConfig, state.data, {}, true, config.native3ds2)
