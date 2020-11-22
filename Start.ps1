@@ -60,4 +60,4 @@ function Set-PsEnv {
 $localEnvFile='.env'
 Set-PsEnv
 
-php -S localhost:3000 -t .
+php -S 127.0.0.1:3000 -t .

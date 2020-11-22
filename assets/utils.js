@@ -98,7 +98,6 @@ const disableDefaultConfig = async () => {
 const getPaymentMethodsDefaultConfig = async () => {
   const config = {};
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
-  config.reference = await httpGet('env', 'REFERENCE');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
   return config;
 };
