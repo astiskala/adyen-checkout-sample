@@ -30,14 +30,11 @@ To run this project, **create** a `.env` file on your project's root folder
 following the example on `.env.default`.
 
 ```
-# Either "test" or "live"
+# "test", "live", "live-au" or "live-us"
 ENVIRONMENT=test
 
-# For "live" environment only - see https://docs.adyen.com/development-resources/live-endpoints
+# For "live" environments only - see https://docs.adyen.com/development-resources/live-endpoints
 PREFIX=
-
-# For "live" environment only, either blank, "au" or "us"
-DC=
 
 # See https://docs.adyen.com/user-management/how-to-get-the-api-key
 CHECKOUT_APIKEY=
@@ -57,8 +54,8 @@ WEBHOOKRELAY_BUCKET=
 
 PAYPAL_INTENT=capture
 
-SDK_VERSION=3.11.3
-CHECKOUT_API_VERSION=53
+SDK_VERSION=3.17.1
+CHECKOUT_API_VERSION=65
 
 COUNTRY=AU
 CURRENCY=AUD

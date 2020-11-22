@@ -1,0 +1,24 @@
+{
+  "name": "adyen-checkout-sample",
+  "version": "1.0.0",
+  "description": "Adyen Checkout Sample",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/astiskala/adyen-checkout-sample.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/astiskala/adyen-checkout-sample/issues"
+  },
+  "homepage": "https://github.com/astiskala/adyen-checkout-sample#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  }
+}
