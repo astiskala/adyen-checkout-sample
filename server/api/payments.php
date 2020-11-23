@@ -13,7 +13,7 @@ $version = getenv('CHECKOUT_API_VERSION');
 $environment = getenv('ENVIRONMENT');
 if ($environment == "test") {
   $domain = "checkout-test.adyen.com";
-} else if ($environment == "live") {
+} else {
   $prefix = getenv('PREFIX');
   if ($prefix) {
     $prefix = $prefix . "-";
