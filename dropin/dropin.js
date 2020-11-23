@@ -64,11 +64,7 @@ const loadDropIn = function loadDropIn() {
         paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
         paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
 
-        //paymentMethodsConfiguration.applepay.configuration = {};
-        //paymentMethodsConfiguration.applepay.configuration.merchantId = "000000000200028";
-        //paymentMethodsConfiguration.applepay.configuration.merchantName = "AdamStiskala";
-
-        paymentMethodsConfiguration.applepay.onChange = (state) => {
+        paymentMethodsConfiguration.applepay.onSubmit = (state, component) => {
           makePayment(localeConfig, state.data, {}, true, config.native3ds2)
             .then((response) => {
               if (response.action) {
@@ -142,7 +138,7 @@ const loadDropIn = function loadDropIn() {
               });
             },
             onDisableStoredPaymentMethod: (storedPaymentMethodId, resolve, reject) => {
-              var disableObject = {
+              const disableObject = {
                 shopperReference: config.shopperReference,
                 recurringDetailReference: storedPaymentMethodId.props.storedPaymentMethodId
               };
