@@ -93,9 +93,16 @@ You can use {guid} to have a random GUID inserted in any variable.
 These variables can be found in Adyen Customer Area. For more information, visit
 [Get started with Adyen guide](https://docs.adyen.com/payments-essentials/get-started-with-adyen).
 
-### Setting up Webhook Relay
+### Setting up Webhooks
 
-Webhook Relay will alllow you to see the result of webhook notifications in
+#### Option 1: Natively
+
+If you have hosted this demo on a publicly accessible server, you can configure
+your Adyen account to point to https://your-host/server/webhook/receive.php
+
+#### Option 2: Using Webhook Relay
+
+Webhook Relay will allow you to see the result of webhook notifications in
 real time as payments are made.
 
 1. Sign up for a free account at https://webhookrelay.com/

@@ -348,7 +348,6 @@ const submitAdditionalDetails = (additionalDetailsRequest, config = {}) => {
 
 const subscribeToWebhooks = async () => {
   const webhookRelayKey = await httpGet('env', 'WEBHOOKRELAY_KEY');
-
   if (webhookRelayKey !== '') {
     const client = new WebSocket('wss://my.webhookrelay.com/v1/socket');
     const webhookRelaySecret = await httpGet('env', 'WEBHOOKRELAY_SERCRET');
@@ -387,6 +386,29 @@ const subscribeToWebhooks = async () => {
         );
       }
     };
+  } else {
+    const refreshWebookMessages = function refreshWebookMessages() {
+        console.log('Polling for new webhook response...');
+        fetch('/server/webhook/poll.php', { headers: { 'Content-Type': 'application/json; charset=utf-8' }})
+          .then(response => response.text())
+          .then(response => {
+            if (response) {
+              console.log('Got webhook...');
+              console.log(response);
+              updateResponseContainer(
+                'Webhook Notification',
+                JSON.parse(response)
+              );
+            }
+          })
+          .catch(err => {
+              console.log('Error retrieving webhook', err)
+          });
+
+        setTimeout(refreshWebookMessages, 3000);
+    }
+
+    setTimeout(refreshWebookMessages, 3000);
   }
 };
 
