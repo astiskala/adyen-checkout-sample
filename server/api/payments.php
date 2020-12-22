@@ -68,9 +68,16 @@ logApiResponse($result);
 
 $json = json_decode($result, true);
 if (isset($json["action"])) {
-  $paymentData = $json["action"]["paymentData"];
   $tmp = sys_get_temp_dir() . "/paymentData";
-  error_log("Persisting paymentData '" . $paymentData . "' to " . $tmp);
+
+  $paymentData = "";
+  if (isset($json["action"]["paymentData"])) {
+    $paymentData = $json["action"]["paymentData"];
+    error_log("Persisting paymentData '" . $paymentData . "' to " . $tmp);
+  } else {
+    error_log("No paymentData to persist");
+  }
+
   file_put_contents($tmp, $paymentData);
 }
 

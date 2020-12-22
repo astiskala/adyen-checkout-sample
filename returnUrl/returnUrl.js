@@ -16,7 +16,10 @@ const handlePostback = function handlePostback(paymentData, postData) {
   updateResponseContainer('Postback', postData);
 
   const details = queryStringToObject(postData);
-  const paymentDetails = { paymentData, details };
+  var paymentDetails = { details };
+  if (paymentData !== "") {
+    paymentDetails = { paymentData, details };
+  }
 
   submitAdditionalDetails(paymentDetails).then((result) => {
     if (result.resultCode) {
