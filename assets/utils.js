@@ -99,6 +99,7 @@ const getPaymentMethodsDefaultConfig = async () => {
   const config = {};
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+  config.channel = 'Web';
   return config;
 };
 
@@ -290,6 +291,10 @@ const makePayment = (localeConfig,
       if (store) {
         paymentRequest.store = store;
       }
+    }
+
+    if (paymentRequest.clientStateDataIndicator) {
+      delete paymentRequest.clientStateDataIndicator;
     }
 
     updateRequestContainer('/payments', paymentRequest);

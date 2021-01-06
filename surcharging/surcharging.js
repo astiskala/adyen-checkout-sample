@@ -1,6 +1,7 @@
 const getConfig = async () => {
   const config = {
     cardConfig: { data: { billingAddress: {} } },
+    applepayConfig: { },
     paypalConfig: { environment: 'test', amount: {} },
     paymentMethod: {},
   };
@@ -12,8 +13,10 @@ const getConfig = async () => {
 
   config.openFirstPaymentMethod = document.querySelector('#openFirstPaymentMethod').checked;
   config.openFirstStoredPaymentMethod = document.querySelector('#openFirstStoredPaymentMethod').checked;
+  config.showStoredPaymentMethods = document.querySelector('#showStoredPaymentMethods').checked;
   config.showPaymentMethods = document.querySelector('#showPaymentMethods').checked;
   config.showPayButton = document.querySelector('#showPayButton').checked;
+  config.showRemovePaymentMethodButton = document.querySelector('#showRemovePaymentMethodButton').checked;
 
   config.cardConfig.enableStoreDetails = document.querySelector('#enableStoreDetails').checked;
   config.cardConfig.hasHolderName = document.querySelector('#hasHolderName').checked;
@@ -29,6 +32,10 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
   config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
+
+  config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+
+  config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
 
   return config;
 };
@@ -48,8 +55,37 @@ const loadDropIn = function loadDropIn() {
         });
 
         const paymentMethodsConfiguration = {
+          applepay: config.applepayConfig,
+          paypal: config.paypalConfig,
           card: config.cardConfig,
         };
+
+        paymentMethodsConfiguration.applepay.amount = localeConfig.amount.value;
+        paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
+        paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
+
+        paymentMethodsConfiguration.applepay.onSubmit = (state, component) => {
+          dropin.setStatus('loading');
+          makePayment(localeConfig, state.data, {}, true, config.native3ds2)
+            .then((response) => {
+              dropin.setStatus('ready');
+              if (response.action) {
+                dropin.handleAction(response.action);
+              } else if (response.resultCode) {
+                dropin.setStatus('success', { message: response.resultCode });
+              } else if (response.message) {
+                dropin.setStatus('success', { message: response.message });
+              }
+            })
+            .catch((error) => {
+              dropin.setStatus('ready');
+              dropin.setStatus('error');
+              console.log('onError', error);
+            });
+        };
+
+        paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
+        paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
 
         paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
           component.setStatus('ready');
@@ -72,18 +108,22 @@ const loadDropIn = function loadDropIn() {
               encryptedCardNumber: lastEncryptedCardNumber
             }
 
+            dropin.setStatus('loading');
             getCostEstimate(costEstimate)
               .then((response) => {
-                if (response.cardBin.paymentMethod.startsWith('mc') && response.cardBin.fundingSource == 'CREDIT') {
-                  dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.01);
-                } else if (response.cardBin.paymentMethod.startsWith('mc')) {
-                  dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.005);
-                } else if (response.cardBin.paymentMethod.startsWith('visa') && response.cardBin.fundingSource == 'CREDIT') {
-                  dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.01);
-                } else if (response.cardBin.paymentMethod.startsWith('visa')) {
-                  dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.005);
-                } else if (response.cardBin.paymentMethod.startsWith('amex')) {
-                  dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.015);
+                dropin.setStatus('ready');
+                if(response.cardBin) {
+                  if (response.cardBin.paymentMethod.startsWith('mc') && response.cardBin.fundingSource == 'CREDIT') {
+                    dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.01);
+                  } else if (response.cardBin.paymentMethod.startsWith('mc')) {
+                    dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.005);
+                  } else if (response.cardBin.paymentMethod.startsWith('visa') && response.cardBin.fundingSource == 'CREDIT') {
+                    dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.01);
+                  } else if (response.cardBin.paymentMethod.startsWith('visa')) {
+                    dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.005);
+                  } else if (response.cardBin.paymentMethod.startsWith('amex')) {
+                    dropin.props.amount.value = Math.round(localeConfig.amount.value * 1.015);
+                  }
                 }
               });
           }
@@ -94,10 +134,11 @@ const loadDropIn = function loadDropIn() {
             paymentMethodsConfiguration,
             openFirstPaymentMethod: config.openFirstPaymentMethod,
             openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
-            showStoredPaymentMethods: false,
+            showStoredPaymentMethods: config.showStoredPaymentMethods,
             showPaymentMethods: config.showPaymentMethods,
             amount: localeConfig.amount,
             showPayButton: config.showPayButton,
+            showRemovePaymentMethodButton: config.showRemovePaymentMethodButton,
             onSelect: (activeComponent) => {
               updateStateContainer(activeComponent.data);
             },
@@ -105,8 +146,10 @@ const loadDropIn = function loadDropIn() {
               updateStateContainer(state);
             },
             onSubmit: (state, component) => {
+              dropin.setStatus('loading');
               makePayment(localeConfig, state.data, {}, true, config.native3ds2)
                 .then((response) => {
+                  dropin.setStatus('ready');
                   if (response.action) {
                     dropin.handleAction(response.action);
                   } else if (response.resultCode) {
@@ -116,17 +159,36 @@ const loadDropIn = function loadDropIn() {
                   }
                 })
                 .catch((error) => {
+                  dropin.setStatus('ready');
                   dropin.setStatus('error');
+                  console.log('onError', error);
                 });
             },
             onAdditionalDetails: (state, component) => {
+              dropin.setStatus('loading');
               submitAdditionalDetails(state.data).then((response) => {
+                dropin.setStatus('ready');
                 if (response.action) {
                   dropin.handleAction(response.action);
                 } else if (response.resultCode) {
                   dropin.setStatus('success', { message: response.resultCode });
                 } else if (response.message) {
                   dropin.setStatus('success', { message: response.message });
+                }
+              });
+            },
+            onDisableStoredPaymentMethod: (storedPaymentMethodId, resolve, reject) => {
+              const disableObject = {
+                shopperReference: config.shopperReference,
+                recurringDetailReference: storedPaymentMethodId.props.storedPaymentMethodId
+              };
+
+              disable(disableObject).then((response) => {
+                if (response.response === '[detail-successfully-disabled]') {
+                  resolve();
+                }
+                else {
+                  reject();
                 }
               });
             },

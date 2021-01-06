@@ -1,6 +1,7 @@
 const getConfig = async () => {
   const config = {
     cardConfig: { data: { billingAddress: {} } },
+    applepayConfig: { },
     paypalConfig: { environment: 'test', amount: {} },
     paymentMethod: {},
   };
@@ -33,6 +34,10 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
+  config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+
+  config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
+
   return config;
 };
 
@@ -63,6 +68,47 @@ const makeDonation = function makeDonation(donation) {
 let dropin;
 let donation;
 
+const getDonationConfig = function getDonationConfig(localeConfig, config, merchantReference, pspReference) {
+  const donationConfig = {
+    amounts: {
+      currency: localeConfig.amount.currency,
+      values: [300, 500, 1000],
+    },
+    description: 'The Charitable Foundation is...',
+    name: 'The Charitable Foundation',
+    url: 'https://example.org',
+    showCancelButton: true,
+    onDonate: (donateState) => {
+      if (donateState.isValid) {
+        const donationRequest = {
+          merchantAccount: config.merchantAccount,
+          donationAccount: config.charityAccount,
+          reference: merchantReference,
+          modificationAmount: donateState.data.amount,
+          originalReference: pspReference,
+        };
+
+        donation.setStatus('loading');
+        makeDonation(donationRequest).then((donateResponse) => {
+          donation.setStatus('ready');
+          if (donateResponse.response === '[donation-received]') {
+            donation.setStatus('success');
+          } else {
+            updateDonationContainer(donateResponse.response);
+          }
+        });
+      }
+    },
+    onCancel: () => {
+      if (donation !== undefined) {
+        donation.unmount('#donation-container');
+      }
+    },
+  };
+
+  return donationConfig;
+};
+
 const loadDropIn = function loadDropIn() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
@@ -76,7 +122,48 @@ const loadDropIn = function loadDropIn() {
         });
 
         const paymentMethodsConfiguration = {
+          applepay: config.applepayConfig,
+          paypal: config.paypalConfig,
           card: config.cardConfig,
+        };
+
+        paymentMethodsConfiguration.applepay.amount = localeConfig.amount.value;
+        paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
+        paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
+
+        paymentMethodsConfiguration.applepay.onSubmit = (state, component) => {
+          dropin.setStatus('loading');
+          makePayment(localeConfig, state.data, {}, true, config.native3ds2)
+            .then((response) => {
+              dropin.setStatus('ready');
+              if (response.action) {
+                dropin.handleAction(response.action);
+              } else if (response.resultCode) {
+                dropin.setStatus('success', { message: response.resultCode });
+              } else if (response.message) {
+                dropin.setStatus('success', { message: response.message });
+              }
+            })
+            .catch((error) => {
+              dropin.setStatus('ready');
+              dropin.setStatus('error');
+              console.log('onError', error);
+            });
+        };
+
+        paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
+        paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
+
+        paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
+          component.setStatus('ready');
+        };
+
+        paymentMethodsConfiguration.card.onBinValue = (state) => {
+          console.log('onBinValue', state);
+        };
+
+        paymentMethodsConfiguration.card.onBrand = (state) => {
+          console.log('onBrand', state);
         };
 
         dropin = checkout
@@ -95,48 +182,16 @@ const loadDropIn = function loadDropIn() {
               updateStateContainer(state);
             },
             onSubmit: (state, component) => {
+              dropin.setStatus('loading');
               makePayment(localeConfig, state.data, {}, true, config.native3ds2)
                 .then((response) => {
+                  dropin.setStatus('ready');
                   if (response.action) {
                     dropin.handleAction(response.action);
                   } else if (response.resultCode) {
                     dropin.setStatus('success', { message: response.resultCode });
                     if (response.resultCode === 'Authorised') {
-                      const donationConfig = {
-                        amounts: {
-                          currency: localeConfig.amount.currency,
-                          values: [300, 500, 1000],
-                        },
-                        description: 'The Charitable Foundation is...',
-                        name: 'The Charitable Foundation',
-                        url: 'https://example.org',
-                        showCancelButton: true,
-                        onDonate: (donateState) => {
-                          if (donateState.isValid) {
-                            const donationRequest = {
-                              merchantAccount: config.merchantAccount,
-                              donationAccount: config.charityAccount,
-                              reference: response.merchantReference,
-                              modificationAmount: donateState.data.amount,
-                              originalReference: response.pspReference,
-                            };
-
-                            makeDonation(donationRequest).then((donateResponse) => {
-                              if (donateResponse.response === '[donation-received]') {
-                                donation.setStatus('success');
-                              } else {
-                                updateDonationContainer(donateResponse.response);
-                              }
-                            });
-                          }
-                        },
-                        onCancel: () => {
-                          if (donation !== undefined) {
-                            donation.unmount('#donation-container');
-                          }
-                        },
-                      };
-
+                      const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference);
                       donation = checkout.create('donation', donationConfig).mount('#donation-container');
                     }
                   } else if (response.message) {
@@ -144,22 +199,45 @@ const loadDropIn = function loadDropIn() {
                   }
                 })
                 .catch((error) => {
+                  dropin.setStatus('ready');
                   dropin.setStatus('error');
+                  console.log('onError', error);
                 });
             },
             onAdditionalDetails: (state, component) => {
+              dropin.setStatus('loading');
               submitAdditionalDetails(state.data).then((response) => {
-                if (result.action) {
+                dropin.setStatus('ready');
+                if (response.action) {
                   dropin.handleAction(response.action);
                 } else if (response.resultCode) {
                   dropin.setStatus('success', { message: response.resultCode });
+                  if (response.resultCode === 'Authorised') {
+                    const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference);
+                    donation = checkout.create('donation', donationConfig).mount('#donation-container');
+                  }
                 } else if (response.message) {
                   dropin.setStatus('success', { message: response.message });
                 }
               });
             },
+            onDisableStoredPaymentMethod: (storedPaymentMethodId, resolve, reject) => {
+              const disableObject = {
+                shopperReference: config.shopperReference,
+                recurringDetailReference: storedPaymentMethodId.props.storedPaymentMethodId
+              };
+
+              disable(disableObject).then((response) => {
+                if (response.response === '[detail-successfully-disabled]') {
+                  resolve();
+                }
+                else {
+                  reject();
+                }
+              });
+            },
             onError: (state, component) => {
-              dropin.setStatus('error');
+              console.log('onError', state);
             },
           })
           .mount('#dropin-container');

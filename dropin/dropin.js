@@ -65,8 +65,10 @@ const loadDropIn = function loadDropIn() {
         paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
 
         paymentMethodsConfiguration.applepay.onSubmit = (state, component) => {
+          dropin.setStatus('loading');
           makePayment(localeConfig, state.data, {}, true, config.native3ds2)
             .then((response) => {
+              dropin.setStatus('ready');
               if (response.action) {
                 dropin.handleAction(response.action);
               } else if (response.resultCode) {
@@ -76,7 +78,9 @@ const loadDropIn = function loadDropIn() {
               }
             })
             .catch((error) => {
+              dropin.setStatus('ready');
               dropin.setStatus('error');
+              console.log('onError', error);
             });
         };
 
@@ -112,8 +116,10 @@ const loadDropIn = function loadDropIn() {
               updateStateContainer(state);
             },
             onSubmit: (state, component) => {
+              dropin.setStatus('loading');
               makePayment(localeConfig, state.data, {}, true, config.native3ds2)
                 .then((response) => {
+                  dropin.setStatus('ready');
                   if (response.action) {
                     dropin.handleAction(response.action);
                   } else if (response.resultCode) {
@@ -123,11 +129,15 @@ const loadDropIn = function loadDropIn() {
                   }
                 })
                 .catch((error) => {
+                  dropin.setStatus('ready');
                   dropin.setStatus('error');
+                  console.log('onError', error);
                 });
             },
             onAdditionalDetails: (state, component) => {
+              dropin.setStatus('loading');
               submitAdditionalDetails(state.data).then((response) => {
+                dropin.setStatus('ready');
                 if (response.action) {
                   dropin.handleAction(response.action);
                 } else if (response.resultCode) {

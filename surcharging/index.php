@@ -33,10 +33,14 @@
                     <input type="checkbox" id="openFirstPaymentMethod" name="openFirstPaymentMethod" checked="checked" /><br />
                     <label for="openFirstStoredPaymentMethod">openFirstStoredPaymentMethod:</label>
                     <input type="checkbox" id="openFirstStoredPaymentMethod" name="openFirstStoredPaymentMethod" checked="checked" /><br />
+                    <label for="showStoredPaymentMethods">showStoredPaymentMethods:</label>
+                    <input type="checkbox" id="showStoredPaymentMethods" name="showStoredPaymentMethods" checked="checked" /><br />
                     <label for="showPaymentMethods">showPaymentMethods:</label>
                     <input type="checkbox" id="showPaymentMethods" name="showPaymentMethods" checked="checked" /><br />
                     <label for="showPayButton">showPayButton:</label>
-                    <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" />
+                    <input type="checkbox" id="showPayButton" name="showPayButton" checked="checked" /><br />
+                    <label for="showRemovePaymentMethodButton">showRemovePaymentMethodButton:</label>
+                    <input type="checkbox" id="showRemovePaymentMethodButton" name="showRemovePaymentMethodButton" checked="checked" />
 
                     <h3>Cards Component</h3>
                     <label for="enableStoreDetails">enableStoreDetails:</label>
@@ -66,6 +70,8 @@
                     <h3>/payments Configuration</h3>
                     <label for="captureDelayHours">captureDelayHours:</label>
                     <input type="text" id="captureDelayHours" name="captureDelayHours" /><br />
+                    <label for="enableOneClick">enableOneClick:</label>
+                    <input type="checkbox" id="enableOneClick" name="enableOneClick" /><br />
                     <label for="store">store:</label>
                     <input type="text" id="store" name="store" /><br />
                     <label for="threeDSAuthenticationOnly">threeDSAuthenticationOnly:</label>
@@ -94,7 +100,6 @@
         </div>
     </div>
 
-    <script src="https://pay.google.com/gp/p/js/pay.js"></script>
     <script src="https://checkoutshopper-<?=getenv('ENVIRONMENT')?>.adyen.com/checkoutshopper/sdk/<?=getenv('SDK_VERSION')?>/adyen.js"></script>
     <script src="../assets/utils.js"></script>
     <script src="surcharging.js"></script>
