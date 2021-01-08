@@ -97,6 +97,14 @@
             </li>
           </ul>
         </li>
+        <li class="payment_methods__list__toplevel">
+          Demos
+          <ul class="payment_methods__list">
+            <li class="payment_methods__list__element">
+              <a href="demos/overriding-card-style/">Overriding Card Component Style</a>
+            </li>
+          </ul>
+        </li>
       </ul>
 
       <div class="info">

@@ -10,35 +10,39 @@ function updateStateContainer(newState) {
 function updateRequestContainer(name, response) {
   const formattedJson = JSON.stringify(response, null, 2);
   console.log(`${name} Request`, response);
-  sidebar.insertAdjacentHTML(
-    'beforeend',
-    `<div class="request-container request-container--visible">
-        <div class="header">
-            <h2>${name} Request</h2>
-        </div>
-        <pre class="request-code">${formattedJson}</pre>
-    </div>
-  `,
-  );
+  if (sidebar) {
+    sidebar.insertAdjacentHTML(
+      'beforeend',
+      `<div class="request-container request-container--visible">
+          <div class="header">
+              <h2>${name} Request</h2>
+          </div>
+          <pre class="request-code">${formattedJson}</pre>
+      </div>
+    `,
+    );
 
-  sidebar.scrollTop = sidebar.scrollHeight;
+    sidebar.scrollTop = sidebar.scrollHeight;
+  }
 }
 
 function updateResponseContainer(name, response) {
   const formattedJson = JSON.stringify(response, null, 2);
   console.log(`${name} Response`, response);
-  sidebar.insertAdjacentHTML(
-    'beforeend',
-    `<div class="response-container response-container--visible">
-        <div class="header">
-            <h2>${name} Response</h2>
-        </div>
-        <pre class="response-code">${formattedJson}</pre>
-    </div>
-  `,
-  );
+  if (sidebar) {
+    sidebar.insertAdjacentHTML(
+      'beforeend',
+      `<div class="response-container response-container--visible">
+          <div class="header">
+              <h2>${name} Response</h2>
+          </div>
+          <pre class="response-code">${formattedJson}</pre>
+      </div>
+    `,
+    );
 
-  sidebar.scrollTop = sidebar.scrollHeight;
+    sidebar.scrollTop = sidebar.scrollHeight;
+  }
 }
 
 const clearRequests = function clearRequests() {
@@ -311,29 +315,49 @@ const makePayment = (localeConfig,
   });
 
 const defaultLocaleConfig = async () => {
-  if (!document.querySelector('#locale').value) {
+  if (document.querySelector('#locale') && !document.querySelector('#locale').value) {
     document.querySelector('#locale').value = await httpGet('env', 'SHOPPER_LOCALE');
   }
 
-  if (!document.querySelector('#countryCode').value) {
+  if (document.querySelector('#countryCode') && !document.querySelector('#countryCode').value) {
     document.querySelector('#countryCode').value = await httpGet('env', 'COUNTRY');
   }
 
-  if (!document.querySelector('#currency').value) {
+  if (document.querySelector('#currency') && !document.querySelector('#currency').value) {
     document.querySelector('#currency').value = await httpGet('env', 'CURRENCY');
   }
 
-  if (!document.querySelector('#value').value) {
+  if (document.querySelector('#value') && !document.querySelector('#value').value) {
     document.querySelector('#value').value = await httpGet('env', 'VALUE');
   }
 };
 
 const collectLocaleConfig = function collectLocaleConfig() {
-  const localeConfig = { amount: {} };
-  localeConfig.shopperLocale = document.querySelector('#locale').value;
-  localeConfig.countryCode = document.querySelector('#countryCode').value;
-  localeConfig.amount.currency = document.querySelector('#currency').value;
-  localeConfig.amount.value = parseInt(document.querySelector('#value').value, 10);
+  const localeConfig = {
+    shopperLocale: 'en-AU',
+    countryCode: 'AU',
+    amount: {
+      currency: 'AUD',
+      value: 100
+     }
+   };
+
+  if (document.querySelector('#locale')) {
+    localeConfig.shopperLocale = document.querySelector('#locale').value;
+  }
+
+  if (document.querySelector('#countryCode')) {
+    localeConfig.countryCode = document.querySelector('#countryCode').value;
+  }
+
+  if (document.querySelector('#currency')) {
+    localeConfig.amount.currency = document.querySelector('#currency').value;
+  }
+
+  if (document.querySelector('#value')) {
+    localeConfig.amount.value = parseInt(document.querySelector('#value').value, 10);
+  }
+
   return localeConfig;
 };
 
