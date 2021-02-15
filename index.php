@@ -103,9 +103,12 @@
             <li class="payment_methods__list__element">
               <a href="demos/overriding-card-style/">Overriding Card Component Style</a>
             </li>
-              <li class="payment_methods__list__element">
-                <a href="demos/update-amount/">Update Amount</a>
-              </li>
+            <li class="payment_methods__list__element">
+              <a href="demos/gst-amount/">Sending GST Amount</a>
+            </li>
+            <li class="payment_methods__list__element">
+              <a href="demos/update-amount/">Update Amount</a>
+            </li>
           </ul>
         </li>
       </ul>

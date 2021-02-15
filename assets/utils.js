@@ -252,14 +252,15 @@ const makePayment = (localeConfig,
       paymentRequest.deliveryAddress = null;
     }
 
-    paymentRequest.additionalData = {};
-    paymentRequest.additionalData = {
-      'riskdata.basket.item1.itemID': '001',
-      'riskdata.basket.item1.productTitle': 'Product',
-      'riskdata.basket.item1.currency': 'AUD',
-      'riskdata.basket.item1.amountPerItem': paymentsConfig.amount.value,
-      'riskdata.basket.item1.quantity': 1
-    };
+    if (!paymentRequest.additionalData) {
+      paymentRequest.additionalData = {};
+    }
+
+    paymentRequest.additionalData['riskdata.basket.item1.itemID'] = '001';
+    paymentRequest.additionalData['riskdata.basket.item1.productTitle'] = 'Product';
+    paymentRequest.additionalData['riskdata.basket.item1.currency'] = 'AUD';
+    paymentRequest.additionalData['riskdata.basket.item1.amountPerItem'] = paymentsConfig.amount.value;
+    paymentRequest.additionalData['riskdata.basket.item1.quantity'] = 1;
 
     if (native3ds2 === true) {
       paymentRequest.additionalData.allow3DS2 = true;
