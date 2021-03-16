@@ -70,6 +70,9 @@ const loadComponent = function loadComponent() {
             onBinValue: (state) => {
               console.log('onBinValue', state);
             },
+            onBinLookup: (state) => {
+              console.log('onBinLookup', state);
+            },
             onFieldValid: (state) => {
               console.log('onFieldValid', state);
             },
