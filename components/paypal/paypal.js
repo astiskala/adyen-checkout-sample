@@ -5,7 +5,6 @@ const getConfig = async () => {
 
   config.includeDeliveryAddress = document.querySelector('#includeDeliveryAddress').checked;
 
-  config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
   return config;
 };
 

@@ -36,8 +36,6 @@ const getConfig = async () => {
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
 
-  config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
-
   return config;
 };
 
@@ -119,6 +117,53 @@ const loadDropIn = function loadDropIn() {
           clientKey: config.clientKey,
           paymentMethodsResponse: paymentMethodsResponse,
           locale: localeConfig.locale,
+          onSubmit: (state, component) => {
+            dropin.setStatus('loading');
+            makePayment(localeConfig, state.data, {}, true, config.native3ds2)
+              .then((response) => {
+                dropin.setStatus('ready');
+                if (response.action) {
+                  dropin.handleAction(response.action);
+                } else if (response.resultCode) {
+                  dropin.setStatus('success', { message: response.resultCode });
+                  if (response.resultCode === 'Authorised') {
+                    const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference);
+                    donation = checkout.create('donation', donationConfig).mount('#donation-container');
+                  }
+                } else if (response.message) {
+                  dropin.setStatus('success', { message: response.message });
+                }
+              })
+              .catch((error) => {
+                dropin.setStatus('ready');
+                dropin.setStatus('error');
+                console.log('onError', error);
+              });
+          },
+          onAdditionalDetails: (state, component) => {
+            dropin.setStatus('loading');
+            submitAdditionalDetails(state.data).then((response) => {
+              dropin.setStatus('ready');
+              if (response.action) {
+                dropin.handleAction(response.action);
+              } else if (response.resultCode) {
+                dropin.setStatus('success', { message: response.resultCode });
+                if (response.resultCode === 'Authorised') {
+                  const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference);
+                  donation = checkout.create('donation', donationConfig).mount('#donation-container');
+                }
+              } else if (response.message) {
+                dropin.setStatus('success', { message: response.message });
+              }
+            });
+          },
+          onError: (state, component) => {
+            console.log('onError', state);
+          },
+          onChange: (state) => {
+            console.log('onChange', state);
+            updateStateContainer(state);
+          },
         });
 
         const paymentMethodsConfiguration = {
@@ -176,68 +221,8 @@ const loadDropIn = function loadDropIn() {
             amount: localeConfig.amount,
             showPayButton: config.showPayButton,
             onSelect: (activeComponent) => {
+              console.log('onSelect', activeComponent);
               updateStateContainer(activeComponent.data);
-            },
-            onChange: (state) => {
-              updateStateContainer(state);
-            },
-            onSubmit: (state, component) => {
-              dropin.setStatus('loading');
-              makePayment(localeConfig, state.data, {}, true, config.native3ds2)
-                .then((response) => {
-                  dropin.setStatus('ready');
-                  if (response.action) {
-                    dropin.handleAction(response.action);
-                  } else if (response.resultCode) {
-                    dropin.setStatus('success', { message: response.resultCode });
-                    if (response.resultCode === 'Authorised') {
-                      const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference);
-                      donation = checkout.create('donation', donationConfig).mount('#donation-container');
-                    }
-                  } else if (response.message) {
-                    dropin.setStatus('success', { message: response.message });
-                  }
-                })
-                .catch((error) => {
-                  dropin.setStatus('ready');
-                  dropin.setStatus('error');
-                  console.log('onError', error);
-                });
-            },
-            onAdditionalDetails: (state, component) => {
-              dropin.setStatus('loading');
-              submitAdditionalDetails(state.data).then((response) => {
-                dropin.setStatus('ready');
-                if (response.action) {
-                  dropin.handleAction(response.action);
-                } else if (response.resultCode) {
-                  dropin.setStatus('success', { message: response.resultCode });
-                  if (response.resultCode === 'Authorised') {
-                    const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference);
-                    donation = checkout.create('donation', donationConfig).mount('#donation-container');
-                  }
-                } else if (response.message) {
-                  dropin.setStatus('success', { message: response.message });
-                }
-              });
-            },
-            onDisableStoredPaymentMethod: (storedPaymentMethodId, resolve, reject) => {
-              const disableObject = {
-                shopperReference: config.shopperReference,
-                recurringDetailReference: storedPaymentMethodId.props.storedPaymentMethodId
-              };
-
-              disable(disableObject).then((response) => {
-                if (response.response === '[detail-successfully-disabled]') {
-                  resolve();
-                }
-                else {
-                  reject();
-                }
-              });
-            },
-            onError: (state, component) => {
-              console.log('onError', state);
             },
           })
           .mount('#dropin-container');

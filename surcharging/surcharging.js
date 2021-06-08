@@ -35,8 +35,6 @@ const getConfig = async () => {
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
 
-  config.paypalConfig.intent = await httpGet('env', 'PAYPAL_INTENT');
-
   return config;
 };
 
