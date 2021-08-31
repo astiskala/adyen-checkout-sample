@@ -25,7 +25,7 @@
     "WEBHOOKRELAY_SERCRET": { "required": false },
     "WEBHOOKRELAY_BUCKET": { "required": false },
     "ENVIRONMENT": { "value": "test" },
-    "SDK_VERSION": { "value": "4.6.0" },
+    "SDK_VERSION": { "value": "4.7.3" },
     "CHECKOUT_API_VERSION": { "value": "67" },
     "COUNTRY": { "value": "AU" },
     "CURRENCY": { "value": "AUD" },
