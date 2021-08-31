@@ -19,6 +19,8 @@
                     <div id="card-container" class="payment-method__container">
                         <!-- Card Component will be rendered here -->
                     </div>
+                    <h2>Stored Cards</h2>
+                    <div id="stored-card" class="payment-method__container"></div>
                 </div>
             </div>
 

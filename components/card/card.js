@@ -25,6 +25,7 @@ const getConfig = async () => {
 };
 
 let card;
+let storedCard;
 
 const loadComponent = function loadComponent() {
   defaultLocaleConfig().then(() => {
@@ -37,6 +38,9 @@ const loadComponent = function loadComponent() {
           paymentMethodsResponse: paymentMethodsResponse,
           locale: localeConfig.locale,
         });
+
+        const storedPaymentMethod = checkout.paymentMethodsResponse.storedPaymentMethods[1];
+        storedCard = checkout.create("card", storedPaymentMethod).mount("#stored-card");
 
         card = checkout
           .create('card', {
