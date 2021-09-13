@@ -51,14 +51,14 @@ function updateDonationContainer(response) {
 }
 
 const makeDonation = function makeDonation(donation) {
-  updateRequestContainer('/donate', donation);
-  return httpPost('donate', donation)
+  updateRequestContainer('/donations', donation);
+  return httpPost('donations', donation)
     .then((response) => {
       if (response.error) {
         console.error('Donation failed');
       }
 
-      updateResponseContainer('/donate', response);
+      updateResponseContainer('/donations', response);
       return response;
     });
 };
@@ -66,7 +66,7 @@ const makeDonation = function makeDonation(donation) {
 let dropin;
 let donation;
 
-const getDonationConfig = function getDonationConfig(localeConfig, config, merchantReference, pspReference) {
+const getDonationConfig = function getDonationConfig(localeConfig, config, merchantReference, pspReference, donationToken, cvc) {
   const donationConfig = {
     amounts: {
       currency: localeConfig.amount.currency,
@@ -79,11 +79,15 @@ const getDonationConfig = function getDonationConfig(localeConfig, config, merch
     onDonate: (donateState) => {
       if (donateState.isValid) {
         const donationRequest = {
-          merchantAccount: config.merchantAccount,
-          donationAccount: config.charityAccount,
+          amount: donateState.data.amount,
           reference: merchantReference,
-          modificationAmount: donateState.data.amount,
-          originalReference: pspReference,
+          paymentMethod: { type: "scheme" },
+          donationToken: donationToken,
+          donationOriginalPspReference: pspReference,
+          donationAccount: config.charityAccount,
+          returnUrl: "http://localhost:3000/adyengiving/",
+          merchantAccount: config.merchantAccount,
+          shopperInteraction: "Ecommerce"
         };
 
         donation.setStatus('loading');
@@ -127,7 +131,7 @@ const loadDropIn = function loadDropIn() {
                 } else if (response.resultCode) {
                   dropin.setStatus('success', { message: response.resultCode });
                   if (response.resultCode === 'Authorised') {
-                    const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference);
+                    const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference, response.donationToken, state.data.paymentMethod.encryptedSecurityCode);
                     donation = checkout.create('donation', donationConfig).mount('#donation-container');
                   }
                 } else if (response.message) {
