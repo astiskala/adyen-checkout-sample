@@ -23,25 +23,47 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-        });
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            locale: localeConfig.locale,
+          });
 
-        giftcardContainer = checkout
-          .create('giftcard', {
-            amount: localeConfig.amount,
-            showPayButton: config.showPayButton,
-            type: 'givex',
-            pinRequired: true,
+          giftcardContainer = checkout
+            .create('giftcard', {
+              amount: localeConfig.amount,
+              showPayButton: config.showPayButton,
+              type: 'givex',
+              pinRequired: true,
 
-            onSubmit: (state, component) => {
-              if (state.isValid) {
-                makePayment(localeConfig, giftcardContainer.data).then((response) => {
-                  if (response.action) {
-                    component.handleAction(response.action);
+              onSubmit: (state, component) => {
+                if (state.isValid) {
+                  makePayment(localeConfig, giftcardContainer.data).then((response) => {
+                    if (response.action) {
+                      component.handleAction(response.action);
+                    } else if (response.resultCode) {
+                      updateResultContainer(response.resultCode);
+                      if (giftcardContainer !== undefined) {
+                        giftcardContainer.unmount('#giftcard-container');
+                      }
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                      if (giftcardContainer !== undefined) {
+                        giftcardContainer.unmount('#giftcard-container');
+                      }
+                    }
+                  });
+                }
+              },
+              onChange: (state, component) => {
+                updateStateContainer(state);
+              },
+              onAdditionalDetails: (state, component) => {
+                submitAdditionalDetails(state.data).then((result) => {
+                  if (result.action) {
+                    component.handleAction(result.action);
                   } else if (response.resultCode) {
                     updateResultContainer(response.resultCode);
                     if (giftcardContainer !== undefined) {
@@ -54,30 +76,10 @@ const loadComponent = function loadComponent() {
                     }
                   }
                 });
-              }
-            },
-            onChange: (state, component) => {
-              updateStateContainer(state);
-            },
-            onAdditionalDetails: (state, component) => {
-              submitAdditionalDetails(state.data).then((result) => {
-                if (result.action) {
-                  component.handleAction(result.action);
-                } else if (response.resultCode) {
-                  updateResultContainer(response.resultCode);
-                  if (giftcardContainer !== undefined) {
-                    giftcardContainer.unmount('#giftcard-container');
-                  }
-                } else if (response.message) {
-                  updateResultContainer(response.message);
-                  if (giftcardContainer !== undefined) {
-                    giftcardContainer.unmount('#giftcard-container');
-                  }
-                }
-              });
-            },
-          })
-          .mount('#giftcard-container');
+              },
+            })
+            .mount('#giftcard-container');
+        })()
       });
     });
   });

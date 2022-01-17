@@ -12,37 +12,39 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-          amount: localeConfig.amount,
-          showPayButton: true,
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            locale: localeConfig.locale,
+            amount: localeConfig.amount,
+            showPayButton: true,
 
-          onSubmit: (state, component) => {
-            makePayment(localeConfig, state.data).then((response) => {
-              if (response.action) {
-                ideal.handleAction(response.action);
-              } else if (response.resultCode) {
-                updateResultContainer(response.resultCode);
-                if (ideal !== undefined) {
-                  ideal.unmount('#ideal-container');
+            onSubmit: (state, component) => {
+              makePayment(localeConfig, state.data).then((response) => {
+                if (response.action) {
+                  ideal.handleAction(response.action);
+                } else if (response.resultCode) {
+                  updateResultContainer(response.resultCode);
+                  if (ideal !== undefined) {
+                    ideal.unmount('#ideal-container');
+                  }
+                } else if (response.message) {
+                  updateResultContainer(response.message);
+                  if (ideal !== undefined) {
+                    ideal.unmount('#ideal-container');
+                  }
                 }
-              } else if (response.message) {
-                updateResultContainer(response.message);
-                if (ideal !== undefined) {
-                  ideal.unmount('#ideal-container');
-                }
-              }
-            });
-          },
-          onChange: (state, component) => {
-            updateStateContainer(state);
-          },
-        });
+              });
+            },
+            onChange: (state, component) => {
+              updateStateContainer(state);
+            },
+          });
 
-        ideal = checkout.create('ideal').mount('#ideal-container');
+          ideal = checkout.create('ideal').mount('#ideal-container');
+        })()
       });
     });
   });

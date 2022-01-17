@@ -160,6 +160,54 @@ const getPaymentsDefaultConfig = async () => {
   return config;
 };
 
+const getSessionsDefaultConfig = async () => {
+  const config = {
+    applicationInfo: {
+      externalPlatform: {
+        name: 'adyen-checkout-sample',
+        version: 'N/A',
+        integrator: 'https://github.com/astiskala/adyen-checkout-sample',
+      },
+    },
+    shopperName: {},
+    billingAddress: {},
+    deliveryAddress: {},
+    lineItems: [],
+  };
+
+  config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
+  config.reference = await httpGet('env', 'REFERENCE');
+  config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
+  config.returnUrl = `${config.origin}/returnUrl`;
+
+  config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+
+  const ipResponse = await fetch('https://api.ipify.org');
+  config.shopperIP = await ipResponse.text();
+
+  config.telephoneNumber = await httpGet('env', 'TELEPHONE_NUMBER');
+  config.dateOfBirth = await httpGet('env', 'DATE_OF_BIRTH');
+
+  config.shopperName.firstName = await httpGet('env', 'SHOPPERNAME_FIRSTNAME');
+  config.shopperName.lastName = await httpGet('env', 'SHOPPERNAME_LASTNAME');
+
+  config.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
+  config.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
+  config.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
+  config.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
+  config.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
+  config.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
+
+  config.deliveryAddress.city = await httpGet('env', 'DELIVERY_ADDRESS_CITY');
+  config.deliveryAddress.country = await httpGet('env', 'DELIVERY_ADDRESS_COUNTRY');
+  config.deliveryAddress.houseNumberOrName = await httpGet('env', 'DELIVERY_ADDRESS_HOUSENUMBERORNAME');
+  config.deliveryAddress.postalCode = await httpGet('env', 'DELIVERY_ADDRESS_POSTALCODE');
+  config.deliveryAddress.stateOrProvince = await httpGet('env', 'DELIVERY_ADDRESS_STATEORPROVINCE');
+  config.deliveryAddress.street = await httpGet('env', 'DELIVERY_ADDRESS_STREET')
+
+  return config;
+};
+
 const disable = (disableObject) => disableDefaultConfig()
   .then((disableDefaultConfig) => {
     var disableRequest = {
@@ -208,6 +256,26 @@ const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig()
         }
 
         updateResponseContainer('/paymentMethods', response);
+        return response;
+      });
+  });
+
+const getSessions = (localeConfig) => getSessionsDefaultConfig()
+  .then((sessionsDefaultConfig) => {
+    const sessionsRequest = {
+      ...sessionsDefaultConfig,
+      ...localeConfig,
+    };
+
+    updateRequestContainer('/sessions', sessionsRequest);
+
+    return httpPost('sessions', sessionsRequest)
+      .then((response) => {
+        if (response.error) {
+          console.error('Unable to get session');
+        }
+
+        updateResponseContainer('/sessions', response);
         return response;
       });
   });
@@ -261,6 +329,12 @@ const makePayment = (localeConfig,
     paymentRequest.additionalData['riskdata.basket.item1.currency'] = 'AUD';
     paymentRequest.additionalData['riskdata.basket.item1.amountPerItem'] = paymentsConfig.amount.value;
     paymentRequest.additionalData['riskdata.basket.item1.quantity'] = 1;
+
+    if (!paymentRequest.metadata) {
+      paymentRequest.metadata = {};
+    }
+
+    paymentRequest.metadata['IsTest'] = 'Yes';
 
     if (native3ds2 === true) {
       paymentRequest.additionalData.allow3DS2 = true;

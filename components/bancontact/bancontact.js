@@ -12,38 +12,40 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-        });
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            locale: localeConfig.locale,
+          });
 
-        const bancontactData = {
-          countryCode: localeConfig.countryCode,
-          amount: localeConfig.amount,
-          paymentMethod: {
-            type: 'bcmc_mobile_QR',
-          },
-        };
+          const bancontactData = {
+            countryCode: localeConfig.countryCode,
+            amount: localeConfig.amount,
+            paymentMethod: {
+              type: 'bcmc_mobile_QR',
+            },
+          };
 
-        makePayment(localeConfig, bancontactData).then((response) => {
-          if (response.action) {
-            bancontactComponent = checkout
-              .createFromAction(response.action)
-              .mount('#bancontact-container');
-          } else if (response.resultCode) {
-            updateResultContainer(response.resultCode);
-            if (bancontactComponent !== undefined) {
-              bancontactComponent.unmount('#bancontact-container');
+          makePayment(localeConfig, bancontactData).then((response) => {
+            if (response.action) {
+              bancontactComponent = checkout
+                .createFromAction(response.action)
+                .mount('#bancontact-container');
+            } else if (response.resultCode) {
+              updateResultContainer(response.resultCode);
+              if (bancontactComponent !== undefined) {
+                bancontactComponent.unmount('#bancontact-container');
+              }
+            } else if (response.message) {
+              updateResultContainer(response.message);
+              if (bancontactComponent !== undefined) {
+                bancontactComponent.unmount('#bancontact-container');
+              }
             }
-          } else if (response.message) {
-            updateResultContainer(response.message);
-            if (bancontactComponent !== undefined) {
-              bancontactComponent.unmount('#bancontact-container');
-            }
-          }
-        });
+          });
+        })()
       });
     });
   });

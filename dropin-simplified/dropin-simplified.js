@@ -44,7 +44,7 @@ const loadDropIn = function loadDropIn() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
-      getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
+      getSessions(localeConfig).then((sessionsResponse) => {
         const paymentMethodsConfiguration = {
           applepay: config.applepayConfig,
           paypal: config.paypalConfig,
@@ -55,32 +55,8 @@ const loadDropIn = function loadDropIn() {
         paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
         paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
 
-        paymentMethodsConfiguration.applepay.onSubmit = (state, component) => {
-          dropin.setStatus('loading');
-          makePayment(localeConfig, state.data, {}, true, config.native3ds2)
-            .then((response) => {
-              dropin.setStatus('ready');
-              if (response.action) {
-                dropin.handleAction(response.action);
-              } else if (response.resultCode) {
-                dropin.setStatus('success', { message: response.resultCode });
-              } else if (response.message) {
-                dropin.setStatus('success', { message: response.message });
-              }
-            })
-            .catch((error) => {
-              dropin.setStatus('ready');
-              dropin.setStatus('error');
-              console.log('onError', error);
-            });
-        };
-
         paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
         paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
-
-        paymentMethodsConfiguration.paypal.onCancel = (data, component) => {
-          component.setStatus('ready');
-        };
 
         paymentMethodsConfiguration.card.onBinValue = (state) => {
           console.log('onBinValue', state);
@@ -94,47 +70,13 @@ const loadDropIn = function loadDropIn() {
           const checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
-            paymentMethodsResponse: paymentMethodsResponse,
+            session: sessionsResponse,
             paymentMethodsConfiguration: paymentMethodsConfiguration,
-            locale: localeConfig.locale,
-            onSubmit: (state, component) => {
-              dropin.setStatus('loading');
-              makePayment(localeConfig, state.data, {}, true, config.native3ds2)
-                .then((response) => {
-                  dropin.setStatus('ready');
-                  if (response.action) {
-                    dropin.handleAction(response.action);
-                  } else if (response.resultCode) {
-                    dropin.setStatus('success', { message: response.resultCode });
-                  } else if (response.message) {
-                    dropin.setStatus('success', { message: response.message });
-                  }
-                })
-                .catch((error) => {
-                  dropin.setStatus('ready');
-                  dropin.setStatus('error');
-                  console.log('onError', error);
-                });
+            onPaymentCompleted: (result, component) => {
+              console.log('onPaymentCompleted', result);
             },
-            onAdditionalDetails: (state, component) => {
-              dropin.setStatus('loading');
-              submitAdditionalDetails(state.data).then((response) => {
-                dropin.setStatus('ready');
-                if (response.action) {
-                  dropin.handleAction(response.action);
-                } else if (response.resultCode) {
-                  dropin.setStatus('success', { message: response.resultCode });
-                } else if (response.message) {
-                  dropin.setStatus('success', { message: response.message });
-                }
-              });
-            },
-            onError: (state, component) => {
-              console.log('onError', state);
-            },
-            onChange: (state) => {
-              console.log('onChange', state);
-              updateStateContainer(state);
+            onError: (error) => {
+              console.log('onError', error);
             },
           });
 

@@ -43,6 +43,10 @@ curl_setopt($curlAPICall, CURLOPT_POSTFIELDS, $json_data);
 // Set the url
 curl_setopt($curlAPICall, CURLOPT_URL, $url);
 
+// Get the headers in the response
+curl_setopt($curlAPICall, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curlAPICall, CURLOPT_HEADER, 1);
+
 // Api key
 $headers = array(
     "X-Api-Key: " . $apikey,
@@ -61,10 +65,15 @@ if ($result === false){
   throw new Exception(curl_error($curlAPICall), curl_errno($curlAPICall));
 }
 
+$header_size = curl_getinfo($curlAPICall, CURLINFO_HEADER_SIZE);
+$header = substr($result, 0, $header_size);
+$body = substr($result, $header_size);
+
 // Closing
 curl_close($curlAPICall);
 
-logApiResponse($result);
+logApiResponseHeaders($header);
+logApiResponse($body);
 
 // This file returns a JSON object
-echo $result;
+echo $body;

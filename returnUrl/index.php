@@ -32,8 +32,7 @@
       $request .= file_get_contents('php://input');
   }
 
-  $tmp = sys_get_temp_dir() . "/paymentData";
-  print('handlePostback("' . file_get_contents($tmp) . '", "' . $request . '");');
+  print('handlePostback("", "' . $request . '");');
 ?>
     </script>
 </body>

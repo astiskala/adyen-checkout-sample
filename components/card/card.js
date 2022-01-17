@@ -32,79 +32,81 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-        });
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            locale: localeConfig.locale,
+          });
 
-        const storedPaymentMethod = checkout.paymentMethodsResponse.storedPaymentMethods[1];
-        storedCard = checkout.create("card", storedPaymentMethod).mount("#stored-card");
+          const storedPaymentMethod = checkout.paymentMethodsResponse.storedPaymentMethods[1];
+          storedCard = checkout.create("card", storedPaymentMethod).mount("#stored-card");
 
-        card = checkout
-          .create('card', {
-            amount: localeConfig.amount,
-            showPayButton: config.showPayButton,
-            ...config.cardConfig,
-            onSubmit: (state, component) => {
-              if (state.isValid) {
-                makePayment(localeConfig, card.data, {}, true, config.native3ds2)
-                  .then((response) => {
-                    if (response.action) {
-                      component.handleAction(response.action);
-                    } else if (response.resultCode) {
-                      updateResultContainer(response.resultCode);
-                      if (card !== undefined) {
-                        card.unmount('#card-container');
+          card = checkout
+            .create('card', {
+              amount: localeConfig.amount,
+              showPayButton: config.showPayButton,
+              ...config.cardConfig,
+              onSubmit: (state, component) => {
+                if (state.isValid) {
+                  makePayment(localeConfig, card.data, {}, true, config.native3ds2)
+                    .then((response) => {
+                      if (response.action) {
+                        component.handleAction(response.action);
+                      } else if (response.resultCode) {
+                        updateResultContainer(response.resultCode);
+                        if (card !== undefined) {
+                          card.unmount('#card-container');
+                        }
+                      } else if (response.message) {
+                        updateResultContainer(response.message);
+                        if (card !== undefined) {
+                          card.unmount('#card-container');
+                        }
                       }
-                    } else if (response.message) {
-                      updateResultContainer(response.message);
-                      if (card !== undefined) {
-                        card.unmount('#card-container');
-                      }
-                    }
-                  });
-              }
-            },
-            onChange: (state, component) => {
-              updateStateContainer(state);
-              console.log('onChange', state);
-            },
-            onBinValue: (state) => {
-              console.log('onBinValue', state);
-            },
-            onBinLookup: (state) => {
-              console.log('onBinLookup', state);
-            },
-            onFieldValid: (state) => {
-              console.log('onFieldValid', state);
-            },
-            onFocus: (state) => {
-              console.log('onFocus', state);
-            },
-            onError: (state) => {
-              console.log('onError', state);
-            },
-            onAdditionalDetails: (state, component) => {
-              submitAdditionalDetails(state.data).then((result) => {
-                if (result.action) {
-                  component.handleAction(result.action);
-                } else if (response.resultCode) {
-                  updateResultContainer(response.resultCode);
-                  if (card !== undefined) {
-                    card.unmount('#card-container');
-                  }
-                } else if (response.message) {
-                  updateResultContainer(response.message);
-                  if (card !== undefined) {
-                    card.unmount('#card-container');
-                  }
+                    });
                 }
-              });
-            },
-          })
-          .mount('#card-container');
+              },
+              onChange: (state, component) => {
+                updateStateContainer(state);
+                console.log('onChange', state);
+              },
+              onBinValue: (state) => {
+                console.log('onBinValue', state);
+              },
+              onBinLookup: (state) => {
+                console.log('onBinLookup', state);
+              },
+              onFieldValid: (state) => {
+                console.log('onFieldValid', state);
+              },
+              onFocus: (state) => {
+                console.log('onFocus', state);
+              },
+              onError: (state) => {
+                console.log('onError', state);
+              },
+              onAdditionalDetails: (state, component) => {
+                submitAdditionalDetails(state.data).then((result) => {
+                  if (result.action) {
+                    component.handleAction(result.action);
+                  } else if (response.resultCode) {
+                    updateResultContainer(response.resultCode);
+                    if (card !== undefined) {
+                      card.unmount('#card-container');
+                    }
+                  } else if (response.message) {
+                    updateResultContainer(response.message);
+                    if (card !== undefined) {
+                      card.unmount('#card-container');
+                    }
+                  }
+                });
+              },
+            })
+            .mount('#card-container');
+        })()
       });
     });
   });

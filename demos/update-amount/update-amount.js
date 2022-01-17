@@ -19,13 +19,6 @@ const loadDropIn = function loadDropIn() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-        });
-
         const paymentMethodsConfiguration = {
           applepay: config.applepayConfig,
           paypal: config.paypalConfig,
@@ -39,15 +32,24 @@ const loadDropIn = function loadDropIn() {
         paymentMethodsConfiguration.paypal.countryCode = localeConfig.countryCode;
         paymentMethodsConfiguration.paypal.amount = localeConfig.amount;
 
-        dropin = checkout
-          .create('dropin', {
-            paymentMethodsConfiguration,
-            amount: localeConfig.amount,
-            onError: (state, component) => {
-              console.log('onError', state);
-            },
-          })
-          .mount('#dropin-container');
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            paymentMethodsConfiguration: paymentMethodsConfiguration,
+            locale: localeConfig.locale,
+          });
+
+          dropin = checkout
+            .create('dropin', {
+              amount: localeConfig.amount,
+              onError: (state, component) => {
+                console.log('onError', state);
+              },
+            })
+            .mount('#dropin-container');
+        })()
       });
     });
   });

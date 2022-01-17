@@ -15,7 +15,9 @@ const getPaymentLinkConfig = async (localeConfig) => {
   config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
   config.description = await httpGet('env', 'PAYBYLINK_DESCRIPTION');
   config.reusable = document.querySelector('#reusable').checked;
-  config.storePaymentMethod = document.querySelector('#storePaymentMethod').checked;
+
+  // The following does not work in v68
+  ////config.storePaymentMethod = document.querySelector('#storePaymentMethod').checked;
 
   config.shopperName.firstName = await httpGet('env', 'SHOPPERNAME_FIRSTNAME');
   config.shopperName.lastName = await httpGet('env', 'SHOPPERNAME_LASTNAME');

@@ -29,45 +29,47 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-          amount: localeConfig.amount,
-          showPayButton: config.showPayButton,
-          onSubmit: (state, component) => {
-            makePayment(localeConfig, state.data).then((paymentResponse) => {
-              if (response.action) {
-                boletoVoucher = checkout
-                  .createFromAction(paymentResponse.action)
-                  .mount('#boletobancario-result-container');
-              } else if (response.resultCode) {
-                updateResultContainer(response.resultCode);
-                if (boletoComponent !== undefined) {
-                  boletoComponent.unmount('#boletobancario-container');
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            locale: localeConfig.locale,
+            amount: localeConfig.amount,
+            showPayButton: config.showPayButton,
+            onSubmit: (state, component) => {
+              makePayment(localeConfig, state.data).then((paymentResponse) => {
+                if (response.action) {
+                  boletoVoucher = checkout
+                    .createFromAction(paymentResponse.action)
+                    .mount('#boletobancario-result-container');
+                } else if (response.resultCode) {
+                  updateResultContainer(response.resultCode);
+                  if (boletoComponent !== undefined) {
+                    boletoComponent.unmount('#boletobancario-container');
+                  }
+                } else if (response.message) {
+                  updateResultContainer(response.message);
+                  if (boletoComponent !== undefined) {
+                    boletoComponent.unmount('#boletobancario-container');
+                  }
                 }
-              } else if (response.message) {
-                updateResultContainer(response.message);
-                if (boletoComponent !== undefined) {
-                  boletoComponent.unmount('#boletobancario-container');
-                }
-              }
-            });
-          },
-          onChange: (state, component) => {
-            updateStateContainer(state);
-          },
-        });
+              });
+            },
+            onChange: (state, component) => {
+              updateStateContainer(state);
+            },
+          });
 
-        boletoComponent = checkout
-          .create('boletobancario', {
-            personalDetailsRequired: config.boletobancarioConfig.personalDetailsRequired,
-            billingAddressRequired: config.boletobancarioConfig.billingAddressRequired,
-            showEmailAddress: config.boletobancarioConfig.showEmailAddress,
-            data: config.boletobancarioConfig.data,
-          })
-          .mount('#boletobancario-container');
+          boletoComponent = checkout
+            .create('boletobancario', {
+              personalDetailsRequired: config.boletobancarioConfig.personalDetailsRequired,
+              billingAddressRequired: config.boletobancarioConfig.billingAddressRequired,
+              showEmailAddress: config.boletobancarioConfig.showEmailAddress,
+              data: config.boletobancarioConfig.data,
+            })
+            .mount('#boletobancario-container');
+        })()
       });
     });
   });

@@ -9,6 +9,7 @@ if (file_get_contents('php://input') != '') {
 }
 
 $apikey = getenv('CHECKOUT_APIKEY');
+$merchantAccount = getenv('MERCHANT_ACCOUNT');
 $version = getenv('CHECKOUT_API_VERSION');
 $environment = getenv('ENVIRONMENT');
 if ($environment == "test") {
@@ -22,12 +23,12 @@ if ($environment == "test") {
   $domain = $prefix . "checkout-live.adyenpayments.com/checkout";
 }
 
-$url = "https://" . $domain . "/v{$version}/payments";
+$url = "https://" . $domain . "/v{$version}/sessions";
 
 // Convert data to JSON
 $json_data = json_encode($request);
 
-//  Initiate curl
+// Initiate curl
 $curlAPICall = curl_init();
 
 // Set to POST
@@ -74,21 +75,6 @@ curl_close($curlAPICall);
 
 logApiResponseHeaders($header);
 logApiResponse($body);
-
-$json = json_decode($result, true);
-if (isset($json["action"])) {
-  $tmp = sys_get_temp_dir() . "/paymentData";
-
-  $paymentData = "";
-  if (isset($json["action"]["paymentData"])) {
-    $paymentData = $json["action"]["paymentData"];
-    error_log("Persisting paymentData '" . $paymentData . "' to " . $tmp);
-  } else {
-    error_log("No paymentData to persist");
-  }
-
-  file_put_contents($tmp, $paymentData);
-}
 
 // This file returns a JSON object
 echo $body;

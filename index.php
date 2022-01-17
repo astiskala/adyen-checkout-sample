@@ -35,6 +35,9 @@
         <li class="payment_methods__list__toplevel">
           <a href="dropin/">Drop-in</a>
         </li>
+          <li class="payment_methods__list__toplevel">
+            <a href="dropin-simplified/">Drop-in (Simplified)</a>
+          </li>
         <li class="payment_methods__list__toplevel">
           <a href="paybylink/">Pay by Link</a>
         </li>

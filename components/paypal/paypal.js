@@ -15,29 +15,50 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-        });
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            locale: localeConfig.locale,
+          });
 
-        const { paypalConfig } = config;
-        paypalConfig.amount = localeConfig.amount;
-        paypalConfig.countryCode = localeConfig.countryCode;
+          const { paypalConfig } = config;
+          paypalConfig.amount = localeConfig.amount;
+          paypalConfig.countryCode = localeConfig.countryCode;
 
-        paypalComponent = checkout
-          .create('paypal', {
-            ...paypalConfig,
-            onSelect: (activeComponent) => {
-              updateStateContainer(activeComponent.data);
-            },
-            onChange: (state) => {
-              updateStateContainer(state);
-            },
-            onSubmit: (state, component) => {
-              makePayment(localeConfig, state.data, {}, config.includeDeliveryAddress)
-                .then((response) => {
+          paypalComponent = checkout
+            .create('paypal', {
+              ...paypalConfig,
+              onSelect: (activeComponent) => {
+                updateStateContainer(activeComponent.data);
+              },
+              onChange: (state) => {
+                updateStateContainer(state);
+              },
+              onSubmit: (state, component) => {
+                makePayment(localeConfig, state.data, {}, config.includeDeliveryAddress)
+                  .then((response) => {
+                    if (response.action) {
+                      paypalComponent.handleAction(response.action);
+                    } else if (response.resultCode) {
+                      updateResultContainer(response.resultCode);
+                      if (paypalComponent !== undefined) {
+                        paypalComponent.unmount('#paypal-container');
+                      }
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                      if (paypalComponent !== undefined) {
+                        paypalComponent.unmount('#paypal-container');
+                      }
+                    }
+                  })
+                  .catch((error) => {
+                    throw Error(error);
+                  });
+              },
+              onAdditionalDetails: (state, component) => {
+                submitAdditionalDetails(state.data).then((response) => {
                   if (response.action) {
                     paypalComponent.handleAction(response.action);
                   } else if (response.resultCode) {
@@ -51,36 +72,17 @@ const loadComponent = function loadComponent() {
                       paypalComponent.unmount('#paypal-container');
                     }
                   }
-                })
-                .catch((error) => {
-                  throw Error(error);
                 });
-            },
-            onAdditionalDetails: (state, component) => {
-              submitAdditionalDetails(state.data).then((response) => {
-                if (response.action) {
-                  paypalComponent.handleAction(response.action);
-                } else if (response.resultCode) {
-                  updateResultContainer(response.resultCode);
-                  if (paypalComponent !== undefined) {
-                    paypalComponent.unmount('#paypal-container');
-                  }
-                } else if (response.message) {
-                  updateResultContainer(response.message);
-                  if (paypalComponent !== undefined) {
-                    paypalComponent.unmount('#paypal-container');
-                  }
-                }
-              });
-            },
-            onCancel: (data, component) => {
-              component.setStatus('ready');
-            },
-            onError: (error, component) => {
-              component.setStatus('error');
-            },
-          })
-          .mount('#paypal-container');
+              },
+              onCancel: (data, component) => {
+                component.setStatus('ready');
+              },
+              onError: (error, component) => {
+                component.setStatus('error');
+              },
+            })
+            .mount('#paypal-container');
+        })()
       });
     });
   });

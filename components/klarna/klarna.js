@@ -12,25 +12,44 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-        });
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            locale: localeConfig.locale,
+          });
 
-        klarnaComponent = checkout
-          .create('klarna', {
-            onChange: (state, component) => {
-              updateStateContainer(state);
-            },
-            onSelect: (activeComponent) => {
-              updateStateContainer(activeComponent.data);
-            },
-            onSubmit: (state) => {
-              updateStateContainer(state);
-              if (state.isValid) {
-                makePayment(localeConfig, state.data).then((response) => {
+          klarnaComponent = checkout
+            .create('klarna', {
+              onChange: (state, component) => {
+                updateStateContainer(state);
+              },
+              onSelect: (activeComponent) => {
+                updateStateContainer(activeComponent.data);
+              },
+              onSubmit: (state) => {
+                updateStateContainer(state);
+                if (state.isValid) {
+                  makePayment(localeConfig, state.data).then((response) => {
+                    if (response.action) {
+                      klarnaComponent.handleAction(response.action);
+                    } else if (response.resultCode) {
+                      updateResultContainer(response.resultCode);
+                      if (klarnaComponent !== undefined) {
+                        klarnaComponent.unmount('#klarna-container');
+                      }
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                      if (klarnaComponent !== undefined) {
+                        klarnaComponent.unmount('#klarna-container');
+                      }
+                    }
+                  });
+                }
+              },
+              onAdditionalDetails: (state, component) => {
+                submitAdditionalDetails(state.data).then((response) => {
                   if (response.action) {
                     klarnaComponent.handleAction(response.action);
                   } else if (response.resultCode) {
@@ -45,27 +64,10 @@ const loadComponent = function loadComponent() {
                     }
                   }
                 });
-              }
-            },
-            onAdditionalDetails: (state, component) => {
-              submitAdditionalDetails(state.data).then((response) => {
-                if (response.action) {
-                  klarnaComponent.handleAction(response.action);
-                } else if (response.resultCode) {
-                  updateResultContainer(response.resultCode);
-                  if (klarnaComponent !== undefined) {
-                    klarnaComponent.unmount('#klarna-container');
-                  }
-                } else if (response.message) {
-                  updateResultContainer(response.message);
-                  if (klarnaComponent !== undefined) {
-                    klarnaComponent.unmount('#klarna-container');
-                  }
-                }
-              });
-            },
-          })
-          .mount('#klarna-container');
+              },
+            })
+            .mount('#klarna-container');
+        })()
       });
     });
   });

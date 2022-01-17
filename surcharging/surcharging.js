@@ -45,12 +45,6 @@ const loadDropIn = function loadDropIn() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const checkout = new AdyenCheckout({
-          environment: config.environment,
-          clientKey: config.clientKey,
-          paymentMethodsResponse: paymentMethodsResponse,
-          locale: localeConfig.locale,
-        });
 
         const paymentMethodsConfiguration = {
           applepay: config.applepayConfig,
@@ -127,26 +121,52 @@ const loadDropIn = function loadDropIn() {
           }
         }
 
-        dropin = checkout
-          .create('dropin', {
-            paymentMethodsConfiguration,
-            openFirstPaymentMethod: config.openFirstPaymentMethod,
-            openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
-            showStoredPaymentMethods: config.showStoredPaymentMethods,
-            showPaymentMethods: config.showPaymentMethods,
-            amount: localeConfig.amount,
-            showPayButton: config.showPayButton,
-            showRemovePaymentMethodButton: config.showRemovePaymentMethodButton,
-            onSelect: (activeComponent) => {
-              updateStateContainer(activeComponent.data);
-            },
-            onChange: (state) => {
-              updateStateContainer(state);
-            },
-            onSubmit: (state, component) => {
-              dropin.setStatus('loading');
-              makePayment(localeConfig, state.data, {}, true, config.native3ds2)
-                .then((response) => {
+        (async function(){
+          const checkout = await AdyenCheckout({
+            environment: config.environment,
+            clientKey: config.clientKey,
+            paymentMethodsResponse: paymentMethodsResponse,
+            paymentMethodsConfiguration: paymentMethodsConfiguration,
+            locale: localeConfig.locale,
+          });
+
+          dropin = checkout
+            .create('dropin', {
+              openFirstPaymentMethod: config.openFirstPaymentMethod,
+              openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
+              showStoredPaymentMethods: config.showStoredPaymentMethods,
+              showPaymentMethods: config.showPaymentMethods,
+              amount: localeConfig.amount,
+              showPayButton: config.showPayButton,
+              showRemovePaymentMethodButton: config.showRemovePaymentMethodButton,
+              onSelect: (activeComponent) => {
+                updateStateContainer(activeComponent.data);
+              },
+              onChange: (state) => {
+                updateStateContainer(state);
+              },
+              onSubmit: (state, component) => {
+                dropin.setStatus('loading');
+                makePayment(localeConfig, state.data, {}, true, config.native3ds2)
+                  .then((response) => {
+                    dropin.setStatus('ready');
+                    if (response.action) {
+                      dropin.handleAction(response.action);
+                    } else if (response.resultCode) {
+                      dropin.setStatus('success', { message: response.resultCode });
+                    } else if (response.message) {
+                      dropin.setStatus('success', { message: response.message });
+                    }
+                  })
+                  .catch((error) => {
+                    dropin.setStatus('ready');
+                    dropin.setStatus('error');
+                    console.log('onError', error);
+                  });
+              },
+              onAdditionalDetails: (state, component) => {
+                dropin.setStatus('loading');
+                submitAdditionalDetails(state.data).then((response) => {
                   dropin.setStatus('ready');
                   if (response.action) {
                     dropin.handleAction(response.action);
@@ -155,46 +175,29 @@ const loadDropIn = function loadDropIn() {
                   } else if (response.message) {
                     dropin.setStatus('success', { message: response.message });
                   }
-                })
-                .catch((error) => {
-                  dropin.setStatus('ready');
-                  dropin.setStatus('error');
-                  console.log('onError', error);
                 });
-            },
-            onAdditionalDetails: (state, component) => {
-              dropin.setStatus('loading');
-              submitAdditionalDetails(state.data).then((response) => {
-                dropin.setStatus('ready');
-                if (response.action) {
-                  dropin.handleAction(response.action);
-                } else if (response.resultCode) {
-                  dropin.setStatus('success', { message: response.resultCode });
-                } else if (response.message) {
-                  dropin.setStatus('success', { message: response.message });
-                }
-              });
-            },
-            onDisableStoredPaymentMethod: (storedPaymentMethodId, resolve, reject) => {
-              const disableObject = {
-                shopperReference: config.shopperReference,
-                recurringDetailReference: storedPaymentMethodId.props.storedPaymentMethodId
-              };
+              },
+              onDisableStoredPaymentMethod: (storedPaymentMethodId, resolve, reject) => {
+                const disableObject = {
+                  shopperReference: config.shopperReference,
+                  recurringDetailReference: storedPaymentMethodId.props.storedPaymentMethodId
+                };
 
-              disable(disableObject).then((response) => {
-                if (response.response === '[detail-successfully-disabled]') {
-                  resolve();
-                }
-                else {
-                  reject();
-                }
-              });
-            },
-            onError: (state, component) => {
-              console.log('onError', state);
-            },
-          })
-          .mount('#dropin-container');
+                disable(disableObject).then((response) => {
+                  if (response.response === '[detail-successfully-disabled]') {
+                    resolve();
+                  }
+                  else {
+                    reject();
+                  }
+                });
+              },
+              onError: (state, component) => {
+                console.log('onError', state);
+              },
+            })
+            .mount('#dropin-container');
+        })()
       });
     });
   });
