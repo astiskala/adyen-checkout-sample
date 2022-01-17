@@ -128,6 +128,7 @@ const loadDropIn = function loadDropIn() {
             paymentMethodsResponse: paymentMethodsResponse,
             paymentMethodsConfiguration: paymentMethodsConfiguration,
             locale: localeConfig.locale,
+            amount: localeConfig.amount,
           });
 
           dropin = checkout
@@ -136,7 +137,6 @@ const loadDropIn = function loadDropIn() {
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,
               showPaymentMethods: config.showPaymentMethods,
-              amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               showRemovePaymentMethodButton: config.showRemovePaymentMethodButton,
               onSelect: (activeComponent) => {

@@ -72,6 +72,7 @@ const loadDropIn = function loadDropIn() {
             clientKey: config.clientKey,
             session: sessionsResponse,
             paymentMethodsConfiguration: paymentMethodsConfiguration,
+            amount: localeConfig.amount,
             onPaymentCompleted: (result, component) => {
               console.log('onPaymentCompleted', result);
             },
@@ -86,7 +87,6 @@ const loadDropIn = function loadDropIn() {
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,
               showPaymentMethods: config.showPaymentMethods,
-              amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               showRemovePaymentMethodButton: config.showRemovePaymentMethodButton,
               onSelect: (activeComponent) => {

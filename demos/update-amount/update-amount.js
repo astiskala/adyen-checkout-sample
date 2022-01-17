@@ -39,11 +39,11 @@ const loadDropIn = function loadDropIn() {
             paymentMethodsResponse: paymentMethodsResponse,
             paymentMethodsConfiguration: paymentMethodsConfiguration,
             locale: localeConfig.locale,
+            amount: localeConfig.amount,
           });
 
           dropin = checkout
             .create('dropin', {
-              amount: localeConfig.amount,
               onError: (state, component) => {
                 console.log('onError', state);
               },
