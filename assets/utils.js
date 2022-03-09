@@ -425,6 +425,14 @@ const makePayment = (localeConfig,
       }
     }
 
+    const requestedTestAcquirerResponseCodeField = document.querySelector('#RequestedTestAcquirerResponseCode');
+    if (requestedTestAcquirerResponseCodeField) {
+      const requestedTestAcquirerResponseCode = requestedTestAcquirerResponseCodeField.value;
+      if (requestedTestAcquirerResponseCode) {
+        paymentRequest.additionalData.RequestedTestAcquirerResponseCode = requestedTestAcquirerResponseCode;
+      }
+    }
+
     if (paymentRequest.clientStateDataIndicator) {
       delete paymentRequest.clientStateDataIndicator;
     }

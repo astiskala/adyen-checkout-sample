@@ -76,6 +76,8 @@
                     <input type="text" id="store" name="store" /><br />
                     <label for="threeDSAuthenticationOnly">threeDSAuthenticationOnly:</label>
                     <input type="checkbox" id="threeDSAuthenticationOnly" name="threeDSAuthenticationOnly" /><br />
+                    <label for="RequestedTestAcquirerResponseCode">RequestedTestAcquirerResponseCode:</label>
+                    <input type="text" id="RequestedTestAcquirerResponseCode" name="RequestedTestAcquirerResponseCode" /><br />
 
                     <input type="button" id="submit" name="submit" onclick="javascript:dropin.submit();" value="Pay" />
                 </form>
