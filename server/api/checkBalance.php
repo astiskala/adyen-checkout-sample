@@ -10,24 +10,25 @@ if (file_get_contents('php://input') != '') {
 
 $apikey = getenv('CHECKOUT_APIKEY');
 $merchantAccount = getenv('MERCHANT_ACCOUNT');
+$version = getenv('CHECKOUT_API_VERSION');
 $environment = getenv('ENVIRONMENT');
 if ($environment == "test") {
-  $domain = "pal-test.adyen.com";
+  $domain = "checkout-test.adyen.com";
 } else {
   $prefix = getenv('PREFIX');
   if ($prefix) {
     $prefix = $prefix . "-";
   }
 
-  $domain = $prefix . "pal-live.adyenpayments.com";
+  $domain = $prefix . "checkout-live.adyenpayments.com/checkout";
 }
 
-$url = "https://" . $domain . "/pal/servlet/Recurring/v49/disable";
+$url = "https://" . $domain . "/v{$version}/paymentMethods/balance";
 
 // Convert data to JSON
 $json_data = json_encode($request);
 
-//  Initiate curl
+// Initiate curl
 $curlAPICall = curl_init();
 
 // Set to POST

@@ -107,6 +107,14 @@ const getPaymentMethodsDefaultConfig = async () => {
   return config;
 };
 
+const getCheckBalanceDefaultConfig = async () => {
+  const config = {};
+  config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
+  config.reference = await httpGet('env', 'REFERENCE');
+  config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+  return config;
+};
+
 const getPaymentsDefaultConfig = async () => {
   const config = {
     channel: 'Web',
@@ -279,6 +287,51 @@ const getSessions = (localeConfig) => getSessionsDefaultConfig()
         return response;
       });
   });
+
+const checkBalance = (rawPaymentMethod,
+    config = {}) => getCheckBalanceDefaultConfig()
+    .then((checkBalanceDefaultConfig) => {
+      const checkBalanceConfig = {
+        ...checkBalanceDefaultConfig,
+        ...config,
+      };
+
+      const paymentMethod = rawPaymentMethod;
+      paymentMethod.paymentMethod.type = 'givex';
+
+      const checkBalanceRequest = {
+        ...checkBalanceConfig,
+        ...paymentMethod,
+      };
+
+      const storeField = document.querySelector('#store');
+      if (storeField) {
+        const store = storeField.value;
+        if (store) {
+          checkBalanceRequest.store = store;
+        }
+      }
+
+      if (checkBalanceRequest.riskData) {
+        delete checkBalanceRequest.riskData;
+      }
+
+      if (checkBalanceRequest.clientStateDataIndicator) {
+        delete checkBalanceRequest.clientStateDataIndicator;
+      }
+
+      updateRequestContainer('/checkBalance', checkBalanceRequest);
+
+      return httpPost('checkBalance', checkBalanceRequest)
+        .then((response) => {
+          if (response.error) {
+            console.error('Check Balance initiation failed');
+          }
+
+          updateResponseContainer('/checkBalance', response);
+          return response;
+        });
+    });
 
 const makePayment = (localeConfig,
   rawPaymentMethod,
