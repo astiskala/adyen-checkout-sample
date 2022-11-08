@@ -29,7 +29,9 @@
               <form id="toggles">
                 <h3>3DS2</h3>
                 <label for="native3ds2">Enable Native 3DS2:</label>
-                <input type="checkbox" id="native3ds2" name="native3ds2" checked="checked" />
+                <input type="checkbox" id="native3ds2" name="native3ds2" checked="checked" /><br />
+                <label for="executeThreeD">executeThreeD:</label>
+                <input type="checkbox" id="executeThreeD" name="executeThreeD" checked="checked" />
 
                 <h3>Component</h3>
                 <label for="showPayButton">showPayButton:</label>

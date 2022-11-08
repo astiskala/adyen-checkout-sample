@@ -406,6 +406,14 @@ const makePayment = (localeConfig,
       paymentRequest.additionalData.allow3DS2 = true;
     }
 
+    const executeThreeDField = document.querySelector('#executeThreeD');
+    if (executeThreeDField) {
+      const executeThreeD = executeThreeDField.checked;
+      if (executeThreeD) {
+        paymentRequest.additionalData.executeThreeD = true;
+      }
+    }
+
     const threeDSAuthenticationOnlyField = document.querySelector('#threeDSAuthenticationOnly');
     if (threeDSAuthenticationOnlyField) {
       const threeDSAuthenticationOnly = threeDSAuthenticationOnlyField.checked;
