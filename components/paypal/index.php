@@ -45,6 +45,8 @@
                 <input type="text" id="captureDelayHours" name="captureDelayHours" /><br />
                 <label for="store">store:</label>
                 <input type="text" id="store" name="store" /><br />
+                <label for="storePaymentMethod">storePaymentMethod:</label>
+                <input type="checkbox" id="storePaymentMethod" name="storePaymentMethod" /><br />
               </form>
             </div>
 

@@ -12,10 +12,19 @@ const loadComponent = function loadComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       (async function(){
+
+        const translations = {
+          "en-US": {
+            "creditCard.numberField.placeholder": "Card number",
+            "creditCard.expiryDateField.placeholder": "Expiry date"
+          }
+        };
+
         const checkout = await AdyenCheckout({
           environment: config.environment,
           clientKey: config.clientKey,
           locale: localeConfig.locale,
+          translations: translations,
         });
 
         var styleObject = {

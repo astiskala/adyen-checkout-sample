@@ -71,6 +71,8 @@
                 <input type="checkbox" id="threeDSAuthenticationOnly" name="threeDSAuthenticationOnly" /><br />
                 <label for="RequestedTestAcquirerResponseCode">RequestedTestAcquirerResponseCode:</label>
                 <input type="text" id="RequestedTestAcquirerResponseCode" name="RequestedTestAcquirerResponseCode" /><br />
+                <label for="forceChallenge">Force Challenge:</label>
+                <input type="checkbox" id="forceChallenge" name="forceChallenge" /><br />
 
                 <input type="button" id="submit" name="submit" onclick="javascript:card.submit();" value="Pay" />
               </form>

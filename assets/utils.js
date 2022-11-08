@@ -206,6 +206,9 @@ const getSessionsDefaultConfig = async () => {
   config.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
   config.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
+  config.storePaymentMethod = true;
+  config.showStoredPaymentMethods = true;
+  
   config.deliveryAddress.city = await httpGet('env', 'DELIVERY_ADDRESS_CITY');
   config.deliveryAddress.country = await httpGet('env', 'DELIVERY_ADDRESS_COUNTRY');
   config.deliveryAddress.houseNumberOrName = await httpGet('env', 'DELIVERY_ADDRESS_HOUSENUMBERORNAME');
@@ -373,6 +376,16 @@ const makePayment = (localeConfig,
       paymentRequest.deliveryAddress = null;
     }
 
+    const forceChallengeField = document.querySelector('#forceChallenge');
+    if (forceChallengeField) {
+      const forceChallenge = forceChallengeField.checked;
+      if (forceChallenge) {
+        paymentRequest.threeDS2RequestData = {};
+        paymentRequest.threeDS2RequestData.deviceChannel = 'browser';
+        paymentRequest.threeDS2RequestData.threeDSRequestorChallengeInd = '04';
+      }
+    }
+
     if (!paymentRequest.additionalData) {
       paymentRequest.additionalData = {};
     }
@@ -422,6 +435,14 @@ const makePayment = (localeConfig,
       const store = storeField.value;
       if (store) {
         paymentRequest.store = store;
+      }
+    }
+
+    const storePaymentMethodField = document.querySelector('#storePaymentMethod');
+    if (storePaymentMethodField) {
+      const storePaymentMethod = storePaymentMethodField.checked;
+      if (storePaymentMethod) {
+        paymentRequest.storePaymentMethod = storePaymentMethod;
       }
     }
 
