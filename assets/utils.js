@@ -195,8 +195,13 @@ const getSessionsDefaultConfig = async () => {
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
 
-  const ipResponse = await fetch('https://api.ipify.org');
-  config.shopperIP = await ipResponse.text();
+  try {
+    const ipResponse = await fetch('https://api.ipify.org');
+    config.shopperIP = await ipResponse.text();
+  }
+  catch(err) {
+    console.warn(err);
+  }
 
   config.telephoneNumber = await httpGet('env', 'TELEPHONE_NUMBER');
   config.dateOfBirth = await httpGet('env', 'DATE_OF_BIRTH');
