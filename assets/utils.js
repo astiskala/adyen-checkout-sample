@@ -136,8 +136,13 @@ const getPaymentsDefaultConfig = async () => {
   config.reference = await httpGet('env', 'REFERENCE');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
 
-  const ipResponse = await fetch('https://api.ipify.org');
-  config.shopperIP = await ipResponse.text();
+  try {
+    const ipResponse = await fetch('https://api.ipify.org');
+    config.shopperIP = await ipResponse.text();
+  }
+  catch(err) {
+    console.warn(err);
+  }
 
   config.origin = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
   config.returnUrl = `${config.origin}/returnUrl`;
