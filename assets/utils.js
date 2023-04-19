@@ -217,7 +217,6 @@ const getSessionsDefaultConfig = async () => {
   config.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
   config.storePaymentMethod = true;
-  config.showStoredPaymentMethods = true;
   
   config.deliveryAddress.city = await httpGet('env', 'DELIVERY_ADDRESS_CITY');
   config.deliveryAddress.country = await httpGet('env', 'DELIVERY_ADDRESS_COUNTRY');
