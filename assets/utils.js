@@ -191,7 +191,7 @@ const getSessionsDefaultConfig = async () => {
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
   config.reference = await httpGet('env', 'REFERENCE');
   config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
-  config.returnUrl = `${config.origin}/returnUrl`;
+  config.returnUrl = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/returnUrl`;
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
 
