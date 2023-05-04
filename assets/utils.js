@@ -471,6 +471,14 @@ const makePayment = (localeConfig,
       }
     }
 
+    const industryUsageField = document.querySelector('#industryUsage');
+    if (industryUsageField) {
+      const industryUsage = industryUsageField.value;
+      if (industryUsage) {
+        paymentRequest.additionalData.industryUsage = industryUsage;
+      }
+    }
+
     if (paymentRequest.clientStateDataIndicator) {
       delete paymentRequest.clientStateDataIndicator;
     }

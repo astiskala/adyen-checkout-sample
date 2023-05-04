@@ -2,7 +2,7 @@ if [ -e .env ]
 then
     IFS='
 '
-    export $(cat .env | grep -v "#" | grep -v '^$' | xargs -0)
+    export $(cat .env | grep -v "^#" | grep -v '^$' | xargs -0)
     IFS=
 
     until php -S 127.0.0.1:3000 -t .; do

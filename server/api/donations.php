@@ -8,11 +8,18 @@ if (file_get_contents('php://input') != '') {
     $request = array();
 }
 
+//  Initiate curl
+$curlAPICall = curl_init();
+
 $apikey = getenv('CHECKOUT_APIKEY');
 $version = getenv('CHECKOUT_API_VERSION');
 $environment = getenv('ENVIRONMENT');
 if ($environment == "test") {
   $domain = "checkout-test.adyen.com";
+} else if (str_contains($environment, "beta")) {
+  $domain = "checkout-beta.tro.adyen.com/checkout";
+  curl_setopt($curlAPICall, CURLOPT_SSL_VERIFYHOST, FALSE);
+  curl_setopt($curlAPICall, CURLOPT_SSL_VERIFYPEER, FALSE);
 } else {
   $prefix = getenv('PREFIX');
   if ($prefix) {
@@ -26,9 +33,6 @@ $url = "https://" . $domain . "/v{$version}/donations";
 
 // Convert data to JSON
 $json_data = json_encode($request);
-
-//  Initiate curl
-$curlAPICall = curl_init();
 
 // Set to POST
 $method = "POST";
