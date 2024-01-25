@@ -20,6 +20,8 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.postalCode = await httpGet('env', 'BILLING_ADDRESS_POSTALCODE');
   config.cardConfig.data.billingAddress.stateOrProvince = await httpGet('env', 'BILLING_ADDRESS_STATEORPROVINCE');
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
+  
+  config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
 
   return config;
 };
@@ -48,6 +50,10 @@ const loadComponent = function loadComponent() {
               amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               ...config.cardConfig,
+              clickToPayConfiguration: {
+                merchantDisplayName: 'Test Merchant',
+                shopperEmail: config.shopperEmail
+              },
               onSubmit: (state, component) => {
                 if (state.isValid) {
                   makePayment(localeConfig, card.data, {}, true, config.native3ds2)

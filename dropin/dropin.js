@@ -34,6 +34,7 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+  config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
 
   return config;
 };
@@ -82,8 +83,17 @@ const loadDropIn = function loadDropIn() {
           component.setStatus('ready');
         };
 
+        paymentMethodsConfiguration.card.clickToPayConfiguration = {
+          merchantDisplayName: 'Test Merchant',
+          shopperEmail: config.shopperEmail
+        };
+
         paymentMethodsConfiguration.card.onBinValue = (state) => {
           console.log('onBinValue', state);
+        };
+
+        paymentMethodsConfiguration.card.onBinLookup = (state) => {
+          console.log('onBinLookup', state);
         };
 
         paymentMethodsConfiguration.card.onBrand = (state) => {

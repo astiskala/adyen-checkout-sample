@@ -1,9 +1,5 @@
 const getConfig = async () => {
-  const config = {
-    googlePayConfig: {
-      configuration: { merchantName: 'THIS IS AN EXAMPLE' },
-    },
-  };
+  const config = { };
 
   config.environment = await httpGet('env', 'ENVIRONMENT');
   config.clientKey = await httpGet('env', 'CHECKOUT_CLIENTKEY');
@@ -26,11 +22,8 @@ const loadComponent = function loadComponent() {
             locale: localeConfig.locale,
           });
 
-          const { googlePayConfig } = config;
-          googlePayConfig.amount = localeConfig.amount;
-
           googlepayComponent = checkout
-            .create('paywithgoogle', {
+            .create('googlepay', {
               amount: localeConfig.amount,
               showPayButton: true,
 

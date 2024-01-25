@@ -62,6 +62,10 @@ const loadDropIn = function loadDropIn() {
           console.log('onBinValue', state);
         };
 
+        paymentMethodsConfiguration.card.onBinLookup = (state) => {
+          console.log('onBinLookup', state);
+        };
+
         paymentMethodsConfiguration.card.onBrand = (state) => {
           console.log('onBrand', state);
         };
