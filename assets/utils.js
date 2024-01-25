@@ -209,6 +209,13 @@ const getSessionsDefaultConfig = async () => {
   config.shopperName.firstName = await httpGet('env', 'SHOPPERNAME_FIRSTNAME');
   config.shopperName.lastName = await httpGet('env', 'SHOPPERNAME_LASTNAME');
 
+  config.installmentOptions = {};
+  config.installmentOptions.card = {};
+  config.installmentOptions.card.values = [1, 2, 3, 5];
+  config.installmentOptions.card.plans = ["regular", "revolving", "bonus"];
+
+  //config.mode = 'hosted';
+
   config.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
   config.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
   config.billingAddress.houseNumberOrName = await httpGet('env', 'BILLING_ADDRESS_HOUSENUMBERORNAME');
