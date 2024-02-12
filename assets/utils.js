@@ -135,6 +135,8 @@ const getPaymentsDefaultConfig = async () => {
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
   config.reference = await httpGet('env', 'REFERENCE');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+  config.shopperInteraction = 'Ecommerce';
+  config.recurringProcessingModel = 'CardOnFile';
 
   try {
     const ipResponse = await fetch('https://api.ipify.org');
@@ -173,7 +175,7 @@ const getPaymentsDefaultConfig = async () => {
   return config;
 };
 
-const getSessionsDefaultConfig = async () => {
+const getSessionsDefaultConfig = async (hosted) => {
   const config = {
     applicationInfo: {
       externalPlatform: {
@@ -194,13 +196,19 @@ const getSessionsDefaultConfig = async () => {
   config.returnUrl = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/returnUrl`;
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
+  config.shopperInteraction = 'Ecommerce';
+  config.recurringProcessingModel = 'CardOnFile';
 
-  try {
-    const ipResponse = await fetch('https://api.ipify.org');
-    config.shopperIP = await ipResponse.text();
-  }
-  catch(err) {
-    console.warn(err);
+  if (hosted === false) {
+    try {
+      const ipResponse = await fetch('https://api.ipify.org');
+      config.shopperIP = await ipResponse.text();
+    }
+    catch(err) {
+      console.warn(err);
+    }
+  } else {
+    config.mode = 'hosted';
   }
 
   config.telephoneNumber = await httpGet('env', 'TELEPHONE_NUMBER');
@@ -213,8 +221,6 @@ const getSessionsDefaultConfig = async () => {
   config.installmentOptions.card = {};
   config.installmentOptions.card.values = [1, 2, 3, 5];
   config.installmentOptions.card.plans = ["regular", "revolving", "bonus"];
-
-  //config.mode = 'hosted';
 
   config.billingAddress.city = await httpGet('env', 'BILLING_ADDRESS_CITY');
   config.billingAddress.country = await httpGet('env', 'BILLING_ADDRESS_COUNTRY');
@@ -287,7 +293,7 @@ const getPaymentMethods = (localeConfig) => getPaymentMethodsDefaultConfig()
       });
   });
 
-const getSessions = (localeConfig) => getSessionsDefaultConfig()
+const getSessions = (localeConfig, hosted) => getSessionsDefaultConfig(hosted)
   .then((sessionsDefaultConfig) => {
     const sessionsRequest = {
       ...sessionsDefaultConfig,
@@ -560,6 +566,20 @@ const submitAdditionalDetails = (additionalDetailsRequest, config = {}) => {
       }
 
       updateResponseContainer('/payments/details', response);
+      return response;
+    });
+};
+
+const submitSessionResult = (sessionId, sessionResult) => {
+  updateRequestContainer('/sessions/' + sessionId, '?sessionResult=' + sessionResult);
+
+  return httpPost('sessionResult', { sessionId, sessionResult } )
+    .then((response) => {
+      if (response.error) {
+        console.error('Session result submission failed');
+      }
+
+      updateResponseContainer('/sessions/' + sessionId, response);
       return response;
     });
 };

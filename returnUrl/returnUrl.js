@@ -21,11 +21,21 @@ const handlePostback = function handlePostback(paymentData, postData) {
     paymentDetails = { paymentData, details };
   }
 
-  submitAdditionalDetails(paymentDetails).then((result) => {
-    if (result.resultCode) {
-      updateResultContainer(result.resultCode);
-    } else if (result.message) {
-      updateResultContainer(result.message);
-    }
-  });
+  if (details.sessionId && details.sessionResult) {
+    submitSessionResult(details.sessionId, details.sessionResult).then((result) => {
+      if (result.status) {
+        updateResultContainer(result.status);
+      } else {
+        updateResultContainer(result);
+      }
+    });
+  } else {
+    submitAdditionalDetails(paymentDetails).then((result) => {
+      if (result.resultCode) {
+        updateResultContainer(result.resultCode);
+      } else if (result.message) {
+        updateResultContainer(result.message);
+      }
+    });
+  }
 };

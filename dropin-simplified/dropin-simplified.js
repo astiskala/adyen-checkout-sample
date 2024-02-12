@@ -44,7 +44,7 @@ const loadDropIn = function loadDropIn() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
-      getSessions(localeConfig).then((sessionsResponse) => {
+      getSessions(localeConfig, false).then((sessionsResponse) => {
         const paymentMethodsConfiguration = {
           applepay: config.applepayConfig,
           paypal: config.paypalConfig,
