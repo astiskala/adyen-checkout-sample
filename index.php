@@ -33,73 +33,73 @@
       </div>
       <ul class="payment_methods__list">
         <li class="payment_methods__list__toplevel">
-          <a href="dropin/">Drop-in</a>
+          <a href="dropin/?sdkVersion=<?=getenv('SDK_VERSION')?>">Drop-in</a>
         </li>
         <li class="payment_methods__list__toplevel">
-          <a href="dropin-simplified/">Drop-in (Simplified)</a>
+          <a href="dropin-simplified/?sdkVersion=<?=getenv('SDK_VERSION')?>">Drop-in (Simplified)</a>
         </li>
         <li class="payment_methods__list__toplevel">
-          <a href="hosted/">Hosted Checkout</a>
+          <a href="hosted/?sdkVersion=<?=getenv('SDK_VERSION')?>">Hosted Checkout</a>
         </li>
         <li class="payment_methods__list__toplevel">
-          <a href="paybylink/">Pay by Link</a>
+          <a href="paybylink/?sdkVersion=<?=getenv('SDK_VERSION')?>">Pay by Link</a>
         </li>
         <li class="payment_methods__list__toplevel">
-          <a href="adyengiving/">Adyen Giving</a>
+          <a href="adyengiving/?sdkVersion=<?=getenv('SDK_VERSION')?>">Adyen Giving</a>
         </li>
-          <li class="payment_methods__list__toplevel">
-            <a href="surcharging/">Surcharging</a>
-          </li>
+        <li class="payment_methods__list__toplevel">
+          <a href="surcharging/?sdkVersion=<?=getenv('SDK_VERSION')?>">Surcharging</a>
+        </li>
         <li class="payment_methods__list__toplevel">
           Components
           <ul class="payment_methods__list">
             <li class="payment_methods__list__element">
-              <a href="components/card/">Card</a>
+              <a href="components/card/?sdkVersion=<?=getenv('SDK_VERSION')?>">Card</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/ach/">ACH Direct Debit</a>
+              <a href="components/ach/?sdkVersion=<?=getenv('SDK_VERSION')?>">ACH Direct Debit</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/afterpaytouch/">AfterPay Touch</a>
+              <a href="components/afterpaytouch/?sdkVersion=<?=getenv('SDK_VERSION')?>">AfterPay Touch</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/alipay/">AliPay</a>
+              <a href="components/alipay/?sdkVersion=<?=getenv('SDK_VERSION')?>">AliPay</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/bancontact/">Bancontact Mobile</a>
+              <a href="components/bancontact/?sdkVersion=<?=getenv('SDK_VERSION')?>">Bancontact Mobile</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/boleto/">Boleto Bancário</a>
+              <a href="components/boleto/?sdkVersion=<?=getenv('SDK_VERSION')?>">Boleto Bancário</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/giftcard/">Gift Card</a>
+              <a href="components/giftcard/?sdkVersion=<?=getenv('SDK_VERSION')?>">Gift Card</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/googlepay/">Google Pay</a>
+              <a href="components/googlepay/?sdkVersion=<?=getenv('SDK_VERSION')?>">Google Pay</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/ideal/">iDEAL</a>
+              <a href="components/ideal/?sdkVersion=<?=getenv('SDK_VERSION')?>">iDEAL</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/klarna/">Klarna</a>
+              <a href="components/klarna/?sdkVersion=<?=getenv('SDK_VERSION')?>">Klarna</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/multibanco/">Multibanco</a>
+              <a href="components/multibanco/?sdkVersion=<?=getenv('SDK_VERSION')?>">Multibanco</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/paypal/">PayPal</a>
+              <a href="components/paypal/?sdkVersion=<?=getenv('SDK_VERSION')?>">PayPal</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/sepa/">SEPA Direct Debit</a>
+              <a href="components/sepa/?sdkVersion=<?=getenv('SDK_VERSION')?>">SEPA Direct Debit</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/swish/">Swish</a>
+              <a href="components/swish/?sdkVersion=<?=getenv('SDK_VERSION')?>">Swish</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/wechatpay/">WeChat Pay</a>
+              <a href="components/wechatpay/?sdkVersion=<?=getenv('SDK_VERSION')?>">WeChat Pay</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="components/zip/">Zip</a>
+              <a href="components/zip/?sdkVersion=<?=getenv('SDK_VERSION')?>">Zip</a>
             </li>
           </ul>
         </li>
@@ -107,13 +107,13 @@
           Demos
           <ul class="payment_methods__list">
             <li class="payment_methods__list__element">
-              <a href="demos/overriding-card-style/">Overriding Card Component Style</a>
+              <a href="demos/overriding-card-style/?sdkVersion=<?=getenv('SDK_VERSION')?>">Overriding Card Component Style</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="demos/gst-amount/">Sending GST Amount</a>
+              <a href="demos/gst-amount/?sdkVersion=<?=getenv('SDK_VERSION')?>">Sending GST Amount</a>
             </li>
             <li class="payment_methods__list__element">
-              <a href="demos/update-amount/">Update Amount</a>
+              <a href="demos/update-amount/?sdkVersion=<?=getenv('SDK_VERSION')?>">Update Amount</a>
             </li>
           </ul>
         </li>
