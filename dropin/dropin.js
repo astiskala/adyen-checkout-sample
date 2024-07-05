@@ -53,8 +53,7 @@ const loadDropIn = function loadDropIn() {
           card: config.cardConfig,
         };
 
-        paymentMethodsConfiguration.applepay.amount = localeConfig.amount.value;
-        paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
+        paymentMethodsConfiguration.applepay.amount = localeConfig.amount;
         paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
 
         paymentMethodsConfiguration.applepay.onSubmit = (state, component) => {
