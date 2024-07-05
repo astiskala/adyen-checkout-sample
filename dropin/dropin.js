@@ -39,6 +39,7 @@ const getConfig = async () => {
   return config;
 };
 
+let checkout;
 let dropin;
 
 const loadDropIn = function loadDropIn() {
@@ -101,7 +102,7 @@ const loadDropIn = function loadDropIn() {
         };
 
         (async function(){
-          const checkout = await AdyenCheckout({
+          checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
             paymentMethodsResponse: paymentMethodsResponse,
