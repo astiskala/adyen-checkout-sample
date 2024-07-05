@@ -157,7 +157,7 @@ const loadDropIn = function loadDropIn() {
               showPaymentMethods: config.showPaymentMethods,
               showPayButton: config.showPayButton,
               showRemovePaymentMethodButton: config.showRemovePaymentMethodButton,
-              instantPaymentTypes: [ 'paywithgoogle', 'applepay' ],
+              instantPaymentTypes: [ 'googlepay', 'paywithgoogle', 'applepay' ],
               onSelect: (activeComponent) => {
                 console.log('onSelect', activeComponent);
                 updateStateContainer(activeComponent.data);

@@ -133,7 +133,6 @@ const getPaymentsDefaultConfig = async () => {
   };
 
   config.merchantAccount = await httpGet('env', 'MERCHANT_ACCOUNT');
-  config.merchantAccount = 'PME_ECOM_SG';
   config.reference = await httpGet('env', 'REFERENCE');
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
   config.shopperInteraction = 'Ecommerce';
