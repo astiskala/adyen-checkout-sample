@@ -107,6 +107,9 @@
           Demos
           <ul class="payment_methods__list">
             <li class="payment_methods__list__element">
+              <a href="demos/apple-pay-update-amount/?sdkVersion=<?=getenv('SDK_VERSION')?>">Apple Pay Update Amount</a>
+            </li>
+            <li class="payment_methods__list__element">
               <a href="demos/overriding-card-style/?sdkVersion=<?=getenv('SDK_VERSION')?>">Overriding Card Component Style</a>
             </li>
             <li class="payment_methods__list__element">
