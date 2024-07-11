@@ -34,7 +34,6 @@ const loadApplePayComponent = function loadApplePayComponent() {
               const paymentMethodNetwork = event.paymentMethod.network;
               const paymentMethodType = event.paymentMethod.type;
           
-              // Logging or using the extracted details
               console.log('Selected scheme: ', paymentMethodNetwork);
               console.log('Selected funding source: ', paymentMethodType);
 
@@ -66,18 +65,17 @@ const loadApplePayComponent = function loadApplePayComponent() {
               }
 
               amount = newAmount / 100
+              console.log('New total: ', amount);
 
-              applePayContainer.innerText = 'Selected scheme: ' + paymentMethodNetwork + ', Selected funding source: ' + paymentMethodType + ', New amount: ' + amount;
-
-              const ApplePayPaymentMethodUpdate = {
+              const update = {
                 newTotal: {
-                  amount,
                   label: "Total with Surcharge",
+                  amount: amount,
                   type: "final"
                 }
               }
           
-              resolve(ApplePayPaymentMethodUpdate)
+              resolve(update);
             }
           };
 
@@ -88,8 +86,7 @@ const loadApplePayComponent = function loadApplePayComponent() {
                 applePayComponent.mount("#applepay-container");
             })
             .catch(e => {
-              const applePayContainer = document.querySelector('#applepay-container');
-              applePayContainer.innerText = "Apple Pay is not supported on this device/browser";
+              document.querySelector('#applepay-container').innerText = "Apple Pay is not supported on this device/browser";
             })
         })()
       });
