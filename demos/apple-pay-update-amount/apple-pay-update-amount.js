@@ -31,6 +31,8 @@ const loadApplePayComponent = function loadApplePayComponent() {
 
           const applePayConfiguration = {
             onPaymentMethodSelected: (resolve, reject, event) => {
+              console.log('Event: ', event);
+
               const paymentMethodNetwork = event.paymentMethod.network;
               const paymentMethodType = event.paymentMethod.type;
           
@@ -55,6 +57,14 @@ const loadApplePayComponent = function loadApplePayComponent() {
 
                   break;
                 case "visa":
+                  if (paymentMethodType === "credit") {
+                    newAmount = oldMinorUnitsAmount * 1.03;
+                  } else {
+                    newAmount = oldMinorUnitsAmount * 1.01;
+                  }
+
+                  break;
+                default:
                   if (paymentMethodType === "credit") {
                     newAmount = oldMinorUnitsAmount * 1.03;
                   } else {
