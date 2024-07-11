@@ -14,7 +14,7 @@ const getConfig = async () => {
 
 let applePayComponent;
 
-const loadDropIn = function loadDropIn() {
+const loadApplePayComponent = function loadApplePayComponent() {
   defaultLocaleConfig().then(() => {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
@@ -40,7 +40,7 @@ const loadDropIn = function loadDropIn() {
           });
 
           const applePayConfiguration = {
-            onPaymentMethodSelected: (event) => {
+            onPaymentMethodSelected: (resolve, reject, event) => {
               const paymentMethodNetwork = event.paymentMethod.network;
               const paymentMethodType = event.paymentMethod.type;
           
@@ -48,7 +48,46 @@ const loadDropIn = function loadDropIn() {
               console.log('Selected scheme: ', paymentMethodNetwork);
               console.log('Selected funding source: ', paymentMethodType);
 
-              applePayContainer.innerText = 'Selected scheme: ' + paymentMethodNetwork + ', Selected funding source: ' + paymentMethodType;
+              let oldMinorUnitsAmount = localeConfig.amount;
+              let newAmount = oldMinorUnitsAmount;
+              switch (paymentMethodNetwork) {
+                case "amex":
+                  newAmount = oldMinorUnitsAmount * 1.05;
+                  break;
+                case "eftpos":
+                  newAmount = oldMinorUnitsAmount * 1.01;
+                  break;
+                case "masterCard":
+                  if (paymentMethodType === "credit") {
+                    newAmount = oldMinorUnitsAmount * 1.03;
+                  } else {
+                    newAmount = oldMinorUnitsAmount * 1.01;
+                  }
+
+                  break;
+                case "visa":
+                  if (paymentMethodType === "credit") {
+                    newAmount = oldMinorUnitsAmount * 1.03;
+                  } else {
+                    newAmount = oldMinorUnitsAmount * 1.01;
+                  }
+
+                  break;
+              }
+
+              amount = newAmount / 100
+
+              applePayContainer.innerText = 'Selected scheme: ' + paymentMethodNetwork + ', Selected funding source: ' + paymentMethodType + ', New amount: ' + amount;
+
+              const ApplePayPaymentMethodUpdate = {
+                newTotal: {
+                  amount,
+                  label: "Total with Surcharge",
+                  type: "final"
+                }
+              }
+          
+              resolve(ApplePayPaymentMethodUpdate)
             }
           };
 
@@ -68,13 +107,4 @@ const loadDropIn = function loadDropIn() {
   });
 };
 
-loadDropIn();
-
-const updateAmount = function updateAmount() {
-  var newAmount = document.querySelector('#newAmount').value;
-  var configuration = dropin.props;
-  configuration.amount.value = newAmount;
-  configuration.paymentMethodsConfiguration.applepay.amount = newAmount;
-  configuration.paymentMethodsConfiguration.paypal.amount = newAmount;
-  dropin.update(configuration);
-};
+loadApplePayComponent();
