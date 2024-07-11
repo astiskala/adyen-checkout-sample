@@ -19,22 +19,12 @@ const loadApplePayComponent = function loadApplePayComponent() {
     const localeConfig = collectLocaleConfig();
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
-        const paymentMethodsConfiguration = {
-          applepay: config.applepayConfig,
-          paypal: config.paypalConfig,
-          card: config.cardConfig,
-        };
-
-        paymentMethodsConfiguration.applepay.amount = localeConfig.amount.value;
-        paymentMethodsConfiguration.applepay.currencyCode = localeConfig.amount.currency;
-        paymentMethodsConfiguration.applepay.countryCode = localeConfig.countryCode;
 
         (async function(){
           const checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
             paymentMethodsResponse: paymentMethodsResponse,
-            paymentMethodsConfiguration: paymentMethodsConfiguration,
             locale: localeConfig.locale,
             amount: localeConfig.amount,
           });
