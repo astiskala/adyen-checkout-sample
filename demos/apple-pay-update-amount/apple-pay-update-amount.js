@@ -37,7 +37,7 @@ const loadApplePayComponent = function loadApplePayComponent() {
               console.log('Selected scheme: ', paymentMethodNetwork);
               console.log('Selected funding source: ', paymentMethodType);
 
-              let oldMinorUnitsAmount = localeConfig.amount;
+              let oldMinorUnitsAmount = localeConfig.amount.value;
               let newAmount = oldMinorUnitsAmount;
               switch (paymentMethodNetwork) {
                 case "amex":
