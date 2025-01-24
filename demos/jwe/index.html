@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWE Generator with @panva/jose</title>
+    <script src="jose/browser/index.umd.js"></script>
+</head>
+<body>
+    <h1>JWE Generator</h1>
+    <form id="jwe-form">
+        <label for="publicKey">Public Key (exponent|modulus):</label><br>
+        <input type="text" id="publicKey" value="10001|D68A64ED02098E17FA9D28D5B1DB7E44D023236194862A28C22CBD02B6A372FA099AEEFF306C8874E7A513CD52F0CFBE56C501FD8A4D4F54DB50133FBA2DF2E62A072E17AD6A9C6CA79F08F9845A6F49C70ACE0A89788E08FF50F652AF72F0E362DB8E4EDD75D7F716F24D8BEDC368C284612A8C1369695735A42E60D09771F08D46415B78E73CCCB2C54694A5C1AE15A9E6F00236E2F4922FEFA883C1A5B1F8B40D0DD133864776F6DC960F2EB3B3AA90CD912E38F3DB1DC8A8AE66A23A6B3C23205FF7E665593B704E9BEBF3F3221E96834087A115B01A58911FBC14282B0BE8F8621D7468B3E39BD39DB57D1385E290671231AEBEE8564C08AF09CD7C6C01" required style="width: 100%;"><br><br>
+
+        <label for="payload">Payload (JSON):</label><br>
+        <textarea id="payload" required style="width: 100%; height: 150px;">{ "number": "4111111111111111", "expiryMonth": "03", "expiryYear": "2030", "cvc": "737", "generationtime": "" }</textarea><br><br>
+
+        <button type="button" onclick="generateJWE()">Generate JWE</button>
+    </form>
+
+    <h2>Generated JWE</h2>
+    <textarea id="output" readonly style="width: 100%; height: 100px;"></textarea>
+
+    <script>
+        // Update the generationtime when the page is loaded
+        window.onload = function () {
+            const payloadInput = document.getElementById('payload').value;
+            const currentUtcTime = new Date().toISOString();
+            const updatedPayload = payloadInput.replace('"generationtime": ""', `"generationtime": "${currentUtcTime}"`);
+            document.getElementById('payload').value = updatedPayload;
+        };
+
+        async function hexToRSAPublicKey(hexModulus, hexExponent) {
+            const modulus = hexToUint8Array(hexModulus);
+            const exponent = hexToUint8Array(hexExponent);
+
+            // Import the public key using Web Crypto API
+            return await window.crypto.subtle.importKey(
+                'spki',
+                createSPKI(modulus, exponent), {
+                    name: 'RSA-OAEP',
+                    hash: 'SHA-256'
+                },
+                true,
+                ['encrypt']
+            );
+        }
+
+        function hexToUint8Array(hex) {
+            // Remove '0x' prefix if present
+            hex = hex.replace(/^0x/, '');
+
+            // Ensure even length
+            if (hex.length % 2 !== 0) {
+                hex = '0' + hex;
+            }
+
+            return new Uint8Array(
+                hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16))
+            );
+        }
+
+        function createSPKI(modulus, exponent) {
+            // ASN.1 structure for RSA public key
+            const spkiHeader = new Uint8Array([
+                0x30, 0x82, 0x01, 0x22, // SEQUENCE length
+                0x30, 0x0D, // AlgorithmIdentifier
+                0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, // OID for RSA
+                0x05, 0x00, // NULL
+                0x03, 0x82, 0x01, 0x0F, 0x00 // BIT STRING
+            ]);
+
+            // RSA key structure
+            const rsaKey = new Uint8Array([
+                0x30, 0x82, 0x01, 0x0A, // SEQUENCE length
+                0x02, 0x82, 0x01, 0x01, 0x00, // INTEGER (modulus)
+                ...modulus,
+                0x02, 0x03, // INTEGER (exponent)
+                ...exponent
+            ]);
+
+            // Combine header and key
+            const spki = new Uint8Array(spkiHeader.length + rsaKey.length);
+            spki.set(spkiHeader);
+            spki.set(rsaKey, spkiHeader.length);
+
+            return spki;
+        }
+
+        async function generateJWE() {
+            const publicKeyInput = document.getElementById('publicKey').value;
+            let payloadInput = document.getElementById('payload').value;
+
+            // Split the public key
+            const [exponentHex, modulusHex] = publicKeyInput.split('|');
+            if (!exponentHex || !modulusHex) {
+                alert('Invalid public key format. Use "exponent|modulus".');
+                return;
+            }
+
+            // Build the RSA public key (JWK format)
+            const publicKey = await hexToRSAPublicKey(
+                modulusHex,
+                exponentHex
+            );
+
+            // Perform encryption using the public key and compact format
+            const jwe = await new jose.CompactEncrypt(
+                    new TextEncoder().encode(payloadInput),
+                )
+                .setProtectedHeader({
+                    alg: 'RSA-OAEP-256',
+                    enc: 'A256GCM',
+                    version: "1"
+                })
+                .encrypt(publicKey);
+
+            document.getElementById('output').value = jwe;
+        }
+    </script>
+</body>
+</html>
