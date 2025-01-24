@@ -1,6 +1,7 @@
 const getConfig = async () => {
   const config = { };
 
+  config.native3ds2 = document.querySelector('#native3ds2').checked;
   config.environment = await httpGet('env', 'ENVIRONMENT');
   config.clientKey = await httpGet('env', 'CHECKOUT_CLIENTKEY');
 
@@ -31,24 +32,23 @@ const loadComponent = function loadComponent() {
                 makePayment(localeConfig, state.data).then((response) => {
                   if (response.resultCode) {
                     updateResultContainer(response.resultCode);
-                    if (googlepayComponent !== undefined) {
+                    if (response.action) {
+                      googlepayComponent.handleAction(response.action);
+                    } else if (googlepayComponent !== undefined) {
                       googlepayComponent.unmount('#googlepay-container');
+                    } else if (response.message) {
+                      updateResultContainer(response.message);
+                      if (googlepayComponent !== undefined) {
+                        googlepayComponent.unmount('#googlepay-container');
+                      }
                     }
-                  } else if (response.message) {
-                    updateResultContainer(response.message);
-                    if (googlepayComponent !== undefined) {
-                      googlepayComponent.unmount('#googlepay-container');
-                    }
-                  }
+                  } 
                 });
               },
-              onChange: (state, component) => {
-                updateStateContainer(state);
+              onAdditionalDetails: (state, component) => {
+                console.log('onAdditionalDetails');
               },
             })
-            // Normally, you should check if Google Pay is available before mounting it.
-            // Here we are mounting it directly for demo purposes.
-            // Please refer to the documentation for more information on Google Pay's availability.
             .mount('#googlepay-container');
         })()
       });

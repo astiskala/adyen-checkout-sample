@@ -71,22 +71,25 @@ const loadDropIn = function loadDropIn() {
         };
 
         (async function(){
+          const { AdyenCheckout, Dropin } = window.AdyenWeb;
           const checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
             session: sessionsResponse,
-            paymentMethodsConfiguration: paymentMethodsConfiguration,
             amount: localeConfig.amount,
             onPaymentCompleted: (result, component) => {
               console.log('onPaymentCompleted', result);
+            },
+            onPaymentFailed: (result, component) => {
+              console.log('onPaymentFailed', result);
             },
             onError: (error) => {
               console.log('onError', error);
             },
           });
 
-          dropin = checkout
-            .create('dropin', {
+          dropin = new Dropin(checkout, {
+              paymentMethodsConfiguration: paymentMethodsConfiguration,
               openFirstPaymentMethod: config.openFirstPaymentMethod,
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,

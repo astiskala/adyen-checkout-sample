@@ -34,7 +34,7 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
-  config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
+  //config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
 
   return config;
 };
@@ -101,12 +101,13 @@ const loadDropIn = function loadDropIn() {
         };
 
         (async function(){
+          const { AdyenCheckout, Dropin } = window.AdyenWeb;
           checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
             paymentMethodsResponse: paymentMethodsResponse,
-            paymentMethodsConfiguration: paymentMethodsConfiguration,
             locale: localeConfig.locale,
+            countryCode: localeConfig.countryCode,
             amount: localeConfig.amount,
             onSubmit: (state, component) => {
               dropin.setStatus('loading');
@@ -149,8 +150,8 @@ const loadDropIn = function loadDropIn() {
             },
           });
 
-          dropin = checkout
-            .create('dropin', {
+          dropin = new Dropin(checkout, {
+              paymentMethodsConfiguration: paymentMethodsConfiguration,
               openFirstPaymentMethod: config.openFirstPaymentMethod,
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,

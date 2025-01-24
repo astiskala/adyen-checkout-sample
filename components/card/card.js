@@ -35,18 +35,19 @@ const loadComponent = function loadComponent() {
     getConfig().then((config) => {
       getPaymentMethods(localeConfig).then((paymentMethodsResponse) => {
         (async function(){
+          const { AdyenCheckout, Card } = window.AdyenWeb;
           const checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
             paymentMethodsResponse: paymentMethodsResponse,
             locale: localeConfig.locale,
+            countryCode: localeConfig.countryCode,
           });
 
           const storedPaymentMethod = checkout.paymentMethodsResponse.storedPaymentMethods[1];
-          storedCard = checkout.create("card", storedPaymentMethod).mount("#stored-card");
+          storedCard = new Card(checkout, storedPaymentMethod).mount("#stored-card");
 
-          card = checkout
-            .create('card', {
+          card = new Card(checkout, {
               amount: localeConfig.amount,
               showPayButton: config.showPayButton,
               ...config.cardConfig,

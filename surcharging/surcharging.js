@@ -122,17 +122,18 @@ const loadDropIn = function loadDropIn() {
         }
 
         (async function(){
+          const { AdyenCheckout, Dropin } = window.AdyenWeb;
           const checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
             paymentMethodsResponse: paymentMethodsResponse,
-            paymentMethodsConfiguration: paymentMethodsConfiguration,
             locale: localeConfig.locale,
+            countryCode: localeConfig.countryCode,
             amount: localeConfig.amount,
           });
 
-          dropin = checkout
-            .create('dropin', {
+          dropin = new Dropin(checkout, {
+              paymentMethodsConfiguration: paymentMethodsConfiguration,
               openFirstPaymentMethod: config.openFirstPaymentMethod,
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,

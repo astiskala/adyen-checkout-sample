@@ -162,12 +162,13 @@ const loadDropIn = function loadDropIn() {
         };
 
         (async function(){
+          const { AdyenCheckout, Dropin } = window.AdyenWeb;
           const checkout = await AdyenCheckout({
             environment: config.environment,
             clientKey: config.clientKey,
             paymentMethodsResponse: paymentMethodsResponse,
-            paymentMethodsConfiguration: paymentMethodsConfiguration,
             locale: localeConfig.locale,
+            countryCode: localeConfig.countryCode,
             onSubmit: (state, component) => {
               dropin.setStatus('loading');
               makePayment(localeConfig, state.data, {}, true, config.native3ds2)
@@ -179,7 +180,7 @@ const loadDropIn = function loadDropIn() {
                     dropin.setStatus('success', { message: response.resultCode });
                     if (response.resultCode === 'Authorised') {
                       const donationConfig = getDonationConfig(localeConfig, config, response.merchantReference, response.pspReference, response.donationToken, state.data.paymentMethod.encryptedSecurityCode);
-                      donation = checkout.create('donation', donationConfig).mount('#donation-container');
+                      donation = new Donation(checkout, donationConfig).mount('#donation-container');
                     }
                   } else if (response.message) {
                     dropin.setStatus('success', { message: response.message });
@@ -217,8 +218,8 @@ const loadDropIn = function loadDropIn() {
             },
           });
 
-          dropin = checkout
-            .create('dropin', {
+          dropin = new Dropin(checkout, {
+              paymentMethodsConfiguration: paymentMethodsConfiguration,
               openFirstPaymentMethod: config.openFirstPaymentMethod,
               openFirstStoredPaymentMethod: config.openFirstStoredPaymentMethod,
               showStoredPaymentMethods: config.showStoredPaymentMethods,

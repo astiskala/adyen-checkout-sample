@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adyen Checkout samples</title>
-    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=$_GET['sdkVersion']?>/adyen.css">
+    <link rel="stylesheet" href="https://checkoutshopper-test.cdn.adyen.com/checkoutshopper/sdk/<?=$_GET['sdkVersion']?>/adyen.css">
     <link rel="stylesheet" href="../../assets/style.css">
 </head>
 <body>
@@ -42,6 +42,12 @@
                 <input type="text" id="captureDelayHours" name="captureDelayHours" /><br />
                 <label for="store">store:</label>
                 <input type="text" id="store" name="store" /><br />
+                <label for="native3ds2">Enable Native 3DS2:</label>
+                <input type="checkbox" id="native3ds2" name="native3ds2" checked="checked" /><br />
+                <label for="executeThreeD">executeThreeD:</label>
+                <input type="checkbox" id="executeThreeD" name="executeThreeD" checked="checked" /><br />
+                <label for="forceChallenge">Force Challenge:</label>
+                <input type="checkbox" id="forceChallenge" name="forceChallenge" /><br />
               </form>
             </div>
 
@@ -60,7 +66,7 @@
         </div>
     </div>
 
-    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/<?=$_GET['sdkVersion']?>/adyen.js"></script>
+    <script src="https://checkoutshopper-test.cdn.adyen.com/checkoutshopper/sdk/<?=$_GET['sdkVersion']?>/adyen.js"></script>
     <script src="../../assets/utils.js"></script>
     <script src="googlepay.js"></script>
 </body>

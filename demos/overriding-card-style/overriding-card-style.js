@@ -20,10 +20,12 @@ const loadComponent = function loadComponent() {
           }
         };
 
+        const { AdyenCheckout, Card } = window.AdyenWeb;
         const checkout = await AdyenCheckout({
           environment: config.environment,
           clientKey: config.clientKey,
           locale: localeConfig.locale,
+          countryCode: localeConfig.countryCode,
           translations: translations,
         });
 
@@ -34,8 +36,7 @@ const loadComponent = function loadComponent() {
           }
         };
 
-        card = checkout
-          .create('card', {
+        card = new Card(checkout, {
             styles: styleObject,
             ...config.cardConfig,
             onFocus: (state) => {
