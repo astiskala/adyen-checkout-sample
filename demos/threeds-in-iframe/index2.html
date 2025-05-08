@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Adyen Checkout samples - Iframe Form Post (Customer's Approach)</title>
+    <link rel="stylesheet" href="../../assets/style.css"> <style>
+        .main {
+            width: 100%;
+        }
+        /* Styles from previous version, ensure they are within .checkout-container or apply as needed */
+        .checkout-container form div { /* More specific selector if needed */
+            margin-bottom: 15px;
+        }
+        .checkout-container label { /* More specific selector if needed */
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .checkout-container input[type="text"],
+        .checkout-container input[type="url"] { /* More specific selector if needed */
+            width: calc(100% - 22px); /* Account for padding/border */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .checkout-container button { /* More specific selector if needed */
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .checkout-container button:hover { /* More specific selector if needed */
+            background-color: #0056b3;
+        }
+        .checkout-container iframe { /* More specific selector if needed */
+            margin-top: 20px;
+            border: 1px solid #ddd;
+        }
+        .spinner-container {
+            display: none; /* Hidden by default */
+            position: fixed; /* Or absolute relative to a positioned parent */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999; /* Make sure it's on top */
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner-content {
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container container--full-width">
+        <div class="main"> <a href="../../">Back</a>
+            <div class="checkout-container"> <h1>3DS in iframe (Customer's Approach)</h1>
+                <form id="dataForm">
+                    <div>
+                        <label for="urlInput">URL for POST:</label>
+                        <input type="url" id="urlInput" placeholder="Enter ACS URL here" required>
+                    </div>
+                    <hr>
+                    <p>The following fields will be POSTed to the URL above using fetch, and the HTML response shown in the iframe:</p>
+                    <div>
+                        <label for="mdInput">MD:</label>
+                        <input type="text" id="mdInput" name="MD" placeholder="Enter MD value">
+                    </div>
+                    <div>
+                        <label for="paReqInput">PaReq:</label>
+                        <input type="text" id="paReqInput" name="PaReq" placeholder="Enter PaReq value">
+                    </div>
+                    <button type="submit">Fetch HTML & Load in Iframe</button>
+                </form>
+
+                <div id="spinnerContainer" class="spinner-container">
+                    <div class="spinner-content">
+                        <div class="spinner"></div>
+                        <p>Loading 3DS Challenge...</p>
+                    </div>
+                </div>
+
+                <iframe id="targetIframe" name="targetIframeName" src="about:blank" width="500px" height="600px">
+                    Your browser does not support iframes.
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const urlValue = document.getElementById('urlInput').value;
+            const mdValue = document.getElementById('mdInput').value;
+            const paReqValue = document.getElementById('paReqInput').value;
+            const iframe = document.getElementById('targetIframe');
+            const spinnerContainer = document.getElementById('spinnerContainer');
+
+            if (!urlValue) {
+                alert('Please enter a URL for the form submission.');
+                console.error('URL is empty, submission prevented.');
+                return;
+            }
+
+            try {
+                // Basic URL validation
+                new URL(urlValue);
+            } catch (e) {
+                alert('Please enter a valid URL.');
+                console.error('Invalid URL, submission prevented:', urlValue, e);
+                return;
+            }
+
+            // Show spinner and clear iframe
+            spinnerContainer.style.display = 'flex'; // Use flex to center content if using that for spinner
+            iframe.src = 'about:blank'; // Clear previous content
+
+            console.log('Fetching HTML from URL:', urlValue, 'with MD:', mdValue, 'and PaReq:', paReqValue);
+
+            const bodyParams = new URLSearchParams();
+            // Only append parameters if they have a value.
+            // Adjust as needed if the ACS server expects empty parameters or not.
+            if (mdValue) {
+                bodyParams.append('MD', mdValue);
+            }
+            if (paReqValue) {
+                bodyParams.append('PaReq', paReqValue);
+            }
+
+            try {
+                // Replicate the customer's fetch logic
+                const response = await fetch(urlValue, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: bodyParams.toString(),
+                });
+
+                const responseText = await response.text(); // Get the response as text (HTML)
+
+                if (!response.ok) {
+                    console.error('Fetch Error:', response.status, response.statusText, responseText);
+                    // Display error information in the iframe or as an alert
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(
+                        `<h1>Error fetching 3DS content</h1>
+                         <p>Status: ${response.status} ${response.statusText}</p>
+                         <p>URL: ${urlValue}</p>
+                         <hr>
+                         <p>Response from server:</p>
+                         <pre>${responseText.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>`
+                    );
+                    iframe.contentWindow.document.close();
+                    alert(`Error fetching 3DS content: ${response.status} ${response.statusText}. Check iframe for details.`);
+                    return;
+                }
+
+                console.log('Received HTML response. Injecting into iframe.');
+
+                // Load the HTML response into the iframe
+                // Using iframe.srcdoc is a clean way if the HTML is self-contained
+                // and doesn't have complex relative path issues for scripts/styles
+                // that might be better handled by writing to the document.
+                // iframe.srcdoc = responseText;
+
+                // Alternatively, write to the iframe's document.
+                // This is often more robust for externally fetched HTML that might contain its own scripts.
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(responseText);
+                iframe.contentWindow.document.close();
+
+            } catch (error) {
+                console.error('Error during fetch or processing:', error);
+                // Display error in iframe or as an alert
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(
+                    `<h1>JavaScript Error</h1>
+                     <p>Could not load 3DS content due to a client-side error.</p>
+                     <p>URL: ${urlValue}</p>
+                     <pre>${error.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>
+                     <p>Check browser console for more details.</p>`
+                );
+                iframe.contentWindow.document.close();
+                alert('An error occurred while trying to load the 3DS content. See console or iframe for details.');
+            } finally {
+                // Hide spinner
+                spinnerContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
