@@ -34,7 +34,7 @@ const getConfig = async () => {
   config.cardConfig.data.billingAddress.street = await httpGet('env', 'BILLING_ADDRESS_STREET');
 
   config.shopperReference = await httpGet('env', 'SHOPPER_REFERENCE');
-  //config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
+  config.shopperEmail = await httpGet('env', 'SHOPPER_EMAIL');
 
   return config;
 };
