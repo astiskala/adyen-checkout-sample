@@ -50,7 +50,7 @@
                 <form id="dataForm" method="POST" target="targetIframeName">
                     <div>
                         <label for="urlInput">URL for POST:</label>
-                        <input type="url" id="urlInput" name="urlToLoad" placeholder="https://target.example.com/submit" required>
+                        <input type="url" id="urlInput" placeholder="https://target.example.com/submit" required>
                     </div>
                     <hr>
                     <p>The following fields will be POSTed to the URL above, and the response shown in the iframe:</p>
